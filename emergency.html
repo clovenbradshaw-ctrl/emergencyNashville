@@ -904,51 +904,8 @@
 
         window.onload = function() {
             if (isEmbedded()) {
-                // First try to get location anyway - some browsers/iframes allow it
-                // with the allow="geolocation" attribute
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        // Success - geolocation works even when embedded
-                        async (position) => {
-                            const { latitude: lat, longitude: lng, accuracy } = position.coords;
-                            currentLocation = { lat, lng };
-                            currentAccuracy = accuracy;
-                            showContent();
-                            updateDisplay();
-
-                            const [addr, intersection] = await Promise.all([
-                                reverseGeocode(lat, lng),
-                                findNearestIntersection(lat, lng)
-                            ]);
-
-                            if (addr) {
-                                currentAddress = { ...addr, intersection };
-                                if (addr.street) {
-                                    let fullAddr = addr.street;
-                                    if (addr.city) fullAddr += `, ${addr.city}`;
-                                    if (addr.state) fullAddr += `, ${addr.state}`;
-                                    if (addr.zip) fullAddr += ` ${addr.zip}`;
-                                    document.getElementById('streetAddress').textContent = fullAddr;
-                                    document.getElementById('addressCard').style.display = 'block';
-                                }
-                                if (intersection) {
-                                    document.getElementById('intersection').textContent = intersection;
-                                    document.getElementById('intersectionCard').style.display = 'block';
-                                    document.getElementById('callScript').textContent = `"My GPS coordinates are ${formatCoords(lat, lng)}"\n\n"I'm near ${intersection}"`;
-                                }
-                            }
-                            updateTextLink();
-                            updateOutputPreview();
-                        },
-                        // Error - show the embedded state with "open in new window" option
-                        (error) => {
-                            showEmbedded();
-                        },
-                        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-                    );
-                } else {
-                    showEmbedded();
-                }
+                // When embedded, always prompt to open in new tab for reliable geolocation
+                showEmbedded();
             } else {
                 getLocation();
             }
