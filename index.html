@@ -1,1 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nashville Winter Resources</title>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      padding: 1.5rem 1rem;
+      color: #fff;
+    }
+    
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    
+    .lang-toggle {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .lang-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      color: #94a3b8;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .lang-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+    
+    .lang-btn.active {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+      color: #fff;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+    
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.02em;
+    }
+    
+    .subtitle {
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+    
+    .section {
+      margin-bottom: 1.25rem;
+    }
+    
+    .section-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #64748b;
+      margin-bottom: 0.6rem;
+      padding-left: 0.25rem;
+    }
+    
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    
+    a.link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    a.link i {
+      font-size: 1.25rem;
+      opacity: 0.8;
+      flex-shrink: 0;
+    }
+    
+    a.link:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    a.link:active {
+      transform: translateY(0);
+    }
+    
+    .featured {
+      background: linear-gradient(135deg, #e63946 0%, #d62839 100%);
+      border-color: transparent;
+      font-weight: 600;
+    }
+    
+    .featured:hover {
+      background: linear-gradient(135deg, #f1404e 0%, #e63946 100%);
+      border-color: transparent;
+    }
+    
+    .featured i {
+      opacity: 1;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #64748b;
+      font-size: 0.75rem;
+    }
 
+    [dir="rtl"] a.link {
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+    
+    [dir="rtl"] .section-title {
+      padding-left: 0;
+      padding-right: 0.25rem;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="en">English</button>
+      <button class="lang-btn" data-lang="es">Español</button>
+      <button class="lang-btn" data-lang="ar">العربية</button>
+      <button class="lang-btn" data-lang="ku">کوردی</button>
+      <button class="lang-btn" data-lang="vi">Tiếng Việt</button>
+    </div>
+    
+    <header>
+      <h1 data-i18n="title">Nashville Winter Resources</h1>
+      <p class="subtitle" data-i18n="subtitle">Shelter, food & support during extreme weather</p>
+    </header>
+    
+    <section class="section">
+      <div class="section-title" data-i18n="start">Start Here</div>
+      <div class="links">
+        <a href="https://wttin.org/" class="link featured">
+          <i class="ph ph-compass"></i>
+          <span data-i18n="wttin">Where to Turn in Nashville</span>
+        </a>
+      </div>
+    </section>
+    
+    <section class="section">
+      <div class="section-title" data-i18n="official">Official Resource Hubs</div>
+      <div class="links">
+        <a href="https://www.nashville.gov/departments/emergency-management/news/january-27-winter-weather-update" class="link">
+          <i class="ph ph-cloud-snow"></i>
+          <span data-i18n="nashville_weather">Nashville.gov Winter Weather Updates</span>
+        </a>
+        <a href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather" class="link">
+          <i class="ph ph-thermometer-cold"></i>
+          <span data-i18n="ohs_extreme">Metro OHS – Extreme Weather</span>
+        </a>
+        <a href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather/shelters" class="link">
+          <i class="ph ph-list-bullets"></i>
+          <span data-i18n="shelter_list">Metro Shelter List</span>
+        </a>
+        <a href="https://www.tn.gov/tema/tennessee-shelters.html" class="link">
+          <i class="ph ph-map-trifold"></i>
+          <span data-i18n="tema_map">TEMA Statewide Shelter Map</span>
+        </a>
+        <a href="https://www.tn.gov/tema/updates/2026-disasters/january-2026-winter-weather.html" class="link">
+          <i class="ph ph-warning"></i>
+          <span data-i18n="tema_hub">TEMA Winter Weather Hub</span>
+        </a>
+        <a href="https://www.fema.gov/disaster/2026-winter-storm" class="link">
+          <i class="ph ph-flag"></i>
+          <span data-i18n="fema">FEMA 2026 Winter Storm</span>
+        </a>
+      </div>
+    </section>
+    
+    <section class="section">
+      <div class="section-title" data-i18n="shelter">Shelter & Outreach</div>
+      <div class="links">
+        <a href="https://www.roomintheinn.org/" class="link">
+          <i class="ph ph-bed"></i>
+          <span>Room in the Inn</span>
+        </a>
+        <a href="https://www.opentablenashville.org/" class="link">
+          <i class="ph ph-hand-heart"></i>
+          <span>Open Table Nashville</span>
+        </a>
+        <a href="https://thecontributor.org/" class="link">
+          <i class="ph ph-newspaper"></i>
+          <span>The Contributor</span>
+        </a>
+        <a href="https://www.peoplelovingnashville.com/" class="link">
+          <i class="ph ph-users"></i>
+          <span>People Loving Nashville</span>
+        </a>
+      </div>
+    </section>
+    
+    <section class="section">
+      <div class="section-title" data-i18n="food">Food</div>
+      <div class="links">
+        <a href="https://www.secondharvestmidtn.org/" class="link">
+          <i class="ph ph-package"></i>
+          <span data-i18n="second_harvest">Second Harvest Food Bank</span>
+        </a>
+        <a href="https://www.secondharvestmidtn.org/find-resources/find-food/" class="link">
+          <i class="ph ph-magnifying-glass"></i>
+          <span data-i18n="find_food">Second Harvest – Find Food</span>
+        </a>
+        <a href="https://dreamstreetstn.com/mobilefood" class="link">
+          <i class="ph ph-truck"></i>
+          <span data-i18n="dream_streets">Dream Streets Mobile Food</span>
+        </a>
+      </div>
+    </section>
+    
+    <section class="section">
+      <div class="section-title" data-i18n="immigrant">Immigrant Community</div>
+      <div class="links">
+        <a href="https://www.conexionamericas.org/" class="link">
+          <i class="ph ph-globe-hemisphere-west"></i>
+          <span>Conexión Américas / Casa Azafrán</span>
+        </a>
+      </div>
+    </section>
+    
+    <section class="section">
+      <div class="section-title" data-i18n="legal">Legal & Other Resources</div>
+      <div class="links">
+        <a href="https://las.org/" class="link">
+          <i class="ph ph-scales"></i>
+          <span data-i18n="legal_aid">Legal Aid Society of Middle TN</span>
+        </a>
+        <a href="https://www.wnpt.org/agingmatters/unhoused/" class="link">
+          <i class="ph ph-info"></i>
+          <span data-i18n="npt">NPT Unhoused Resources</span>
+        </a>
+      </div>
+    </section>
+    
+    <footer>
+      <span data-i18n="footer">Share widely · Updated Jan 2026</span>
+    </footer>
+  </div>
+
+  <script>
+    const translations = {
+      en: {
+        title: "Nashville Winter Resources",
+        subtitle: "Shelter, food & support during extreme weather",
+        start: "Start Here",
+        wttin: "Where to Turn in Nashville",
+        official: "Official Resource Hubs",
+        nashville_weather: "Nashville.gov Winter Weather Updates",
+        ohs_extreme: "Metro OHS – Extreme Weather",
+        shelter_list: "Metro Shelter List",
+        tema_map: "TEMA Statewide Shelter Map",
+        tema_hub: "TEMA Winter Weather Hub",
+        fema: "FEMA 2026 Winter Storm",
+        shelter: "Shelter & Outreach",
+        food: "Food",
+        second_harvest: "Second Harvest Food Bank",
+        find_food: "Second Harvest – Find Food",
+        dream_streets: "Dream Streets Mobile Food",
+        immigrant: "Immigrant Community",
+        legal: "Legal & Other Resources",
+        legal_aid: "Legal Aid Society of Middle TN",
+        npt: "NPT Unhoused Resources",
+        footer: "Share widely · Updated Jan 2026"
+      },
+      es: {
+        title: "Recursos de Invierno en Nashville",
+        subtitle: "Refugio, comida y apoyo durante clima extremo",
+        start: "Empiece Aquí",
+        wttin: "Dónde Acudir en Nashville",
+        official: "Centros de Recursos Oficiales",
+        nashville_weather: "Actualizaciones del Clima Invernal",
+        ohs_extreme: "OHS – Clima Extremo",
+        shelter_list: "Lista de Refugios de Metro",
+        tema_map: "Mapa de Refugios de Tennessee",
+        tema_hub: "Centro de Clima Invernal TEMA",
+        fema: "FEMA Tormenta de Invierno 2026",
+        shelter: "Refugio y Alcance",
+        food: "Comida",
+        second_harvest: "Banco de Alimentos Second Harvest",
+        find_food: "Second Harvest – Encontrar Comida",
+        dream_streets: "Dream Streets Comida Móvil",
+        immigrant: "Comunidad Inmigrante",
+        legal: "Recursos Legales y Otros",
+        legal_aid: "Sociedad de Ayuda Legal de Middle TN",
+        npt: "Recursos NPT para Personas sin Hogar",
+        footer: "Comparte · Actualizado Ene 2026"
+      },
+      ar: {
+        title: "موارد الشتاء في ناشفيل",
+        subtitle: "مأوى وطعام ودعم أثناء الطقس القاسي",
+        start: "ابدأ هنا",
+        wttin: "أين تتوجه في ناشفيل",
+        official: "مراكز الموارد الرسمية",
+        nashville_weather: "تحديثات طقس الشتاء",
+        ohs_extreme: "خدمات الطقس القاسي",
+        shelter_list: "قائمة الملاجئ",
+        tema_map: "خريطة ملاجئ تينيسي",
+        tema_hub: "مركز طقس الشتاء TEMA",
+        fema: "FEMA عاصفة الشتاء 2026",
+        shelter: "المأوى والتواصل",
+        food: "الطعام",
+        second_harvest: "بنك الطعام Second Harvest",
+        find_food: "Second Harvest – ابحث عن طعام",
+        dream_streets: "Dream Streets طعام متنقل",
+        immigrant: "مجتمع المهاجرين",
+        legal: "الموارد القانونية وغيرها",
+        legal_aid: "جمعية المساعدة القانونية",
+        npt: "موارد NPT للمشردين",
+        footer: "شارك على نطاق واسع · محدث يناير 2026"
+      },
+      ku: {
+        title: "سەرچاوەکانی زستانی ناشڤیل",
+        subtitle: "پەناگا، خواردن و پشتیوانی لە کاتی کەشوهەوای سەخت",
+        start: "لێرەوە دەست پێبکە",
+        wttin: "لە ناشڤیل بۆ کوێ بڕۆیت",
+        official: "ناوەندە فەرمییەکانی سەرچاوە",
+        nashville_weather: "نوێکردنەوەکانی کەشوهەوای زستان",
+        ohs_extreme: "خزمەتگوزارییەکانی کەشوهەوای سەخت",
+        shelter_list: "لیستی پەناگاکان",
+        tema_map: "نەخشەی پەناگاکانی تێنێسی",
+        tema_hub: "ناوەندی کەشوهەوای زستانی TEMA",
+        fema: "زریانی زستانی FEMA 2026",
+        shelter: "پەناگا و دەستڕاگەیشتن",
+        food: "خواردن",
+        second_harvest: "بانکی خواردنی Second Harvest",
+        find_food: "Second Harvest – خواردن بدۆزەرەوە",
+        dream_streets: "خواردنی گەڕۆکی Dream Streets",
+        immigrant: "کۆمەڵگای کۆچبەران",
+        legal: "سەرچاوە یاساییەکان و هیتر",
+        legal_aid: "کۆمەڵەی یارمەتی یاسایی",
+        npt: "سەرچاوەکانی NPT بۆ بێماڵان",
+        footer: "بڵاوی بکەرەوە · نوێکراوەتەوە کانوونی دووەم 2026"
+      },
+      vi: {
+        title: "Tài Nguyên Mùa Đông Nashville",
+        subtitle: "Nơi trú ẩn, thực phẩm & hỗ trợ trong thời tiết khắc nghiệt",
+        start: "Bắt Đầu Tại Đây",
+        wttin: "Nơi Hướng Dẫn Tại Nashville",
+        official: "Trung Tâm Tài Nguyên Chính Thức",
+        nashville_weather: "Cập Nhật Thời Tiết Mùa Đông",
+        ohs_extreme: "OHS – Thời Tiết Khắc Nghiệt",
+        shelter_list: "Danh Sách Nơi Trú Ẩn Metro",
+        tema_map: "Bản Đồ Nơi Trú Ẩn Toàn Tiểu Bang",
+        tema_hub: "Trung Tâm Thời Tiết Mùa Đông TEMA",
+        fema: "FEMA Bão Tuyết 2026",
+        shelter: "Nơi Trú Ẩn & Tiếp Cận",
+        food: "Thực Phẩm",
+        second_harvest: "Ngân Hàng Thực Phẩm Second Harvest",
+        find_food: "Second Harvest – Tìm Thực Phẩm",
+        dream_streets: "Dream Streets Thực Phẩm Di Động",
+        immigrant: "Cộng Đồng Người Nhập Cư",
+        legal: "Tài Nguyên Pháp Lý & Khác",
+        legal_aid: "Hội Trợ Giúp Pháp Lý Middle TN",
+        npt: "Tài Nguyên NPT cho Người Vô Gia Cư",
+        footer: "Chia sẻ rộng rãi · Cập nhật Tháng 1 2026"
+      }
+    };
+
+    const rtlLangs = ['ar', 'ku'];
+
+    function setLanguage(lang) {
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+
+      if (rtlLangs.includes(lang)) {
+        document.documentElement.setAttribute('dir', 'rtl');
+        document.documentElement.setAttribute('lang', lang);
+      } else {
+        document.documentElement.setAttribute('dir', 'ltr');
+        document.documentElement.setAttribute('lang', lang);
+      }
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (translations[lang][key]) {
+          el.textContent = translations[lang][key];
+        }
+      });
+
+      localStorage.setItem('nashville-resources-lang', lang);
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+    });
+
+    const savedLang = localStorage.getItem('nashville-resources-lang');
+    if (savedLang && translations[savedLang]) {
+      setLanguage(savedLang);
+    }
+  </script>
+</body>
+</html>
