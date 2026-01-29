@@ -260,6 +260,33 @@
         .icon { width: 22px; height: 22px; flex-shrink: 0; }
         .icon-sm { width: 16px; height: 16px; }
 
+        .embedded-container {
+            background: white; border-radius: 16px; padding: 32px 24px;
+            text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .embedded-icon {
+            width: 64px; height: 64px; background: #fef3c7; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px; font-size: 32px;
+        }
+
+        .embedded-container h2 { font-size: 20px; color: #111; margin-bottom: 12px; }
+        .embedded-container p { color: #6b7280; margin-bottom: 24px; line-height: 1.5; }
+
+        .btn-open-new {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white; border: none;
+            padding: 16px 32px; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer;
+            min-height: 52px;
+            touch-action: manipulation;
+            display: inline-flex; align-items: center; gap: 8px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(185, 28, 28, 0.4);
+        }
+
+        .btn-open-new:active { transform: scale(0.98); }
+
         .back-link {
             display: inline-flex;
             align-items: center;
@@ -309,6 +336,20 @@
             <h2 data-i18n="error_title">Location Error</h2>
             <p id="errorMessage" data-i18n="error_generic">Unable to get your location.</p>
             <button class="btn-retry" onclick="getLocation()" data-i18n="try_again">Try Again</button>
+        </div>
+
+        <div id="embeddedState" class="embedded-container hidden">
+            <div class="embedded-icon">📍</div>
+            <h2 data-i18n="embedded_title">Location Access Needed</h2>
+            <p data-i18n="embedded_desc">For your safety, location access requires opening this page directly. Tap the button below to get your location for 911.</p>
+            <a href="" id="openNewBtn" class="btn-open-new" target="_blank">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                    <polyline points="15 3 21 3 21 9"/>
+                    <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+                <span data-i18n="open_new_btn">Open 911 Location Tool</span>
+            </a>
         </div>
 
         <div id="mainContent" class="hidden">
@@ -428,6 +469,9 @@
                 error_unavailable: "Location unavailable. Please try again.",
                 error_timeout: "Location request timed out. Please try again.",
                 try_again: "Try Again",
+                embedded_title: "Location Access Needed",
+                embedded_desc: "For your safety, location access requires opening this page directly. Tap the button below to get your location for 911.",
+                open_new_btn: "Open 911 Location Tool",
                 title: "911 Emergency Location",
                 subtitle: "Share your exact location with emergency services",
                 privacy_notice: "Your location stays private on your device. Nothing is shared unless YOU choose to send it via call, text, or copy.",
@@ -462,6 +506,9 @@
                 error_unavailable: "Ubicación no disponible. Intenta de nuevo.",
                 error_timeout: "Tiempo agotado. Intenta de nuevo.",
                 try_again: "Intentar de Nuevo",
+                embedded_title: "Se Necesita Acceso a Ubicación",
+                embedded_desc: "Por tu seguridad, el acceso a la ubicación requiere abrir esta página directamente. Toca el botón para obtener tu ubicación para 911.",
+                open_new_btn: "Abrir Herramienta 911",
                 title: "Ubicación de Emergencia 911",
                 subtitle: "Comparte tu ubicación con servicios de emergencia",
                 privacy_notice: "Tu ubicación permanece privada en tu dispositivo. No se comparte nada a menos que TÚ elijas enviarlo por llamada, mensaje o copia.",
@@ -496,6 +543,9 @@
                 error_unavailable: "الموقع غير متوفر. حاول مرة أخرى.",
                 error_timeout: "انتهت المهلة. حاول مرة أخرى.",
                 try_again: "حاول مرة أخرى",
+                embedded_title: "مطلوب الوصول إلى الموقع",
+                embedded_desc: "لسلامتك، يتطلب الوصول إلى الموقع فتح هذه الصفحة مباشرة. اضغط الزر للحصول على موقعك لـ 911.",
+                open_new_btn: "فتح أداة 911",
                 title: "موقع طوارئ 911",
                 subtitle: "شارك موقعك مع خدمات الطوارئ",
                 privacy_notice: "موقعك يبقى خاصاً على جهازك. لا يتم مشاركة أي شيء إلا إذا اخترت أنت إرساله عبر مكالمة أو رسالة أو نسخ.",
@@ -530,6 +580,9 @@
                 error_unavailable: "شوێن بەردەست نییە. دووبارە هەوڵ بدەوە.",
                 error_timeout: "کات تێپەڕی. دووبارە هەوڵ بدەوە.",
                 try_again: "دووبارە هەوڵ بدەوە",
+                embedded_title: "پێویستی بە دەستگەیشتن بە شوێن",
+                embedded_desc: "بۆ سەلامەتیت، دەستگەیشتن بە شوێن پێویستی بە کردنەوەی ڕاستەوخۆی ئەم پەڕەیە هەیە. دوگمەکە بپەنجێنە بۆ وەرگرتنی شوێنەکەت بۆ 911.",
+                open_new_btn: "کردنەوەی ئامرازی 911",
                 title: "شوێنی فریاکەوتنی 911",
                 subtitle: "شوێنەکەت هاوبەش بکە",
                 privacy_notice: "شوێنەکەت تایبەت دەمێنێتەوە لە ئامێرەکەت. هیچ شتێک هاوبەش ناکرێت مەگەر تۆ خۆت بیبنێریت بە پەیوەندی، نامە، یان لەبەرگرتنەوە.",
@@ -564,6 +617,9 @@
                 error_unavailable: "Vị trí không khả dụng. Thử lại.",
                 error_timeout: "Hết thời gian. Thử lại.",
                 try_again: "Thử Lại",
+                embedded_title: "Cần Truy Cập Vị Trí",
+                embedded_desc: "Vì sự an toàn của bạn, truy cập vị trí yêu cầu mở trang này trực tiếp. Nhấn nút bên dưới để lấy vị trí cho 911.",
+                open_new_btn: "Mở Công Cụ 911",
                 title: "Vị Trí Khẩn Cấp 911",
                 subtitle: "Chia sẻ vị trí với dịch vụ cấp cứu",
                 privacy_notice: "Vị trí của bạn được giữ riêng tư trên thiết bị. Không có gì được chia sẻ trừ khi BẠN chọn gửi qua cuộc gọi, tin nhắn, hoặc sao chép.",
@@ -827,7 +883,76 @@
             );
         }
 
-        window.onload = getLocation;
+        function isEmbedded() {
+            try {
+                return window.self !== window.top;
+            } catch (e) {
+                // If we can't access window.top due to cross-origin restrictions, we're embedded
+                return true;
+            }
+        }
+
+        function showEmbedded() {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('errorState').classList.add('hidden');
+            document.getElementById('mainContent').classList.add('hidden');
+            document.getElementById('embeddedState').classList.remove('hidden');
+
+            // Set the URL for the "Open in new window" button
+            document.getElementById('openNewBtn').href = window.location.href;
+        }
+
+        window.onload = function() {
+            if (isEmbedded()) {
+                // First try to get location anyway - some browsers/iframes allow it
+                // with the allow="geolocation" attribute
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        // Success - geolocation works even when embedded
+                        async (position) => {
+                            const { latitude: lat, longitude: lng, accuracy } = position.coords;
+                            currentLocation = { lat, lng };
+                            currentAccuracy = accuracy;
+                            showContent();
+                            updateDisplay();
+
+                            const [addr, intersection] = await Promise.all([
+                                reverseGeocode(lat, lng),
+                                findNearestIntersection(lat, lng)
+                            ]);
+
+                            if (addr) {
+                                currentAddress = { ...addr, intersection };
+                                if (addr.street) {
+                                    let fullAddr = addr.street;
+                                    if (addr.city) fullAddr += `, ${addr.city}`;
+                                    if (addr.state) fullAddr += `, ${addr.state}`;
+                                    if (addr.zip) fullAddr += ` ${addr.zip}`;
+                                    document.getElementById('streetAddress').textContent = fullAddr;
+                                    document.getElementById('addressCard').style.display = 'block';
+                                }
+                                if (intersection) {
+                                    document.getElementById('intersection').textContent = intersection;
+                                    document.getElementById('intersectionCard').style.display = 'block';
+                                    document.getElementById('callScript').textContent = `"My GPS coordinates are ${formatCoords(lat, lng)}"\n\n"I'm near ${intersection}"`;
+                                }
+                            }
+                            updateTextLink();
+                            updateOutputPreview();
+                        },
+                        // Error - show the embedded state with "open in new window" option
+                        (error) => {
+                            showEmbedded();
+                        },
+                        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                    );
+                } else {
+                    showEmbedded();
+                }
+            } else {
+                getLocation();
+            }
+        };
     </script>
 </body>
 </html>
