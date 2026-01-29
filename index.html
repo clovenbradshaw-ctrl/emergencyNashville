@@ -250,114 +250,6 @@
       font-size: 0.8rem;
     }
 
-    .admin-link {
-      color: #475569;
-      font-size: 0.7rem;
-      text-decoration: none;
-      cursor: pointer;
-      margin-top: 0.75rem;
-      display: inline-block;
-      transition: color 0.15s ease;
-    }
-
-    .admin-link:hover {
-      color: #64748b;
-    }
-
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .modal {
-      background: #1e293b;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 1.5rem;
-      width: 100%;
-      max-width: 320px;
-      text-align: center;
-    }
-
-    .modal h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: #fff;
-    }
-
-    .modal input {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.05);
-      color: #fff;
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
-    }
-
-    .modal input:focus {
-      outline: none;
-      border-color: #60a5fa;
-    }
-
-    .modal-buttons {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .modal-btn {
-      flex: 1;
-      padding: 0.75rem 1rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .modal-btn.cancel {
-      background: rgba(255, 255, 255, 0.1);
-      color: #94a3b8;
-    }
-
-    .modal-btn.cancel:hover {
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .modal-btn.submit {
-      background: #3b82f6;
-      color: #fff;
-    }
-
-    .modal-btn.submit:hover {
-      background: #2563eb;
-    }
-
-    .modal-error {
-      color: #f87171;
-      font-size: 0.8rem;
-      margin-bottom: 0.75rem;
-      display: none;
-    }
-
-    .modal-error.show {
-      display: block;
-    }
-
     [dir="rtl"] a.link {
       flex-direction: row-reverse;
       text-align: right;
@@ -513,21 +405,7 @@
     
     <footer>
       <span data-i18n="footer">Share widely · Updated Jan 2026</span>
-      <br>
-      <a class="admin-link" id="adminLink">Admin</a>
     </footer>
-  </div>
-
-  <div class="modal-overlay" id="adminModal">
-    <div class="modal">
-      <h3>Admin Login</h3>
-      <div class="modal-error" id="modalError">Incorrect password</div>
-      <input type="password" id="adminPassword" placeholder="Enter password" autocomplete="off">
-      <div class="modal-buttons">
-        <button class="modal-btn cancel" id="modalCancel">Cancel</button>
-        <button class="modal-btn submit" id="modalSubmit">Login</button>
-      </div>
-    </div>
   </div>
 
   <script>
@@ -707,52 +585,6 @@
     if (savedLang && translations[savedLang]) {
       setLanguage(savedLang);
     }
-
-    // Admin modal functionality
-    const adminLink = document.getElementById('adminLink');
-    const adminModal = document.getElementById('adminModal');
-    const adminPassword = document.getElementById('adminPassword');
-    const modalCancel = document.getElementById('modalCancel');
-    const modalSubmit = document.getElementById('modalSubmit');
-    const modalError = document.getElementById('modalError');
-
-    function openModal() {
-      adminModal.classList.add('active');
-      adminPassword.value = '';
-      modalError.classList.remove('show');
-      setTimeout(() => adminPassword.focus(), 100);
-    }
-
-    function closeModal() {
-      adminModal.classList.remove('active');
-      adminPassword.value = '';
-      modalError.classList.remove('show');
-    }
-
-    function handleLogin() {
-      const password = adminPassword.value;
-      if (password) {
-        // Store password hash in session and redirect to admin
-        sessionStorage.setItem('adminAuth', btoa(password));
-        window.location.href = 'admin.html';
-      } else {
-        modalError.textContent = 'Please enter a password';
-        modalError.classList.add('show');
-      }
-    }
-
-    adminLink.addEventListener('click', openModal);
-    modalCancel.addEventListener('click', closeModal);
-    modalSubmit.addEventListener('click', handleLogin);
-
-    adminPassword.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') handleLogin();
-      if (e.key === 'Escape') closeModal();
-    });
-
-    adminModal.addEventListener('click', (e) => {
-      if (e.target === adminModal) closeModal();
-    });
   </script>
 </body>
 </html>
