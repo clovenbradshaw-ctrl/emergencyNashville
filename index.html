@@ -196,149 +196,48 @@
       opacity: 1;
     }
 
-    /* Emergency Toggle Styles */
-    .emergency-toggle {
-      display: flex;
+    /* Emergency Link - Subtle utility style */
+    .emergency-link {
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-      border: 2px solid #fca5a5;
-      border-radius: 16px;
-      padding: 1.25rem 1.5rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      touch-action: manipulation;
+      gap: 0.4rem;
+      color: #f87171;
+      font-size: 0.85rem;
+      font-weight: 500;
       text-decoration: none;
-      color: #fff;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+      background: rgba(248, 113, 113, 0.1);
+      border: 1px solid rgba(248, 113, 113, 0.2);
     }
 
-    .emergency-toggle:hover {
-      background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+    .emergency-link i {
+      font-size: 1rem;
     }
 
-    .emergency-toggle:active {
+    .emergency-link:hover {
+      background: rgba(248, 113, 113, 0.2);
+      color: #fca5a5;
+    }
+
+    .emergency-link:active {
       transform: scale(0.98);
     }
 
-    .emergency-toggle-content {
+    .emergency-link:focus-visible {
+      outline: 2px solid #f87171;
+      outline-offset: 2px;
+    }
+
+    .header-utility {
       display: flex;
-      align-items: center;
-      gap: 1rem;
+      justify-content: flex-end;
+      margin-bottom: 0.75rem;
     }
 
-    .emergency-toggle-icon {
-      font-size: 2rem;
-      animation: pulse-icon 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse-icon {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
-
-    .emergency-toggle-text {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-
-    .emergency-toggle-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-    }
-
-    .emergency-toggle-subtitle {
-      font-size: 0.8rem;
-      opacity: 0.9;
-      font-weight: 400;
-    }
-
-    .toggle-switch {
-      width: 60px;
-      height: 32px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 16px;
-      position: relative;
-      flex-shrink: 0;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .toggle-switch::after {
-      content: '';
-      position: absolute;
-      width: 24px;
-      height: 24px;
-      background: #fff;
-      border-radius: 50%;
-      top: 2px;
-      left: 2px;
-      transition: transform 0.2s ease;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    .emergency-toggle:hover .toggle-switch::after {
-      transform: translateX(28px);
-    }
-
-    .toggle-label {
-      position: absolute;
-      right: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.7);
-      text-transform: uppercase;
-    }
-
-    .emergency-toggle:hover .toggle-label {
-      left: 6px;
-      right: auto;
-      color: #22c55e;
-    }
-
-    [dir="rtl"] .emergency-toggle {
-      flex-direction: row-reverse;
-    }
-
-    [dir="rtl"] .emergency-toggle-content {
-      flex-direction: row-reverse;
-    }
-
-    [dir="rtl"] .emergency-toggle-text {
-      text-align: right;
-    }
-
-    @media (max-width: 360px) {
-      .emergency-toggle {
-        padding: 1rem 1.25rem;
-      }
-      .emergency-toggle-icon {
-        font-size: 1.75rem;
-      }
-      .emergency-toggle-title {
-        font-size: 1rem;
-      }
-      .toggle-switch {
-        width: 52px;
-        height: 28px;
-      }
-      .toggle-switch::after {
-        width: 20px;
-        height: 20px;
-      }
-      .emergency-toggle:hover .toggle-switch::after {
-        transform: translateX(24px);
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .emergency-toggle-icon {
-        animation: none;
-      }
+    [dir="rtl"] .header-utility {
+      justify-content: flex-start;
     }
 
     footer {
@@ -390,25 +289,15 @@
     </div>
     
     <header>
+      <div class="header-utility">
+        <a href="emergency.html" class="emergency-link">
+          <i class="ph ph-siren"></i>
+          <span data-i18n="emergency_911">911 Location</span>
+        </a>
+      </div>
       <h1 data-i18n="title">Nashville Winter Resources</h1>
       <p class="subtitle" data-i18n="subtitle">Shelter, food & support during extreme weather</p>
     </header>
-    
-    <section class="section">
-      <div class="section-title" data-i18n="emergency">Emergency</div>
-      <a href="emergency.html" class="emergency-toggle">
-        <div class="emergency-toggle-content">
-          <i class="ph ph-warning-circle emergency-toggle-icon"></i>
-          <div class="emergency-toggle-text">
-            <span class="emergency-toggle-title" data-i18n="emergency_location">911 Emergency Location</span>
-            <span class="emergency-toggle-subtitle" data-i18n="emergency_tap">Tap to activate</span>
-          </div>
-        </div>
-        <div class="toggle-switch">
-          <span class="toggle-label">GO</span>
-        </div>
-      </a>
-    </section>
 
     <section class="section">
       <div class="section-title" data-i18n="start">Start Here</div>
@@ -524,9 +413,7 @@
       en: {
         title: "Nashville Winter Resources",
         subtitle: "Shelter, food & support during extreme weather",
-        emergency: "Emergency",
-        emergency_location: "911 Emergency Location",
-        emergency_tap: "Tap to activate",
+        emergency_911: "911 Location",
         start: "Start Here",
         wttin: "Where to Turn in Nashville",
         official: "Official Resource Hubs",
@@ -550,9 +437,7 @@
       es: {
         title: "Recursos de Invierno en Nashville",
         subtitle: "Refugio, comida y apoyo durante clima extremo",
-        emergency: "Emergencia",
-        emergency_location: "Ubicación de Emergencia 911",
-        emergency_tap: "Toca para activar",
+        emergency_911: "Ubicación 911",
         start: "Empiece Aquí",
         wttin: "Dónde Acudir en Nashville",
         official: "Centros de Recursos Oficiales",
@@ -576,9 +461,7 @@
       ar: {
         title: "موارد الشتاء في ناشفيل",
         subtitle: "مأوى وطعام ودعم أثناء الطقس القاسي",
-        emergency: "طوارئ",
-        emergency_location: "موقع طوارئ 911",
-        emergency_tap: "اضغط للتفعيل",
+        emergency_911: "موقع 911",
         start: "ابدأ هنا",
         wttin: "أين تتوجه في ناشفيل",
         official: "مراكز الموارد الرسمية",
@@ -602,9 +485,7 @@
       ku: {
         title: "سەرچاوەکانی زستانی ناشڤیل",
         subtitle: "پەناگا، خواردن و پشتیوانی لە کاتی کەشوهەوای سەخت",
-        emergency: "فریاکەوتن",
-        emergency_location: "شوێنی فریاکەوتنی 911",
-        emergency_tap: "بۆ چالاککردن دابگرە",
+        emergency_911: "شوێنی 911",
         start: "لێرەوە دەست پێبکە",
         wttin: "لە ناشڤیل بۆ کوێ بڕۆیت",
         official: "ناوەندە فەرمییەکانی سەرچاوە",
@@ -628,9 +509,7 @@
       vi: {
         title: "Tài Nguyên Mùa Đông Nashville",
         subtitle: "Nơi trú ẩn, thực phẩm & hỗ trợ trong thời tiết khắc nghiệt",
-        emergency: "Khẩn Cấp",
-        emergency_location: "Vị Trí Khẩn Cấp 911",
-        emergency_tap: "Nhấn để kích hoạt",
+        emergency_911: "Vị Trí 911",
         start: "Bắt Đầu Tại Đây",
         wttin: "Nơi Hướng Dẫn Tại Nashville",
         official: "Trung Tâm Tài Nguyên Chính Thức",
