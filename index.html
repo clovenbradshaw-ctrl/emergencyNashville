@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Nashville Winter Resources</title>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <style>
@@ -10,19 +10,38 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
-    
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
       min-height: 100vh;
+      min-height: 100dvh;
       padding: 1.5rem 1rem;
+      padding-top: max(1.5rem, env(safe-area-inset-top));
+      padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+      padding-left: max(1rem, env(safe-area-inset-left));
+      padding-right: max(1rem, env(safe-area-inset-right));
       color: #fff;
+      -webkit-text-size-adjust: 100%;
     }
-    
+
     .container {
       max-width: 480px;
       margin: 0 auto;
+    }
+
+    @media (max-width: 360px) {
+      body {
+        padding: 1rem 0.75rem;
+        padding-top: max(1rem, env(safe-area-inset-top));
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
+      }
     }
     
     .lang-toggle {
@@ -37,19 +56,34 @@
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 8px;
-      padding: 0.5rem 0.75rem;
+      padding: 0.6rem 0.85rem;
+      min-height: 44px;
       color: #94a3b8;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s ease;
+      touch-action: manipulation;
     }
-    
-    .lang-btn:hover {
-      background: rgba(255, 255, 255, 0.12);
+
+    @media (hover: hover) {
+      .lang-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+      }
+    }
+
+    .lang-btn:active {
+      background: rgba(255, 255, 255, 0.18);
       color: #fff;
+      transform: scale(0.97);
     }
-    
+
+    .lang-btn:focus-visible {
+      outline: 2px solid #60a5fa;
+      outline-offset: 2px;
+    }
+
     .lang-btn.active {
       background: rgba(255, 255, 255, 0.2);
       border-color: rgba(255, 255, 255, 0.3);
@@ -64,13 +98,21 @@
     h1 {
       font-size: 1.6rem;
       font-weight: 700;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.5rem;
       letter-spacing: -0.02em;
+      line-height: 1.2;
     }
-    
+
+    @media (max-width: 360px) {
+      h1 {
+        font-size: 1.4rem;
+      }
+    }
+
     .subtitle {
       color: #94a3b8;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
+      line-height: 1.4;
     }
     
     .section {
@@ -78,18 +120,18 @@
     }
     
     .section-title {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       color: #64748b;
       margin-bottom: 0.6rem;
       padding-left: 0.25rem;
     }
-    
+
     .links {
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.5rem;
     }
     
     a.link {
@@ -99,28 +141,38 @@
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
-      padding: 0.9rem 1rem;
+      padding: 1rem;
+      min-height: 52px;
       color: #fff;
       text-decoration: none;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 500;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
     }
-    
+
     a.link i {
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       opacity: 0.8;
       flex-shrink: 0;
     }
-    
-    a.link:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px);
+
+    @media (hover: hover) {
+      a.link:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
     }
-    
+
     a.link:active {
-      transform: translateY(0);
+      background: rgba(255, 255, 255, 0.18);
+      transform: scale(0.98);
+    }
+
+    a.link:focus-visible {
+      outline: 2px solid #60a5fa;
+      outline-offset: 2px;
     }
     
     .featured {
@@ -128,12 +180,18 @@
       border-color: transparent;
       font-weight: 600;
     }
-    
-    .featured:hover {
-      background: linear-gradient(135deg, #f1404e 0%, #e63946 100%);
-      border-color: transparent;
+
+    @media (hover: hover) {
+      .featured:hover {
+        background: linear-gradient(135deg, #f1404e 0%, #e63946 100%);
+        border-color: transparent;
+      }
     }
-    
+
+    .featured:active {
+      background: linear-gradient(135deg, #d62839 0%, #c41e2e 100%);
+    }
+
     .featured i {
       opacity: 1;
     }
@@ -142,20 +200,37 @@
       text-align: center;
       margin-top: 2rem;
       padding-top: 1.25rem;
+      padding-bottom: 0.5rem;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
       color: #64748b;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
     }
 
     [dir="rtl"] a.link {
       flex-direction: row-reverse;
       text-align: right;
     }
-    
+
     [dir="rtl"] .section-title {
       padding-left: 0;
       padding-right: 0.25rem;
       text-align: right;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+        transform: none !important;
+      }
+      html {
+        scroll-behavior: auto;
+      }
+    }
+
+    @supports (-webkit-touch-callout: none) {
+      body {
+        min-height: -webkit-fill-available;
+      }
     }
   </style>
 </head>
