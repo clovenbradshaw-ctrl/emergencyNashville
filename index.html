@@ -195,7 +195,152 @@
     .featured i {
       opacity: 1;
     }
-    
+
+    /* Emergency Toggle Styles */
+    .emergency-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+      border: 2px solid #fca5a5;
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .emergency-toggle:hover {
+      background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+    }
+
+    .emergency-toggle:active {
+      transform: scale(0.98);
+    }
+
+    .emergency-toggle-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .emergency-toggle-icon {
+      font-size: 2rem;
+      animation: pulse-icon 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-icon {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .emergency-toggle-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .emergency-toggle-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .emergency-toggle-subtitle {
+      font-size: 0.8rem;
+      opacity: 0.9;
+      font-weight: 400;
+    }
+
+    .toggle-switch {
+      width: 60px;
+      height: 32px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 16px;
+      position: relative;
+      flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background: #fff;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .emergency-toggle:hover .toggle-switch::after {
+      transform: translateX(28px);
+    }
+
+    .toggle-label {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+    }
+
+    .emergency-toggle:hover .toggle-label {
+      left: 6px;
+      right: auto;
+      color: #22c55e;
+    }
+
+    [dir="rtl"] .emergency-toggle {
+      flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .emergency-toggle-content {
+      flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .emergency-toggle-text {
+      text-align: right;
+    }
+
+    @media (max-width: 360px) {
+      .emergency-toggle {
+        padding: 1rem 1.25rem;
+      }
+      .emergency-toggle-icon {
+        font-size: 1.75rem;
+      }
+      .emergency-toggle-title {
+        font-size: 1rem;
+      }
+      .toggle-switch {
+        width: 52px;
+        height: 28px;
+      }
+      .toggle-switch::after {
+        width: 20px;
+        height: 20px;
+      }
+      .emergency-toggle:hover .toggle-switch::after {
+        transform: translateX(24px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .emergency-toggle-icon {
+        animation: none;
+      }
+    }
+
     footer {
       text-align: center;
       margin-top: 2rem;
@@ -251,18 +396,24 @@
     
     <section class="section">
       <div class="section-title" data-i18n="emergency">Emergency</div>
-      <div class="links">
-        <a href="emergency.html" class="link featured">
-          <i class="ph ph-warning-circle"></i>
-          <span data-i18n="emergency_location">911 Emergency Location</span>
-        </a>
-      </div>
+      <a href="emergency.html" class="emergency-toggle">
+        <div class="emergency-toggle-content">
+          <i class="ph ph-warning-circle emergency-toggle-icon"></i>
+          <div class="emergency-toggle-text">
+            <span class="emergency-toggle-title" data-i18n="emergency_location">911 Emergency Location</span>
+            <span class="emergency-toggle-subtitle" data-i18n="emergency_tap">Tap to activate</span>
+          </div>
+        </div>
+        <div class="toggle-switch">
+          <span class="toggle-label">GO</span>
+        </div>
+      </a>
     </section>
 
     <section class="section">
       <div class="section-title" data-i18n="start">Start Here</div>
       <div class="links">
-        <a href="https://wttin.org/" class="link featured">
+        <a href="https://wttin.org/" class="link featured external-link" target="_blank" rel="noopener noreferrer" data-href="https://wttin.org/">
           <i class="ph ph-compass"></i>
           <span data-i18n="wttin">Where to Turn in Nashville</span>
         </a>
@@ -272,27 +423,27 @@
     <section class="section">
       <div class="section-title" data-i18n="official">Official Resource Hubs</div>
       <div class="links">
-        <a href="https://www.nashville.gov/departments/emergency-management/news/january-27-winter-weather-update" class="link">
+        <a href="https://www.nashville.gov/departments/emergency-management/news/january-27-winter-weather-update" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.nashville.gov/departments/emergency-management/news/january-27-winter-weather-update">
           <i class="ph ph-cloud-snow"></i>
           <span data-i18n="nashville_weather">Nashville.gov Winter Weather Updates</span>
         </a>
-        <a href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather" class="link">
+        <a href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather">
           <i class="ph ph-thermometer-cold"></i>
           <span data-i18n="ohs_extreme">Metro OHS – Extreme Weather</span>
         </a>
-        <a href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather/shelters" class="link">
+        <a href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather/shelters" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather/shelters">
           <i class="ph ph-list-bullets"></i>
           <span data-i18n="shelter_list">Metro Shelter List</span>
         </a>
-        <a href="https://www.tn.gov/tema/tennessee-shelters.html" class="link">
+        <a href="https://www.tn.gov/tema/tennessee-shelters.html" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.tn.gov/tema/tennessee-shelters.html">
           <i class="ph ph-map-trifold"></i>
           <span data-i18n="tema_map">TEMA Statewide Shelter Map</span>
         </a>
-        <a href="https://www.tn.gov/tema/updates/2026-disasters/january-2026-winter-weather.html" class="link">
+        <a href="https://www.tn.gov/tema/updates/2026-disasters/january-2026-winter-weather.html" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.tn.gov/tema/updates/2026-disasters/january-2026-winter-weather.html">
           <i class="ph ph-warning"></i>
           <span data-i18n="tema_hub">TEMA Winter Weather Hub</span>
         </a>
-        <a href="https://www.fema.gov/disaster/2026-winter-storm" class="link">
+        <a href="https://www.fema.gov/disaster/2026-winter-storm" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.fema.gov/disaster/2026-winter-storm">
           <i class="ph ph-flag"></i>
           <span data-i18n="fema">FEMA 2026 Winter Storm</span>
         </a>
@@ -302,19 +453,19 @@
     <section class="section">
       <div class="section-title" data-i18n="shelter">Shelter & Outreach</div>
       <div class="links">
-        <a href="https://www.roomintheinn.org/" class="link">
+        <a href="https://www.roomintheinn.org/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.roomintheinn.org/">
           <i class="ph ph-bed"></i>
           <span>Room in the Inn</span>
         </a>
-        <a href="https://www.opentablenashville.org/" class="link">
+        <a href="https://www.opentablenashville.org/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.opentablenashville.org/">
           <i class="ph ph-hand-heart"></i>
           <span>Open Table Nashville</span>
         </a>
-        <a href="https://thecontributor.org/" class="link">
+        <a href="https://thecontributor.org/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://thecontributor.org/">
           <i class="ph ph-newspaper"></i>
           <span>The Contributor</span>
         </a>
-        <a href="https://www.peoplelovingnashville.com/" class="link">
+        <a href="https://www.peoplelovingnashville.com/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.peoplelovingnashville.com/">
           <i class="ph ph-users"></i>
           <span>People Loving Nashville</span>
         </a>
@@ -324,15 +475,15 @@
     <section class="section">
       <div class="section-title" data-i18n="food">Food</div>
       <div class="links">
-        <a href="https://www.secondharvestmidtn.org/" class="link">
+        <a href="https://www.secondharvestmidtn.org/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.secondharvestmidtn.org/">
           <i class="ph ph-package"></i>
           <span data-i18n="second_harvest">Second Harvest Food Bank</span>
         </a>
-        <a href="https://www.secondharvestmidtn.org/find-resources/find-food/" class="link">
+        <a href="https://www.secondharvestmidtn.org/find-resources/find-food/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.secondharvestmidtn.org/find-resources/find-food/">
           <i class="ph ph-magnifying-glass"></i>
           <span data-i18n="find_food">Second Harvest – Find Food</span>
         </a>
-        <a href="https://dreamstreetstn.com/mobilefood" class="link">
+        <a href="https://dreamstreetstn.com/mobilefood" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://dreamstreetstn.com/mobilefood">
           <i class="ph ph-truck"></i>
           <span data-i18n="dream_streets">Dream Streets Mobile Food</span>
         </a>
@@ -342,7 +493,7 @@
     <section class="section">
       <div class="section-title" data-i18n="immigrant">Immigrant Community</div>
       <div class="links">
-        <a href="https://www.conexionamericas.org/" class="link">
+        <a href="https://www.conexionamericas.org/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.conexionamericas.org/">
           <i class="ph ph-globe-hemisphere-west"></i>
           <span>Conexión Américas / Casa Azafrán</span>
         </a>
@@ -352,11 +503,11 @@
     <section class="section">
       <div class="section-title" data-i18n="legal">Legal & Other Resources</div>
       <div class="links">
-        <a href="https://las.org/" class="link">
+        <a href="https://las.org/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://las.org/">
           <i class="ph ph-scales"></i>
           <span data-i18n="legal_aid">Legal Aid Society of Middle TN</span>
         </a>
-        <a href="https://www.wnpt.org/agingmatters/unhoused/" class="link">
+        <a href="https://www.wnpt.org/agingmatters/unhoused/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.wnpt.org/agingmatters/unhoused/">
           <i class="ph ph-info"></i>
           <span data-i18n="npt">NPT Unhoused Resources</span>
         </a>
@@ -375,6 +526,7 @@
         subtitle: "Shelter, food & support during extreme weather",
         emergency: "Emergency",
         emergency_location: "911 Emergency Location",
+        emergency_tap: "Tap to activate",
         start: "Start Here",
         wttin: "Where to Turn in Nashville",
         official: "Official Resource Hubs",
@@ -400,6 +552,7 @@
         subtitle: "Refugio, comida y apoyo durante clima extremo",
         emergency: "Emergencia",
         emergency_location: "Ubicación de Emergencia 911",
+        emergency_tap: "Toca para activar",
         start: "Empiece Aquí",
         wttin: "Dónde Acudir en Nashville",
         official: "Centros de Recursos Oficiales",
@@ -425,6 +578,7 @@
         subtitle: "مأوى وطعام ودعم أثناء الطقس القاسي",
         emergency: "طوارئ",
         emergency_location: "موقع طوارئ 911",
+        emergency_tap: "اضغط للتفعيل",
         start: "ابدأ هنا",
         wttin: "أين تتوجه في ناشفيل",
         official: "مراكز الموارد الرسمية",
@@ -450,6 +604,7 @@
         subtitle: "پەناگا، خواردن و پشتیوانی لە کاتی کەشوهەوای سەخت",
         emergency: "فریاکەوتن",
         emergency_location: "شوێنی فریاکەوتنی 911",
+        emergency_tap: "بۆ چالاککردن دابگرە",
         start: "لێرەوە دەست پێبکە",
         wttin: "لە ناشڤیل بۆ کوێ بڕۆیت",
         official: "ناوەندە فەرمییەکانی سەرچاوە",
@@ -475,6 +630,7 @@
         subtitle: "Nơi trú ẩn, thực phẩm & hỗ trợ trong thời tiết khắc nghiệt",
         emergency: "Khẩn Cấp",
         emergency_location: "Vị Trí Khẩn Cấp 911",
+        emergency_tap: "Nhấn để kích hoạt",
         start: "Bắt Đầu Tại Đây",
         wttin: "Nơi Hướng Dẫn Tại Nashville",
         official: "Trung Tâm Tài Nguyên Chính Thức",
@@ -499,6 +655,25 @@
 
     const rtlLangs = ['ar', 'ku'];
 
+    const langCodes = {
+      en: 'en',
+      es: 'es',
+      ar: 'ar',
+      ku: 'ckb',
+      vi: 'vi'
+    };
+
+    function updateExternalLinks(lang) {
+      document.querySelectorAll('.external-link').forEach(link => {
+        const originalUrl = link.dataset.href;
+        if (lang === 'en') {
+          link.href = originalUrl;
+        } else {
+          link.href = `https://translate.google.com/translate?sl=en&tl=${langCodes[lang]}&u=${encodeURIComponent(originalUrl)}`;
+        }
+      });
+    }
+
     function setLanguage(lang) {
       document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.lang === lang);
@@ -519,6 +694,7 @@
         }
       });
 
+      updateExternalLinks(lang);
       localStorage.setItem('nashville-resources-lang', lang);
     }
 
