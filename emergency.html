@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>911 Emergency Location</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 16px;
+            padding-top: max(16px, env(safe-area-inset-top));
+            padding-bottom: max(16px, env(safe-area-inset-bottom));
+            padding-left: max(16px, env(safe-area-inset-left));
+            padding-right: max(16px, env(safe-area-inset-right));
+        }
+
+        [dir="rtl"] { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; }
+        [dir="rtl"] .info-card-label { flex-direction: row-reverse; }
+        [dir="rtl"] .gps-badge { margin-left: 0; margin-right: auto; }
+        [dir="rtl"] .btn-call, [dir="rtl"] .btn-text, [dir="rtl"] .btn-copy, [dir="rtl"] .btn-refresh, [dir="rtl"] .btn-text-other { flex-direction: row-reverse; }
+        [dir="rtl"] .privacy-notice { text-align: right; }
+
+        .container { max-width: 420px; margin: 0 auto; }
+
+        .lang-selector {
+            display: flex; gap: 6px; flex-wrap: wrap;
+            justify-content: center; margin-bottom: 12px;
+        }
+
+        .lang-btn {
+            padding: 8px 12px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white; border-radius: 8px;
+            font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+            min-height: 44px;
+            touch-action: manipulation;
+        }
+
+        .lang-btn:hover { background: rgba(255,255,255,0.2); }
+        .lang-btn:active { transform: scale(0.97); }
+        .lang-btn.active { background: white; color: #7f1d1d; border-color: white; }
+
+        .header {
+            background: #7f1d1d; color: white;
+            padding: 16px 20px; text-align: center;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .header h1 {
+            font-size: 22px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+
+        .header p { color: #fca5a5; font-size: 13px; margin-top: 4px; }
+
+        .privacy-notice {
+            background: #065f46;
+            color: white;
+            padding: 12px 16px;
+            font-size: 13px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.4;
+        }
+
+        .privacy-notice svg {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .emergency-buttons {
+            background: #fee2e2; padding: 16px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+        }
+
+        .btn-call, .btn-text {
+            padding: 18px 16px; border: none; border-radius: 12px;
+            font-weight: 700; font-size: 17px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: transform 0.1s; text-decoration: none; color: white;
+            min-height: 56px;
+            touch-action: manipulation;
+        }
+
+        .btn-call {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            box-shadow: 0 4px 12px rgba(185, 28, 28, 0.4);
+        }
+
+        .btn-text {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-call:active, .btn-text:active { transform: scale(0.96); }
+
+        .content { background: white; padding: 16px; }
+
+        .info-card { border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+        .info-card:last-child { margin-bottom: 0; }
+
+        .info-card-label {
+            font-size: 12px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;
+        }
+
+        .info-card-value {
+            font-size: 20px; font-weight: 700; color: #111; margin-top: 6px;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        }
+
+        .info-card-hint { font-size: 11px; color: #6b7280; margin-top: 4px; font-style: italic; }
+
+        .gps-card { background: #ecfdf5; border: 2px solid #10b981; }
+        .gps-card .info-card-label { color: #065f46; }
+
+        .gps-badge {
+            background: #10b981; color: white; font-size: 10px;
+            padding: 3px 8px; border-radius: 20px; margin-left: auto;
+        }
+
+        .accuracy-text { font-size: 13px; margin-top: 8px; font-weight: 500; }
+        .accuracy-excellent { color: #059669; }
+        .accuracy-good { color: #2563eb; }
+        .accuracy-moderate { color: #d97706; }
+        .accuracy-poor { color: #dc2626; }
+
+        .intersection-card { background: #fffbeb; border: 1px solid #fbbf24; }
+        .intersection-card .info-card-label { color: #92400e; }
+
+        .address-card { background: #f9fafb; border: 1px solid #e5e7eb; }
+        .address-card .info-card-label { color: #4b5563; }
+        .address-card .info-card-value { font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 17px; }
+
+        .maps-card { background: #eff6ff; border: 1px solid #93c5fd; }
+        .maps-card .info-card-label { color: #1d4ed8; }
+        .maps-link { color: #2563eb; font-size: 13px; word-break: break-all; display: block; margin-top: 6px; }
+
+        .actions { background: #f3f4f6; padding: 16px; border-radius: 0 0 16px 16px; }
+
+        .btn-copy, .btn-text-other {
+            width: 100%; padding: 16px; border: none; border-radius: 12px;
+            font-weight: 700; font-size: 16px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.2s; margin-bottom: 12px;
+            min-height: 52px;
+            touch-action: manipulation;
+        }
+
+        .btn-copy {
+            background: #1f2937; color: white;
+        }
+
+        .btn-copy:hover { background: #111827; }
+        .btn-copy:active { transform: scale(0.98); }
+        .btn-copy.copied { background: #059669; }
+
+        .btn-text-other {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-text-other:hover { opacity: 0.95; }
+        .btn-text-other:active { transform: scale(0.98); }
+
+        .btn-refresh {
+            width: 100%; padding: 14px; border: 2px solid #d1d5db; border-radius: 12px;
+            font-weight: 600; font-size: 15px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: white; color: #374151; transition: background 0.2s;
+            min-height: 48px;
+            touch-action: manipulation;
+        }
+
+        .btn-refresh:hover { background: #f9fafb; }
+        .btn-refresh:active { transform: scale(0.98); }
+
+        .instructions {
+            background: rgba(255,255,255,0.9); border-radius: 12px;
+            padding: 16px; margin-top: 16px; font-size: 14px; color: #374151;
+        }
+
+        .instructions strong { color: #111; }
+
+        .instructions .script {
+            color: #1f2937; margin: 8px 0;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 13px; background: #f3f4f6;
+            padding: 8px 12px; border-radius: 8px; white-space: pre-wrap;
+        }
+
+        .instructions .note {
+            font-size: 12px; color: #6b7280; margin-top: 12px;
+            padding-top: 12px; border-top: 1px solid #e5e7eb;
+        }
+
+        .output-preview {
+            background: #fefce8; border: 1px solid #fde047;
+            border-radius: 8px; padding: 12px; margin-top: 12px; font-size: 12px;
+        }
+
+        .output-preview-title { font-weight: 600; color: #854d0e; margin-bottom: 8px; }
+
+        .output-preview-content {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 11px; color: #1f2937; white-space: pre-wrap;
+            background: white; padding: 8px; border-radius: 4px;
+            max-height: 150px; overflow-y: auto;
+        }
+
+        .loading-container {
+            background: white; border-radius: 16px; padding: 48px 24px;
+            text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .spinner {
+            width: 56px; height: 56px; border: 4px solid #fee2e2;
+            border-top-color: #dc2626; border-radius: 50%;
+            animation: spin 1s linear infinite; margin: 0 auto 20px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-container h2 { font-size: 20px; color: #111; margin-bottom: 8px; }
+        .loading-container p { color: #6b7280; }
+
+        .error-container {
+            background: white; border-radius: 16px; padding: 48px 24px;
+            text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .error-icon {
+            width: 56px; height: 56px; background: #fee2e2; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px; font-size: 28px;
+        }
+
+        .error-container h2 { font-size: 20px; color: #111; margin-bottom: 8px; }
+        .error-container p { color: #6b7280; margin-bottom: 24px; }
+
+        .btn-retry {
+            background: #dc2626; color: white; border: none;
+            padding: 14px 32px; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer;
+            min-height: 48px;
+            touch-action: manipulation;
+        }
+
+        .btn-retry:active { transform: scale(0.98); }
+
+        .hidden { display: none !important; }
+        .icon { width: 22px; height: 22px; flex-shrink: 0; }
+        .icon-sm { width: 16px; height: 16px; }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 12px;
+            opacity: 0.9;
+            min-height: 44px;
+            padding: 8px 0;
+        }
+
+        .back-link:hover { opacity: 1; }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { transition: none !important; }
+            .spinner { animation: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span data-i18n="back_to_resources">Back to Resources</span>
+        </a>
+
+        <div class="lang-selector">
+            <button class="lang-btn active" data-lang="en">English</button>
+            <button class="lang-btn" data-lang="es">Español</button>
+            <button class="lang-btn" data-lang="ar">العربية</button>
+            <button class="lang-btn" data-lang="ku">کوردی</button>
+            <button class="lang-btn" data-lang="vi">Tiếng Việt</button>
+        </div>
+
+        <div id="loadingState" class="loading-container">
+            <div class="spinner"></div>
+            <h2 data-i18n="loading_title">Getting Your Location</h2>
+            <p data-i18n="loading_desc">Please allow location access when prompted...</p>
+        </div>
+
+        <div id="errorState" class="error-container hidden">
+            <div class="error-icon">⚠️</div>
+            <h2 data-i18n="error_title">Location Error</h2>
+            <p id="errorMessage" data-i18n="error_generic">Unable to get your location.</p>
+            <button class="btn-retry" onclick="getLocation()" data-i18n="try_again">Try Again</button>
+        </div>
+
+        <div id="mainContent" class="hidden">
+            <div class="header">
+                <h1>
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    <span data-i18n="title">911 Emergency Location</span>
+                </h1>
+                <p data-i18n="subtitle">Share your exact location with emergency services</p>
+            </div>
+
+            <div class="privacy-notice">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <span data-i18n="privacy_notice">Your location stays private on your device. Nothing is shared unless YOU choose to send it via call, text, or copy.</span>
+            </div>
+
+            <div class="emergency-buttons">
+                <a href="tel:911" class="btn-call">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                    <span data-i18n="call_911">CALL 911</span>
+                </a>
+                <a href="#" id="textBtn" class="btn-text">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <span data-i18n="text_911">TEXT 911</span>
+                </a>
+            </div>
+
+            <div class="content">
+                <div class="info-card gps-card">
+                    <div class="info-card-label">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+                        </svg>
+                        <span data-i18n="gps_label">GPS COORDINATES</span>
+                        <span class="gps-badge" data-i18n="gps_badge">911 UNIVERSAL</span>
+                    </div>
+                    <div class="info-card-value" id="gpsCoords">—</div>
+                    <div class="info-card-hint" data-i18n="gps_hint">This is what 911 dispatchers need most</div>
+                    <div class="accuracy-text" id="accuracyText"></div>
+                </div>
+
+                <div class="info-card intersection-card" id="intersectionCard" style="display:none;">
+                    <div class="info-card-label">🚦 <span data-i18n="intersection_label">NEAREST INTERSECTION</span></div>
+                    <div class="info-card-value" id="intersection" style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 18px;">—</div>
+                    <div class="info-card-hint" data-i18n="intersection_hint">Cross streets help responders find you</div>
+                </div>
+
+                <div class="info-card address-card" id="addressCard" style="display:none;">
+                    <div class="info-card-label">📫 <span data-i18n="address_label">STREET ADDRESS</span></div>
+                    <div class="info-card-value" id="streetAddress">—</div>
+                </div>
+
+                <div class="info-card maps-card">
+                    <div class="info-card-label">🗺️ <span data-i18n="maps_label">GOOGLE MAPS</span></div>
+                    <a class="maps-link" id="mapsLink" href="#" target="_blank">—</a>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn-copy" id="copyBtn" onclick="copyToClipboard()">
+                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                    </svg>
+                    <span data-i18n="copy_btn">Copy All Info</span>
+                </button>
+
+                <button class="btn-text-other" id="textOtherBtn" onclick="textSomeoneElse()">
+                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    <span data-i18n="text_other_btn">Text Someone Else</span>
+                </button>
+
+                <button class="btn-refresh" onclick="getLocation()">
+                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                    </svg>
+                    <span data-i18n="refresh_btn">Refresh Location</span>
+                </button>
+
+                <div class="output-preview">
+                    <div class="output-preview-title" data-i18n="preview_title">📤 Message preview (in English for 911):</div>
+                    <div class="output-preview-content" id="outputPreview">—</div>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <strong data-i18n="instructions_title">📞 When calling 911, say:</strong>
+                <p class="script" id="callScript">"My GPS coordinates are..."</p>
+                <p class="note" data-i18n="text_911_note">Nashville/Davidson County supports Text-to-911. Text if you cannot safely speak.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                back_to_resources: "Back to Resources",
+                loading_title: "Getting Your Location",
+                loading_desc: "Please allow location access when prompted...",
+                error_title: "Location Error",
+                error_generic: "Unable to get your location.",
+                error_denied: "Location access denied. Please enable location permissions.",
+                error_unavailable: "Location unavailable. Please try again.",
+                error_timeout: "Location request timed out. Please try again.",
+                try_again: "Try Again",
+                title: "911 Emergency Location",
+                subtitle: "Share your exact location with emergency services",
+                privacy_notice: "Your location stays private on your device. Nothing is shared unless YOU choose to send it via call, text, or copy.",
+                call_911: "CALL 911",
+                text_911: "TEXT 911",
+                gps_label: "GPS COORDINATES",
+                gps_badge: "911 UNIVERSAL",
+                gps_hint: "This is what 911 dispatchers need most",
+                intersection_label: "NEAREST INTERSECTION",
+                intersection_hint: "Cross streets help responders find you",
+                address_label: "STREET ADDRESS",
+                maps_label: "GOOGLE MAPS",
+                copy_btn: "Copy All Info",
+                copy_success: "Copied!",
+                text_other_btn: "Text Someone Else",
+                refresh_btn: "Refresh Location",
+                preview_title: "📤 Message preview (in English for 911):",
+                instructions_title: "📞 When calling 911, say:",
+                text_911_note: "Nashville/Davidson County supports Text-to-911. Text if you cannot safely speak.",
+                accuracy_excellent: "Accuracy: Excellent",
+                accuracy_good: "Accuracy: Good",
+                accuracy_moderate: "Accuracy: Moderate",
+                accuracy_poor: "Accuracy: Approximate"
+            },
+            es: {
+                back_to_resources: "Volver a Recursos",
+                loading_title: "Obteniendo Tu Ubicación",
+                loading_desc: "Permite el acceso a la ubicación cuando se solicite...",
+                error_title: "Error de Ubicación",
+                error_generic: "No se puede obtener tu ubicación.",
+                error_denied: "Acceso denegado. Habilita los permisos de ubicación.",
+                error_unavailable: "Ubicación no disponible. Intenta de nuevo.",
+                error_timeout: "Tiempo agotado. Intenta de nuevo.",
+                try_again: "Intentar de Nuevo",
+                title: "Ubicación de Emergencia 911",
+                subtitle: "Comparte tu ubicación con servicios de emergencia",
+                privacy_notice: "Tu ubicación permanece privada en tu dispositivo. No se comparte nada a menos que TÚ elijas enviarlo por llamada, mensaje o copia.",
+                call_911: "LLAMAR 911",
+                text_911: "MENSAJE 911",
+                gps_label: "COORDENADAS GPS",
+                gps_badge: "911 UNIVERSAL",
+                gps_hint: "Esto es lo que más necesita el 911",
+                intersection_label: "INTERSECCIÓN MÁS CERCANA",
+                intersection_hint: "Las calles cruzadas ayudan a encontrarte",
+                address_label: "DIRECCIÓN",
+                maps_label: "GOOGLE MAPS",
+                copy_btn: "Copiar Todo",
+                copy_success: "¡Copiado!",
+                text_other_btn: "Enviar a Otra Persona",
+                refresh_btn: "Actualizar Ubicación",
+                preview_title: "📤 Vista previa (en inglés para 911):",
+                instructions_title: "📞 Al llamar al 911, di en inglés:",
+                text_911_note: "Nashville tiene texto al 911. Envía mensaje si no puedes hablar.",
+                accuracy_excellent: "Precisión: Excelente",
+                accuracy_good: "Precisión: Buena",
+                accuracy_moderate: "Precisión: Moderada",
+                accuracy_poor: "Precisión: Aproximada"
+            },
+            ar: {
+                back_to_resources: "العودة إلى الموارد",
+                loading_title: "جاري الحصول على موقعك",
+                loading_desc: "يرجى السماح بالوصول إلى الموقع...",
+                error_title: "خطأ في الموقع",
+                error_generic: "تعذر الحصول على موقعك.",
+                error_denied: "تم رفض الوصول. يرجى تمكين الأذونات.",
+                error_unavailable: "الموقع غير متوفر. حاول مرة أخرى.",
+                error_timeout: "انتهت المهلة. حاول مرة أخرى.",
+                try_again: "حاول مرة أخرى",
+                title: "موقع طوارئ 911",
+                subtitle: "شارك موقعك مع خدمات الطوارئ",
+                privacy_notice: "موقعك يبقى خاصاً على جهازك. لا يتم مشاركة أي شيء إلا إذا اخترت أنت إرساله عبر مكالمة أو رسالة أو نسخ.",
+                call_911: "اتصل 911",
+                text_911: "رسالة 911",
+                gps_label: "إحداثيات GPS",
+                gps_badge: "911 عالمي",
+                gps_hint: "هذا ما يحتاجه 911 أكثر",
+                intersection_label: "أقرب تقاطع",
+                intersection_hint: "الشوارع تساعد في العثور عليك",
+                address_label: "عنوان الشارع",
+                maps_label: "خرائط جوجل",
+                copy_btn: "نسخ الكل",
+                copy_success: "تم النسخ!",
+                text_other_btn: "أرسل لشخص آخر",
+                refresh_btn: "تحديث الموقع",
+                preview_title: "📤 معاينة الرسالة (بالإنجليزية لـ 911):",
+                instructions_title: "📞 عند الاتصال، قل بالإنجليزية:",
+                text_911_note: "ناشفيل تدعم الرسائل لـ 911. أرسل رسالة إذا لم تستطع التحدث.",
+                accuracy_excellent: "الدقة: ممتازة",
+                accuracy_good: "الدقة: جيدة",
+                accuracy_moderate: "الدقة: متوسطة",
+                accuracy_poor: "الدقة: تقريبية"
+            },
+            ku: {
+                back_to_resources: "گەڕانەوە بۆ سەرچاوەکان",
+                loading_title: "شوێنەکەت دەدۆزرێتەوە",
+                loading_desc: "ڕێگە بدە بە دەستگەیشتن بە شوێن...",
+                error_title: "هەڵەی شوێن",
+                error_generic: "نەتوانرا شوێنەکەت بدۆزرێتەوە.",
+                error_denied: "ڕەتکرایەوە. ڕێگەپێدان چالاک بکە.",
+                error_unavailable: "شوێن بەردەست نییە. دووبارە هەوڵ بدەوە.",
+                error_timeout: "کات تێپەڕی. دووبارە هەوڵ بدەوە.",
+                try_again: "دووبارە هەوڵ بدەوە",
+                title: "شوێنی فریاکەوتنی 911",
+                subtitle: "شوێنەکەت هاوبەش بکە",
+                privacy_notice: "شوێنەکەت تایبەت دەمێنێتەوە لە ئامێرەکەت. هیچ شتێک هاوبەش ناکرێت مەگەر تۆ خۆت بیبنێریت بە پەیوەندی، نامە، یان لەبەرگرتنەوە.",
+                call_911: "پەیوەندی 911",
+                text_911: "نامە 911",
+                gps_label: "کۆئۆردیناتی GPS",
+                gps_badge: "911 جیهانی",
+                gps_hint: "ئەمە پێویستترینە بۆ 911",
+                intersection_label: "نزیکترین خاچەڕێ",
+                intersection_hint: "شەقامەکان یارمەتی دەدەن",
+                address_label: "ناونیشان",
+                maps_label: "نەخشەی گووگڵ",
+                copy_btn: "هەموو لەبەرگرتنەوە",
+                copy_success: "لەبەرگیرا!",
+                text_other_btn: "نامە بنێرە بۆ کەسێکی تر",
+                refresh_btn: "نوێکردنەوە",
+                preview_title: "📤 پێشبینینی نامە (بە ئینگلیزی بۆ 911):",
+                instructions_title: "📞 بە ئینگلیزی بڵێ:",
+                text_911_note: "ناشڤیل نامە بۆ 911 پشتگیری دەکات.",
+                accuracy_excellent: "وردی: نایاب",
+                accuracy_good: "وردی: باش",
+                accuracy_moderate: "وردی: مامناوەند",
+                accuracy_poor: "وردی: نزیک"
+            },
+            vi: {
+                back_to_resources: "Quay lại Tài Nguyên",
+                loading_title: "Đang Lấy Vị Trí",
+                loading_desc: "Vui lòng cho phép truy cập vị trí...",
+                error_title: "Lỗi Vị Trí",
+                error_generic: "Không thể lấy vị trí.",
+                error_denied: "Bị từ chối. Vui lòng bật quyền vị trí.",
+                error_unavailable: "Vị trí không khả dụng. Thử lại.",
+                error_timeout: "Hết thời gian. Thử lại.",
+                try_again: "Thử Lại",
+                title: "Vị Trí Khẩn Cấp 911",
+                subtitle: "Chia sẻ vị trí với dịch vụ cấp cứu",
+                privacy_notice: "Vị trí của bạn được giữ riêng tư trên thiết bị. Không có gì được chia sẻ trừ khi BẠN chọn gửi qua cuộc gọi, tin nhắn, hoặc sao chép.",
+                call_911: "GỌI 911",
+                text_911: "NHẮN 911",
+                gps_label: "TỌA ĐỘ GPS",
+                gps_badge: "911 TOÀN CẦU",
+                gps_hint: "Đây là thông tin 911 cần nhất",
+                intersection_label: "GIAO LỘ GẦN NHẤT",
+                intersection_hint: "Các đường giao giúp tìm bạn",
+                address_label: "ĐỊA CHỈ",
+                maps_label: "GOOGLE MAPS",
+                copy_btn: "Sao Chép Tất Cả",
+                copy_success: "Đã Sao Chép!",
+                text_other_btn: "Nhắn Cho Người Khác",
+                refresh_btn: "Làm Mới",
+                preview_title: "📤 Xem trước tin nhắn (tiếng Anh cho 911):",
+                instructions_title: "📞 Khi gọi, nói tiếng Anh:",
+                text_911_note: "Nashville hỗ trợ nhắn 911. Nhắn nếu không thể nói.",
+                accuracy_excellent: "Độ chính xác: Xuất sắc",
+                accuracy_good: "Độ chính xác: Tốt",
+                accuracy_moderate: "Độ chính xác: Trung bình",
+                accuracy_poor: "Độ chính xác: Gần đúng"
+            }
+        };
+
+        let currentLang = 'en';
+        let currentLocation = null;
+        let currentAccuracy = null;
+        let currentAddress = null;
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+
+            document.documentElement.setAttribute('dir', (lang === 'ar' || lang === 'ku') ? 'rtl' : 'ltr');
+            document.documentElement.setAttribute('lang', lang);
+
+            localStorage.setItem('emergency-lang', lang);
+
+            if (currentLocation) updateDisplay();
+        }
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+        });
+
+        // Load saved language
+        const savedLang = localStorage.getItem('emergency-lang');
+        if (savedLang && translations[savedLang]) {
+            setLanguage(savedLang);
+        }
+
+        function formatCoords(lat, lng) {
+            return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        }
+
+        function getAccuracyInfo(meters) {
+            const t = translations[currentLang];
+            if (meters <= 10) return { label: t.accuracy_excellent, class: 'accuracy-excellent' };
+            if (meters <= 30) return { label: t.accuracy_good, class: 'accuracy-good' };
+            if (meters <= 100) return { label: t.accuracy_moderate, class: 'accuracy-moderate' };
+            return { label: t.accuracy_poor, class: 'accuracy-poor' };
+        }
+
+        async function reverseGeocode(lat, lng) {
+            try {
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1&zoom=18`,
+                    { headers: { 'User-Agent': 'Emergency911Widget/1.0' } }
+                );
+                const data = await response.json();
+                const addr = data.address || {};
+                return {
+                    street: addr.house_number ? `${addr.house_number} ${addr.road || ''}` : (addr.road || ''),
+                    city: addr.city || addr.town || addr.village || '',
+                    state: addr.state || '',
+                    zip: addr.postcode || ''
+                };
+            } catch (err) { return null; }
+        }
+
+        async function findNearestIntersection(lat, lng) {
+            try {
+                const query = `[out:json][timeout:10];(way["highway"~"^(primary|secondary|tertiary|residential|unclassified)$"](around:150,${lat},${lng}););out body;`;
+                const response = await fetch('https://overpass-api.de/api/interpreter', { method: 'POST', body: query });
+                const data = await response.json();
+                const roads = data.elements.filter(e => e.type === 'way' && e.tags?.name).map(e => e.tags.name).filter((v, i, a) => a.indexOf(v) === i);
+                if (roads.length >= 2) return `${roads[0]} & ${roads[1]}`;
+                if (roads.length === 1) return `Near ${roads[0]}`;
+                return null;
+            } catch (err) { return null; }
+        }
+
+        function showLoading() {
+            document.getElementById('loadingState').classList.remove('hidden');
+            document.getElementById('errorState').classList.add('hidden');
+            document.getElementById('mainContent').classList.add('hidden');
+        }
+
+        function showError(errorKey) {
+            const t = translations[currentLang];
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('errorState').classList.remove('hidden');
+            document.getElementById('mainContent').classList.add('hidden');
+            document.getElementById('errorMessage').textContent = t[errorKey] || t.error_generic;
+        }
+
+        function showContent() {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('errorState').classList.add('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+        }
+
+        function updateDisplay() {
+            const { lat, lng } = currentLocation;
+            const coordsStr = formatCoords(lat, lng);
+
+            document.getElementById('gpsCoords').textContent = coordsStr;
+
+            if (currentAccuracy) {
+                const accInfo = getAccuracyInfo(currentAccuracy);
+                document.getElementById('accuracyText').textContent = `${accInfo.label} (±${Math.round(currentAccuracy)}m)`;
+                document.getElementById('accuracyText').className = `accuracy-text ${accInfo.class}`;
+            }
+
+            const mapsUrl = `https://maps.google.com/?q=${lat},${lng}`;
+            document.getElementById('mapsLink').href = mapsUrl;
+            document.getElementById('mapsLink').textContent = mapsUrl;
+
+            document.getElementById('callScript').textContent = `"My GPS coordinates are ${coordsStr}"`;
+
+            updateTextLink();
+            updateOutputPreview();
+        }
+
+        function updateTextLink() {
+            document.getElementById('textBtn').href = `sms:911?body=${encodeURIComponent(buildEmergencyMessage())}`;
+        }
+
+        function buildEmergencyMessage() {
+            if (!currentLocation) return '';
+            const { lat, lng } = currentLocation;
+            const coordsStr = formatCoords(lat, lng);
+
+            let msg = `EMERGENCY - MY LOCATION:\n\nGPS: ${coordsStr}\n\n`;
+
+            if (currentAddress?.intersection) msg += `INTERSECTION: ${currentAddress.intersection}\n\n`;
+
+            if (currentAddress?.street) {
+                msg += `ADDRESS: ${currentAddress.street}`;
+                if (currentAddress.city) msg += `, ${currentAddress.city}`;
+                if (currentAddress.state) msg += `, ${currentAddress.state}`;
+                if (currentAddress.zip) msg += ` ${currentAddress.zip}`;
+                msg += `\n\n`;
+            }
+
+            msg += `MAP: https://maps.google.com/?q=${lat},${lng}\n\nAccuracy: ±${Math.round(currentAccuracy)}m`;
+
+            return msg;
+        }
+
+        function updateOutputPreview() {
+            document.getElementById('outputPreview').textContent = buildEmergencyMessage();
+        }
+
+        async function copyToClipboard() {
+            const t = translations[currentLang];
+            try {
+                await navigator.clipboard.writeText(buildEmergencyMessage());
+                const btn = document.getElementById('copyBtn');
+                btn.classList.add('copied');
+                btn.innerHTML = `<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>${t.copy_success}</span>`;
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = `<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>${t.copy_btn}</span>`;
+                }, 2000);
+            } catch (err) {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = buildEmergencyMessage();
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+
+                const btn = document.getElementById('copyBtn');
+                btn.classList.add('copied');
+                btn.innerHTML = `<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>${t.copy_success}</span>`;
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = `<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>${t.copy_btn}</span>`;
+                }, 2000);
+            }
+        }
+
+        function textSomeoneElse() {
+            // Open SMS app without a pre-filled number, letting user enter their own recipient
+            const message = buildEmergencyMessage();
+            // On iOS, sms: without a number opens the Messages app
+            // On Android, sms: also works similarly
+            window.location.href = `sms:?body=${encodeURIComponent(message)}`;
+        }
+
+        async function getLocation() {
+            showLoading();
+
+            if (!navigator.geolocation) { showError('error_generic'); return; }
+
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const { latitude: lat, longitude: lng, accuracy } = position.coords;
+
+                    currentLocation = { lat, lng };
+                    currentAccuracy = accuracy;
+
+                    showContent();
+                    updateDisplay();
+
+                    const [addr, intersection] = await Promise.all([
+                        reverseGeocode(lat, lng),
+                        findNearestIntersection(lat, lng)
+                    ]);
+
+                    if (addr) {
+                        currentAddress = { ...addr, intersection };
+
+                        if (addr.street) {
+                            let fullAddr = addr.street;
+                            if (addr.city) fullAddr += `, ${addr.city}`;
+                            if (addr.state) fullAddr += `, ${addr.state}`;
+                            if (addr.zip) fullAddr += ` ${addr.zip}`;
+                            document.getElementById('streetAddress').textContent = fullAddr;
+                            document.getElementById('addressCard').style.display = 'block';
+                        }
+
+                        if (intersection) {
+                            document.getElementById('intersection').textContent = intersection;
+                            document.getElementById('intersectionCard').style.display = 'block';
+                            document.getElementById('callScript').textContent = `"My GPS coordinates are ${formatCoords(lat, lng)}"\n\n"I'm near ${intersection}"`;
+                        }
+                    }
+
+                    updateTextLink();
+                    updateOutputPreview();
+                },
+                (error) => {
+                    const errorMap = { 1: 'error_denied', 2: 'error_unavailable', 3: 'error_timeout' };
+                    showError(errorMap[error.code] || 'error_generic');
+                },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+            );
+        }
+
+        window.onload = getLocation;
+    </script>
+</body>
+</html>
