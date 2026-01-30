@@ -2227,6 +2227,88 @@
       text-decoration: underline;
     }
 
+    /* Featured WTTIN Resource Banner */
+    .wttin-banner {
+      background: linear-gradient(135deg, #1e3a5f 0%, #0f2744 100%);
+      border: 1px solid #3b82f6;
+      border-radius: 14px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+    }
+
+    .wttin-banner-content {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .wttin-banner-icon {
+      font-size: 1.75rem;
+      flex-shrink: 0;
+    }
+
+    .wttin-banner-text h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.25rem;
+    }
+
+    .wttin-banner-text p {
+      font-size: 0.8125rem;
+      color: #94a3b8;
+      margin: 0;
+    }
+
+    .wttin-banner-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #3b82f6;
+      color: #fff;
+      padding: 0.625rem 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      white-space: nowrap;
+      flex-shrink: 0;
+      min-height: 44px;
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+
+    .wttin-banner-link:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    .wttin-banner-link i {
+      font-size: 1rem;
+    }
+
+    @media (max-width: 400px) {
+      .wttin-banner {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+      }
+
+      .wttin-banner-content {
+        flex-direction: column;
+      }
+
+      .wttin-banner-link {
+        justify-content: center;
+      }
+    }
+
     /* Quick Contacts Footer */
     .quick-contacts {
       background: #0f0f18;
@@ -3305,6 +3387,21 @@
     <div class="tab-content active" id="tab-find-help">
       <div class="section-label" data-i18n="what_do_you_need">What do you need?</div>
 
+      <!-- Featured WTTIN Banner -->
+      <div class="wttin-banner">
+        <div class="wttin-banner-content">
+          <div class="wttin-banner-icon">📖</div>
+          <div class="wttin-banner-text">
+            <h4 data-i18n="wttin_title">Where to Turn in Nashville</h4>
+            <p data-i18n="wttin_desc">Complete directory of 200+ local resources</p>
+          </div>
+        </div>
+        <a href="https://wttin.org/" class="wttin-banner-link" target="_blank" rel="noopener noreferrer">
+          <span data-i18n="wttin_visit">Visit wttin.org</span>
+          <i class="ph ph-arrow-square-out"></i>
+        </a>
+      </div>
+
       <div class="intent-grid">
         <!-- Shelter Card -->
         <div class="intent-card" data-intent="shelter">
@@ -4299,6 +4396,9 @@
         emergency_911: "911 Location",
         start: "Start Here",
         wttin: "Where to Turn in Nashville",
+        wttin_title: "Where to Turn in Nashville",
+        wttin_desc: "Complete directory of 200+ local resources",
+        wttin_visit: "Visit wttin.org",
         official: "Official Resource Hubs",
         nashville_weather: "Nashville.gov Winter Weather Updates",
         ohs_extreme: "Metro OHS – Extreme Weather",
@@ -4455,6 +4555,9 @@
         emergency_911: "Ubicación 911",
         start: "Empiece Aquí",
         wttin: "Dónde Acudir en Nashville",
+        wttin_title: "Dónde Acudir en Nashville",
+        wttin_desc: "Directorio completo de más de 200 recursos locales",
+        wttin_visit: "Visitar wttin.org",
         official: "Centros de Recursos Oficiales",
         nashville_weather: "Actualizaciones del Clima Invernal",
         ohs_extreme: "OHS – Clima Extremo",
@@ -4611,6 +4714,9 @@
         emergency_911: "موقع 911",
         start: "ابدأ هنا",
         wttin: "أين تتوجه في ناشفيل",
+        wttin_title: "أين تتوجه في ناشفيل",
+        wttin_desc: "دليل شامل لأكثر من 200 مورد محلي",
+        wttin_visit: "زيارة wttin.org",
         official: "مراكز الموارد الرسمية",
         nashville_weather: "تحديثات طقس الشتاء",
         ohs_extreme: "خدمات الطقس القاسي",
@@ -4767,6 +4873,9 @@
         emergency_911: "شوێنی 911",
         start: "لێرەوە دەست پێبکە",
         wttin: "لە ناشڤیل بۆ کوێ بڕۆیت",
+        wttin_title: "لە ناشڤیل بۆ کوێ بڕۆیت",
+        wttin_desc: "ڕێنیشاندەری تەواوی زیاتر لە 200 سەرچاوەی ناوخۆیی",
+        wttin_visit: "سەردانی wttin.org بکە",
         official: "ناوەندە فەرمییەکانی سەرچاوە",
         nashville_weather: "نوێکردنەوەکانی کەشوهەوای زستان",
         ohs_extreme: "خزمەتگوزارییەکانی کەشوهەوای سەخت",
@@ -4923,6 +5032,9 @@
         emergency_911: "Vị Trí 911",
         start: "Bắt Đầu Tại Đây",
         wttin: "Nơi Hướng Dẫn Tại Nashville",
+        wttin_title: "Nơi Hướng Dẫn Tại Nashville",
+        wttin_desc: "Danh bạ đầy đủ hơn 200 nguồn tài nguyên địa phương",
+        wttin_visit: "Truy cập wttin.org",
         official: "Trung Tâm Tài Nguyên Chính Thức",
         nashville_weather: "Cập Nhật Thời Tiết Mùa Đông",
         ohs_extreme: "OHS – Thời Tiết Khắc Nghiệt",
