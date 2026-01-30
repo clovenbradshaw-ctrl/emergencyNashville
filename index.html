@@ -1542,12 +1542,11 @@
       vi: 'vi'
     };
 
-    // Get language from URL parameter (?lang=es, ?lang=ar, etc.)
+    // Get language from URL parameter (?es, ?ar, etc.)
     function getLanguageFromURL() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const lang = urlParams.get('lang');
-      if (lang && translations[lang]) {
-        return lang;
+      const search = window.location.search.slice(1).toLowerCase(); // Remove '?' and lowercase
+      if (search && translations[search]) {
+        return search;
       }
       return null;
     }
@@ -1555,12 +1554,16 @@
     // Update URL with current language without adding history entry
     function updateURLWithLanguage(lang) {
       const url = new URL(window.location);
-      if (lang === 'en') {
-        url.searchParams.delete('lang');
-      } else {
-        url.searchParams.set('lang', lang);
-      }
+      url.search = (lang === 'en') ? '' : `?${lang}`;
       window.history.replaceState({}, '', url);
+    }
+
+    // Update internal navigation links to preserve language
+    function updateInternalLinks(lang) {
+      document.querySelectorAll('.emergency-link, .back-link').forEach(link => {
+        const baseUrl = link.getAttribute('href').split('?')[0];
+        link.href = (lang === 'en') ? baseUrl : `${baseUrl}?${lang}`;
+      });
     }
 
     function updateExternalLinks(lang) {
@@ -1595,6 +1598,7 @@
       });
 
       updateExternalLinks(lang);
+      updateInternalLinks(lang);
       localStorage.setItem('nashville-resources-lang', lang);
       updateURLWithLanguage(lang);
 
