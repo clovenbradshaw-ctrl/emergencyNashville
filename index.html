@@ -899,6 +899,163 @@
       margin-bottom: 0.5rem;
     }
 
+    /* Cold Weather Shelter Alert Banner */
+    .shelter-alert-banner {
+      background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+      border: 2px solid #60a5fa;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      animation: slideDown 0.4s ease-out, pulseGlow 3s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(96, 165, 250, 0.3); }
+      50% { box-shadow: 0 0 25px rgba(96, 165, 250, 0.6); }
+    }
+
+    .shelter-alert-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #60a5fa, #a78bfa, #60a5fa);
+      background-size: 200% 100%;
+      animation: shimmer 2s linear infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .shelter-alert-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .shelter-alert-icon {
+      font-size: 1.75rem;
+      color: #fbbf24;
+      animation: pulse-alert 2s ease-in-out infinite;
+    }
+
+    .shelter-alert-title-group {
+      flex: 1;
+    }
+
+    .shelter-alert-date {
+      display: inline-block;
+      background: #fbbf24;
+      color: #1e3a5f;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+
+    .shelter-alert-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .shelter-alert-status {
+      background: #dc2626;
+      color: #fff;
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      animation: pulse-alert 2s ease-in-out infinite;
+      white-space: nowrap;
+    }
+
+    .shelter-alert-body {
+      color: rgba(255,255,255,0.95);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .shelter-alert-details {
+      display: grid;
+      gap: 0.5rem;
+      margin: 0.75rem 0;
+    }
+
+    .shelter-detail-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    .shelter-detail-item i {
+      color: #60a5fa;
+      font-size: 1rem;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+
+    .shelter-alert-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .shelter-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .shelter-cta-btn:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-1px);
+    }
+
+    .shelter-cta-btn.primary {
+      background: #fbbf24;
+      border-color: #fbbf24;
+      color: #1e3a5f;
+    }
+
+    .shelter-cta-btn.primary:hover {
+      background: #fcd34d;
+    }
+
+    .shelter-primary-note {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.8);
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+
     /* Power Outage Styles */
     .outages-container {
       margin-bottom: 1rem;
@@ -1689,6 +1846,53 @@
       </a>
     </header>
 
+    <!-- Cold Weather Shelter Alert -->
+    <div class="shelter-alert-banner" role="alert" aria-live="polite">
+      <div class="shelter-alert-header">
+        <i class="ph ph-warning-circle shelter-alert-icon"></i>
+        <div class="shelter-alert-title-group">
+          <span class="shelter-alert-date" data-i18n="shelter_alert_date">January 30, 2026 Update</span>
+          <div class="shelter-alert-title" data-i18n="shelter_alert_title">Metro Emergency Overflow Shelter</div>
+        </div>
+        <span class="shelter-alert-status" data-i18n="shelter_alert_status">Open 24 Hours</span>
+      </div>
+      <div class="shelter-alert-body">
+        <div class="shelter-alert-details">
+          <div class="shelter-detail-item">
+            <i class="ph ph-map-pin"></i>
+            <span data-i18n="shelter_alert_location">3230 Brick Church Pike, Nashville</span>
+          </div>
+          <div class="shelter-detail-item">
+            <i class="ph ph-users"></i>
+            <span data-i18n="shelter_alert_who">Adults 18+, couples, pets welcome (kennels provided)</span>
+          </div>
+          <div class="shelter-detail-item">
+            <i class="ph ph-bowl-food"></i>
+            <span data-i18n="shelter_alert_services">Hot meals, snacks, mats/cots, showers</span>
+          </div>
+          <div class="shelter-detail-item">
+            <i class="ph ph-bus"></i>
+            <span data-i18n="shelter_alert_transport">Free WeGo Bus Line #23B from WeGo Central after 7pm</span>
+          </div>
+        </div>
+        <div class="shelter-alert-cta">
+          <a href="sms:888-777?body=OHSALERT" class="shelter-cta-btn primary">
+            <i class="ph ph-chat-text"></i>
+            <span data-i18n="shelter_alert_text">Text OHSALERT to 888-777</span>
+          </a>
+          <a href="tel:615-862-6391" class="shelter-cta-btn">
+            <i class="ph ph-phone"></i>
+            <span>615-862-6391</span>
+          </a>
+          <a href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather" class="shelter-cta-btn" target="_blank" rel="noopener noreferrer">
+            <i class="ph ph-arrow-square-out"></i>
+            <span data-i18n="shelter_alert_more">Official Info</span>
+          </a>
+        </div>
+        <p class="shelter-primary-note" data-i18n="shelter_alert_note">Primary shelters: Room In The Inn, Nashville Rescue Mission, Launch Pad, Oasis. Try primary shelters first.</p>
+      </div>
+    </div>
+
     <section class="section">
       <div class="section-title" data-i18n="start">Start Here</div>
       <div class="links">
@@ -2345,7 +2549,17 @@
         map_warming_open: "Open warming center",
         map_warming_unconfirmed: "Unconfirmed - verify status",
         map_warming_food: "Food available 24/7",
-        map_warming_verify_link: "Verify on Nashville.gov"
+        map_warming_verify_link: "Verify on Nashville.gov",
+        shelter_alert_date: "January 30, 2026 Update",
+        shelter_alert_title: "Metro Emergency Overflow Shelter",
+        shelter_alert_status: "Open 24 Hours",
+        shelter_alert_location: "3230 Brick Church Pike, Nashville",
+        shelter_alert_who: "Adults 18+, couples, pets welcome (kennels provided)",
+        shelter_alert_services: "Hot meals, snacks, mats/cots, showers",
+        shelter_alert_transport: "Free WeGo Bus Line #23B from WeGo Central after 7pm",
+        shelter_alert_text: "Text OHSALERT to 888-777",
+        shelter_alert_more: "Official Info",
+        shelter_alert_note: "Primary shelters: Room In The Inn, Nashville Rescue Mission, Launch Pad, Oasis. Try primary shelters first."
       },
       es: {
         title: "Recursos de Invierno en Nashville",
@@ -2446,7 +2660,17 @@
         map_warming_open: "Centro de calentamiento abierto",
         map_warming_unconfirmed: "Sin confirmar - verificar estado",
         map_warming_food: "Comida disponible 24/7",
-        map_warming_verify_link: "Verificar en Nashville.gov"
+        map_warming_verify_link: "Verificar en Nashville.gov",
+        shelter_alert_date: "Actualización 30 de enero de 2026",
+        shelter_alert_title: "Refugio de Desbordamiento de Emergencia de Metro",
+        shelter_alert_status: "Abierto 24 Horas",
+        shelter_alert_location: "3230 Brick Church Pike, Nashville",
+        shelter_alert_who: "Adultos 18+, parejas, mascotas bienvenidas (jaulas disponibles)",
+        shelter_alert_services: "Comidas calientes, snacks, colchonetas/catres, duchas",
+        shelter_alert_transport: "Autobús WeGo Línea #23B gratis desde WeGo Central después de las 7pm",
+        shelter_alert_text: "Envía OHSALERT al 888-777",
+        shelter_alert_more: "Información Oficial",
+        shelter_alert_note: "Refugios principales: Room In The Inn, Nashville Rescue Mission, Launch Pad, Oasis. Pruebe primero los refugios principales."
       },
       ar: {
         title: "موارد الشتاء في ناشفيل",
@@ -2547,7 +2771,17 @@
         map_warming_open: "مركز تدفئة مفتوح",
         map_warming_unconfirmed: "غير مؤكد - تحقق من الحالة",
         map_warming_food: "طعام متاح 24/7",
-        map_warming_verify_link: "تحقق على Nashville.gov"
+        map_warming_verify_link: "تحقق على Nashville.gov",
+        shelter_alert_date: "تحديث 30 يناير 2026",
+        shelter_alert_title: "مأوى الطوارئ الفائض في مترو",
+        shelter_alert_status: "مفتوح 24 ساعة",
+        shelter_alert_location: "3230 Brick Church Pike، ناشفيل",
+        shelter_alert_who: "البالغون 18+، الأزواج، الحيوانات الأليفة مرحب بها (توفر أقفاص)",
+        shelter_alert_services: "وجبات ساخنة، وجبات خفيفة، حصائر/أسرة، حمامات",
+        shelter_alert_transport: "حافلة WeGo المجانية خط #23B من WeGo Central بعد 7 مساءً",
+        shelter_alert_text: "أرسل OHSALERT إلى 888-777",
+        shelter_alert_more: "معلومات رسمية",
+        shelter_alert_note: "الملاجئ الرئيسية: Room In The Inn، Nashville Rescue Mission، Launch Pad، Oasis. جرب الملاجئ الرئيسية أولاً."
       },
       ku: {
         title: "سەرچاوەکانی زستانی ناشڤیل",
@@ -2648,7 +2882,17 @@
         map_warming_open: "ناوەندی گەرمکردنەوە کراوەیە",
         map_warming_unconfirmed: "نەدڵنیا - دۆخەکە پشتڕاست بکەرەوە",
         map_warming_food: "خواردن بەردەستە 24/7",
-        map_warming_verify_link: "پشتڕاستکردنەوە لە Nashville.gov"
+        map_warming_verify_link: "پشتڕاستکردنەوە لە Nashville.gov",
+        shelter_alert_date: "نوێکردنەوەی 30ی کانوونی دووەم 2026",
+        shelter_alert_title: "پەناگای کاتی فریاکەوتنی میترۆ",
+        shelter_alert_status: "24 کاتژمێر کراوەیە",
+        shelter_alert_location: "3230 Brick Church Pike، ناشڤیل",
+        shelter_alert_who: "بەساڵاچووان 18+، هاوسەران، ئاژەڵی ماڵی بەخێرهاتوون (قەفەس هەیە)",
+        shelter_alert_services: "نانی گەرم، خواردنەوە، دۆشەک/تەخت، حەمام",
+        shelter_alert_transport: "پاسی بەخۆڕایی WeGo هێڵی #23B لە WeGo Central پاش 7ی ئێوارە",
+        shelter_alert_text: "OHSALERT بنێرە بۆ 888-777",
+        shelter_alert_more: "زانیاری فەرمی",
+        shelter_alert_note: "پەناگا سەرەکییەکان: Room In The Inn، Nashville Rescue Mission، Launch Pad، Oasis. سەرەتا پەناگا سەرەکییەکان تاقی بکەرەوە."
       },
       vi: {
         title: "Tài Nguyên Mùa Đông Nashville",
@@ -2749,7 +2993,17 @@
         map_warming_open: "Trung tâm sưởi ấm đang mở",
         map_warming_unconfirmed: "Chưa xác nhận - kiểm tra trạng thái",
         map_warming_food: "Có thức ăn 24/7",
-        map_warming_verify_link: "Xác minh tại Nashville.gov"
+        map_warming_verify_link: "Xác minh tại Nashville.gov",
+        shelter_alert_date: "Cập nhật ngày 30 tháng 1, 2026",
+        shelter_alert_title: "Nơi Trú Ẩn Khẩn Cấp Tràn Lan Metro",
+        shelter_alert_status: "Mở 24 Giờ",
+        shelter_alert_location: "3230 Brick Church Pike, Nashville",
+        shelter_alert_who: "Người lớn 18+, cặp đôi, thú cưng được chào đón (có chuồng)",
+        shelter_alert_services: "Bữa ăn nóng, đồ ăn nhẹ, chiếu/giường gấp, nhà tắm",
+        shelter_alert_transport: "Xe buýt WeGo miễn phí Tuyến #23B từ WeGo Central sau 7 giờ tối",
+        shelter_alert_text: "Nhắn OHSALERT đến 888-777",
+        shelter_alert_more: "Thông Tin Chính Thức",
+        shelter_alert_note: "Nơi trú ẩn chính: Room In The Inn, Nashville Rescue Mission, Launch Pad, Oasis. Hãy thử các nơi trú ẩn chính trước."
       }
     };
 
