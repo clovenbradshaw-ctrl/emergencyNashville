@@ -3316,9 +3316,9 @@
         <button class="lang-btn" data-lang="vi">VI</button>
       </div>
       <div style="display: flex; gap: 0.5rem; align-items: center;">
-        <button class="alerts-toggle-btn" id="alertsToggleBtn" onclick="openAlertsScreen()" aria-label="View live alerts feed" title="Live Alerts Feed">
+        <button class="alerts-toggle-btn" id="alertsToggleBtn" onclick="openAlertsScreen()" aria-label="View live news and alerts feed" title="Live News & Alerts Feed">
           <span class="pulse-indicator"></span>
-          <span>Alerts</span>
+          <span>News & Alerts</span>
           <span class="alert-count-badge" id="mainAlertCountBadge" style="display: none;">--</span>
         </button>
         <button class="a11y-toggle" id="textSizeToggle" aria-label="Change text size" title="Change text size">Aa</button>
@@ -3785,7 +3785,7 @@
               </svg>
             </button>
             <h1 class="alerts-header-title">
-              Alerts Feed
+              News & Alerts
               <span class="alerts-counter" id="alertsCounterBadge">
                 <span class="pulse-dot"></span>
                 <span id="alertsFeedCount">--</span>
@@ -6954,10 +6954,8 @@
       },
 
       isPriorityAlert(alert) {
-        if (alert.source === 'nws') {
-          const sev = alert.severity?.toLowerCase();
-          return sev === 'extreme' || sev === 'severe';
-        }
+        // All NWS weather alerts are priority (cold weather advisories, winter storms, etc.)
+        if (alert.source === 'nws') return true;
         if (alert.source === 'nes') return true;
         if (alert.source === 'fema') return alert.severity === 'severe';
         if (alert.source === 'localNews') {
