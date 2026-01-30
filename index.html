@@ -5846,17 +5846,19 @@
     let cachedMapOutages = [];
     let mapStatsData = { customers: 0, crews: 0, waiting: 0 };
 
-    // Warming centers data - Official locations from Nashville.gov
-    // Last verified: January 29, 2026
-    // Source: https://www.nashville.gov/departments/emergency-management/news/new-warming-location-opens-at-bellevue-community-center
-    const WARMING_CENTERS_VERIFIED_DATE = '2026-01-29';
+    // Warming centers data - Official locations from Nashville.gov + community resources
+    // Last verified: January 30, 2026
+    // Sources: Nashville.gov, Nashville Predators, Nashville Scene
+    const WARMING_CENTERS_VERIFIED_DATE = '2026-01-30';
     const WARMING_CENTERS_EXPIRY_DAYS = 3;
 
     const warmingCenters = [
       { lat: 36.0679, lng: -86.6675, name: "Southeast Regional Community Center", address: "5260 Hickory Hollow Pkwy, Suite 202, Antioch, TN 37013", hasFood: true },
       { lat: 36.2573, lng: -86.7093, name: "Madison Community Center", address: "550 N Dupont Ave, Madison, TN 37115", hasFood: true },
       { lat: 36.1409, lng: -86.7634, name: "Nashville Fairgrounds", address: "401 Wingrove St, Nashville, TN 37203", hasFood: true },
-      { lat: 36.0771, lng: -86.9208, name: "Bellevue Community Center", address: "7638A Highway 70 S, Nashville, TN 37221", hasFood: true }
+      { lat: 36.0771, lng: -86.9208, name: "Bellevue Community Center", address: "7638A Highway 70 S, Nashville, TN 37221", hasFood: true },
+      { lat: 36.1592, lng: -86.7785, name: "Bridgestone Arena (11:30am-4:30pm)", address: "501 Broadway, Nashville, TN 37203", hasFood: true },
+      { lat: 36.2557, lng: -86.7062, name: "Covenant of the Cross / Madison Co-op", address: "752 Madison Square, Madison, TN 37115", hasFood: true }
     ];
 
     // Road closures data - fetched from Nashville NERVE API

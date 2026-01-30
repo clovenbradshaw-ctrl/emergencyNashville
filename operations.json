@@ -110,6 +110,60 @@
         "actor": "system",
         "reason": "Replaced hardcoded road closures with real-time Nashville NERVE API data"
       }
+    },
+    {
+      "id": "op_005",
+      "ts": "2026-01-30T16:00:00-06:00",
+      "op": "INS",
+      "target": {
+        "id": "warming_center_bridgestone_arena",
+        "type": "warming_center"
+      },
+      "context": {
+        "table": "warming_centers",
+        "data": {
+          "name": "Bridgestone Arena (11:30am-4:30pm)",
+          "address": "501 Broadway, Nashville, TN 37203",
+          "lat": 36.1592,
+          "lng": -86.7785,
+          "hasFood": true,
+          "services": "Device charging, water refills, hot meals"
+        },
+        "source_url": "https://twitter.com/NashSevereWx - Nashville Predators announcement"
+      },
+      "frame": {
+        "verified_date": "2026-01-30",
+        "expiry_days": 1,
+        "actor": "admin",
+        "reason": "Nashville Predators opening Bridgestone Arena as community resource center during winter storm"
+      }
+    },
+    {
+      "id": "op_006",
+      "ts": "2026-01-30T16:00:00-06:00",
+      "op": "INS",
+      "target": {
+        "id": "warming_center_covenant_cross",
+        "type": "warming_center"
+      },
+      "context": {
+        "table": "warming_centers",
+        "data": {
+          "name": "Covenant of the Cross / Madison Co-op",
+          "address": "752 Madison Square, Madison, TN 37115",
+          "lat": 36.2557,
+          "lng": -86.7062,
+          "hasFood": true,
+          "services": "Daily lunch (1pm), dinner (5:30-8pm), Metro shuttle pickup stop"
+        },
+        "source_url": "Nashville Scene, Metro Nashville pilot shuttle program"
+      },
+      "frame": {
+        "verified_date": "2026-01-30",
+        "expiry_days": 3,
+        "actor": "admin",
+        "reason": "LGBTQ+-affirming church with Covenant Cupboard food pantry providing expanded meal service during winter emergency"
+      }
     }
   ]
 }
