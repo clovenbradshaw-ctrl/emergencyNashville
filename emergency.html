@@ -566,6 +566,54 @@
         // ===========================================
         const WEBHOOK_URL = 'https://n8n.intelechia.com/webhook/dc4ce521-1f11-4e5a-8850-e38b1d3b3f39';
 
+        // Debug function to test webhook manually from console
+        window.testWebhook = async function() {
+          console.log('%c[Webhook Test] Starting manual webhook test...', 'color: blue; font-weight: bold');
+          console.log('[Webhook Test] URL:', WEBHOOK_URL);
+
+          const testPayload = {
+            page: 'emergency',
+            action: 'manual_test',
+            details: { test: true, timestamp: Date.now() },
+            timestamp: new Date().toISOString(),
+            language: 'en',
+            userAgent: navigator.userAgent,
+            referrer: document.referrer || null
+          };
+
+          console.log('[Webhook Test] Payload:', JSON.stringify(testPayload, null, 2));
+
+          try {
+            const response = await fetch(WEBHOOK_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(testPayload),
+              mode: 'cors'
+            });
+
+            console.log('%c[Webhook Test] Response received!', 'color: green; font-weight: bold');
+            console.log('[Webhook Test] Status:', response.status, response.statusText);
+            console.log('[Webhook Test] Headers:', [...response.headers.entries()]);
+
+            const text = await response.text();
+            console.log('[Webhook Test] Body:', text);
+
+            return { success: response.ok, status: response.status, body: text };
+          } catch (error) {
+            console.log('%c[Webhook Test] ERROR!', 'color: red; font-weight: bold');
+            console.log('[Webhook Test] Error type:', error.name);
+            console.log('[Webhook Test] Error message:', error.message);
+
+            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+              console.log('%c[Webhook Test] This is likely a CORS error!', 'color: orange; font-weight: bold');
+              console.log('[Webhook Test] Check that n8n webhook has CORS enabled.');
+              console.log('[Webhook Test] In n8n, ensure the webhook node has "Response Mode" set properly');
+            }
+
+            return { success: false, error: error.message };
+          }
+        };
+
         function trackActivity(action, details = {}) {
           try {
             const payload = {
@@ -579,21 +627,35 @@
             };
 
             console.log('[Webhook] Sending:', action, payload);
+            console.log('[Webhook] Target URL:', WEBHOOK_URL);
 
             fetch(WEBHOOK_URL, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(payload),
-              keepalive: true
+              keepalive: true,
+              mode: 'cors'
             })
             .then(response => {
               console.log('[Webhook] Response:', response.status, response.statusText);
               if (!response.ok) {
                 console.error('[Webhook] Failed with status:', response.status);
+              } else {
+                console.log('%c[Webhook] Success!', 'color: green');
               }
+              return response.text();
+            })
+            .then(body => {
+              if (body) console.log('[Webhook] Response body:', body);
             })
             .catch(error => {
-              console.error('[Webhook] Error:', error.message || error);
+              console.error('%c[Webhook] Error!', 'color: red; font-weight: bold');
+              console.error('[Webhook] Error name:', error.name);
+              console.error('[Webhook] Error message:', error.message || error);
+
+              if (error.name === 'TypeError') {
+                console.error('%c[Webhook] Likely CORS issue - check n8n webhook settings', 'color: orange');
+              }
             });
           } catch (e) {
             console.error('[Webhook] Exception:', e);
@@ -601,6 +663,7 @@
         }
 
         // Track page load
+        console.log('%c[Webhook] Page loaded, sending page_load event...', 'color: blue');
         trackActivity('page_load', { url: window.location.href });
 
         const translations = {
