@@ -3380,7 +3380,7 @@
     <!-- Tab Bar -->
     <div class="tab-bar">
       <button class="tab-btn active" data-tab="find-help" data-i18n="tab_find_help">Find Help</button>
-      <button class="tab-btn" data-tab="resource-map" data-i18n="tab_resource_map">Resource Map</button>
+      <button class="tab-btn" data-tab="resource-map" data-i18n="tab_resource_map">Map</button>
     </div>
 
     <!-- Find Help Tab Content -->
@@ -3681,25 +3681,28 @@
             </div>
             <div class="map-preview-wrapper" style="height: 300px; border-radius: 12px; overflow: hidden;">
               <div id="outageMapPreview"></div>
-              <div class="map-preview-legend">
-                <div class="map-legend-item">
-                  <div class="map-legend-dot red"></div>
-                  <span data-i18n="map_legend_outage">Outage</span>
-                </div>
-                <div class="map-legend-item">
-                  <div class="map-legend-dot blue"></div>
-                  <span data-i18n="map_legend_warming">Warming center</span>
-                </div>
-              </div>
+            </div>
+            <div class="map-toggles" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.75rem; padding: 0.75rem; background: rgba(30, 41, 59, 0.5); border-radius: 8px;">
+              <label class="map-toggle-item" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.85rem;">
+                <input type="checkbox" id="toggleOutages" checked onchange="toggleMapLayer('outages')" style="accent-color: #f87171;">
+                <span class="map-legend-dot red" style="width: 10px; height: 10px;"></span>
+                <span data-i18n="map_legend_outage">Outages</span>
+              </label>
+              <label class="map-toggle-item" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.85rem;">
+                <input type="checkbox" id="toggleWarmingCenters" checked onchange="toggleMapLayer('warmingCenters')" style="accent-color: #60a5fa;">
+                <span class="map-legend-dot blue" style="width: 10px; height: 10px;"></span>
+                <span data-i18n="map_legend_warming">Warming centers</span>
+              </label>
+              <label class="map-toggle-item" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.85rem;">
+                <input type="checkbox" id="toggleRoadClosures" checked onchange="toggleMapLayer('roadClosures')" style="accent-color: #f97316;">
+                <span class="map-legend-dot orange" style="width: 10px; height: 10px;"></span>
+                <span data-i18n="map_legend_road_closed">Road closures</span>
+              </label>
             </div>
             <div class="map-preview-stats" style="margin-top: 0.75rem;">
               <div class="map-stat">
                 <div class="map-stat-value red" id="mapStatCustomers">--</div>
                 <div class="map-stat-label" data-i18n="map_stat_affected">Affected</div>
-              </div>
-              <div class="map-legend-item">
-                <div class="map-legend-dot orange"></div>
-                <span data-i18n="map_legend_road_closed">Road Closed</span>
               </div>
             </div>
           </div>
@@ -4491,7 +4494,7 @@
         shelter_alert_note: "Primary shelters: Room In The Inn, Nashville Rescue Mission, Launch Pad, Oasis. Try primary shelters first.",
         // UX Revamp translations
         tab_find_help: "Find Help",
-        tab_resource_map: "Resource Map",
+        tab_resource_map: "Map",
         what_do_you_need: "What do you need?",
         intent_shelter: "I need a place tonight",
         intent_shelter_count: "4 shelters open now",
@@ -4647,7 +4650,7 @@
         shelter_alert_note: "Refugios principales: Room In The Inn, Nashville Rescue Mission, Launch Pad, Oasis. Pruebe primero los refugios principales.",
         // UX Revamp translations
         tab_find_help: "Buscar Ayuda",
-        tab_resource_map: "Mapa de Recursos",
+        tab_resource_map: "Mapa",
         what_do_you_need: "¿Qué necesitas?",
         intent_shelter: "Necesito un lugar esta noche",
         intent_shelter_count: "4 refugios abiertos ahora",
@@ -4803,7 +4806,7 @@
         shelter_alert_note: "الملاجئ الرئيسية: Room In The Inn، Nashville Rescue Mission، Launch Pad، Oasis. جرب الملاجئ الرئيسية أولاً.",
         // UX Revamp translations
         tab_find_help: "ابحث عن مساعدة",
-        tab_resource_map: "خريطة الموارد",
+        tab_resource_map: "خريطة",
         what_do_you_need: "ماذا تحتاج؟",
         intent_shelter: "أحتاج مكاناً الليلة",
         intent_shelter_count: "4 ملاجئ مفتوحة الآن",
@@ -4959,7 +4962,7 @@
         shelter_alert_note: "پەناگا سەرەکییەکان: Room In The Inn، Nashville Rescue Mission، Launch Pad، Oasis. سەرەتا پەناگا سەرەکییەکان تاقی بکەرەوە.",
         // UX Revamp translations
         tab_find_help: "یارمەتی بدۆزەرەوە",
-        tab_resource_map: "نەخشەی سەرچاوەکان",
+        tab_resource_map: "نەخشە",
         what_do_you_need: "پێویستت بە چی هەیە؟",
         intent_shelter: "ئەم شەوە پێویستم بە شوێنێکە",
         intent_shelter_count: "4 پەناگا ئێستا کراوەن",
@@ -5115,7 +5118,7 @@
         shelter_alert_note: "Nơi trú ẩn chính: Room In The Inn, Nashville Rescue Mission, Launch Pad, Oasis. Hãy thử các nơi trú ẩn chính trước.",
         // UX Revamp translations
         tab_find_help: "Tìm Trợ Giúp",
-        tab_resource_map: "Bản Đồ Tài Nguyên",
+        tab_resource_map: "Bản Đồ",
         what_do_you_need: "Bạn cần gì?",
         intent_shelter: "Tôi cần chỗ ở tối nay",
         intent_shelter_count: "4 nơi trú ẩn đang mở",
@@ -5972,6 +5975,13 @@
     let cachedMapOutages = [];
     let mapStatsData = { customers: 0, crews: 0, waiting: 0 };
 
+    // Map layer toggle state
+    let mapToggles = {
+      outages: true,
+      warmingCenters: true,
+      roadClosures: true
+    };
+
     // Warming centers data - Official locations from Nashville.gov + community resources
     // Last verified: January 30, 2026
     // Sources: Nashville.gov, Nashville Predators, Nashville Scene
@@ -6164,54 +6174,73 @@
     function addOutageMarkers(map, layer) {
       layer.clearLayers();
 
-      cachedMapOutages.forEach(event => {
-        const lat = event.lat || event.latitude;
-        const lng = event.lng || event.longitude;
-        const customers = event.customersAffected || event.customers_affected || event.numPeople || 1;
-        const status = event.status || event.crewStatus || 'Unassigned';
+      // Add outage markers (if toggle enabled)
+      if (mapToggles.outages) {
+        cachedMapOutages.forEach(event => {
+          const lat = event.lat || event.latitude;
+          const lng = event.lng || event.longitude;
+          const customers = event.customersAffected || event.customers_affected || event.numPeople || 1;
+          const status = event.status || event.crewStatus || 'Unassigned';
 
-        if (!lat || !lng) return;
+          if (!lat || !lng) return;
 
-        const color = getMapStatusColor(status);
-        const radius = Math.min(Math.max(Math.sqrt(customers) * 1.2, 6), 30);
+          const color = getMapStatusColor(status);
+          const radius = Math.min(Math.max(Math.sqrt(customers) * 1.2, 6), 30);
 
-        const marker = L.circleMarker([lat, lng], {
-          radius: radius,
-          fillColor: color,
-          color: '#1e293b',
-          weight: 1.5,
-          opacity: 1,
-          fillOpacity: 0.75
-        }).addTo(layer);
+          const marker = L.circleMarker([lat, lng], {
+            radius: radius,
+            fillColor: color,
+            color: '#1e293b',
+            weight: 1.5,
+            opacity: 1,
+            fillOpacity: 0.75
+          }).addTo(layer);
 
-        marker.bindPopup(() => createOutagePopup(customers, status));
-      });
+          marker.bindPopup(() => createOutagePopup(customers, status));
+        });
+      }
 
-      // Add warming center markers
-      const warmingIcon = L.divIcon({
-        className: '',
-        html: '<div class="warming-center-icon">🏠</div>',
-        iconSize: [28, 28],
-        iconAnchor: [14, 14]
-      });
+      // Add warming center markers (if toggle enabled)
+      if (mapToggles.warmingCenters) {
+        const warmingIcon = L.divIcon({
+          className: '',
+          html: '<div class="warming-center-icon">🏠</div>',
+          iconSize: [28, 28],
+          iconAnchor: [14, 14]
+        });
 
-      warmingCenters.forEach(center => {
-        const marker = L.marker([center.lat, center.lng], { icon: warmingIcon }).addTo(layer);
-        marker.bindPopup(() => createWarmingCenterPopup(center.name, center.address, center.hasFood));
-      });
+        warmingCenters.forEach(center => {
+          const marker = L.marker([center.lat, center.lng], { icon: warmingIcon }).addTo(layer);
+          marker.bindPopup(() => createWarmingCenterPopup(center.name, center.address, center.hasFood));
+        });
+      }
 
-      // Add road closure markers
-      const roadClosureIcon = L.divIcon({
-        className: '',
-        html: '<div class="road-closure-icon" style="background: #f97316; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; border: 2px solid #1e293b; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">✕</div>',
-        iconSize: [28, 28],
-        iconAnchor: [14, 14]
-      });
+      // Add road closure markers (if toggle enabled)
+      if (mapToggles.roadClosures) {
+        const roadClosureIcon = L.divIcon({
+          className: '',
+          html: '<div class="road-closure-icon" style="background: #f97316; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; border: 2px solid #1e293b; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">✕</div>',
+          iconSize: [28, 28],
+          iconAnchor: [14, 14]
+        });
 
-      roadClosures.forEach(closure => {
-        const marker = L.marker([closure.lat, closure.lng], { icon: roadClosureIcon }).addTo(layer);
-        marker.bindPopup(() => createRoadClosurePopup(closure.name, closure.location, closure.reason));
-      });
+        roadClosures.forEach(closure => {
+          const marker = L.marker([closure.lat, closure.lng], { icon: roadClosureIcon }).addTo(layer);
+          marker.bindPopup(() => createRoadClosurePopup(closure.name, closure.location, closure.reason));
+        });
+      }
+    }
+
+    function toggleMapLayer(layerType) {
+      mapToggles[layerType] = !mapToggles[layerType];
+
+      // Refresh both maps
+      if (previewMap && previewOutageLayer) {
+        addOutageMarkers(previewMap, previewOutageLayer);
+      }
+      if (fullMap && fullOutageLayer) {
+        addOutageMarkers(fullMap, fullOutageLayer);
+      }
     }
 
     function updateMapStats() {
