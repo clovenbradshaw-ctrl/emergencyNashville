@@ -754,6 +754,11 @@
       50% { opacity: 0.6; }
     }
 
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
     .alert-content {
       flex: 1;
       min-width: 0;
@@ -1090,6 +1095,239 @@
     // Store data for re-rendering on language change
     let cachedWeatherData = null;
     let cachedAlertsData = null;
+
+    // ===========================================
+    // TRANSLATION CACHE (localStorage persistence)
+    // ===========================================
+    const translationCache = new Map();
+    const CACHE_KEY = 'nashville_alert_translations_v1';
+    const CACHE_EXPIRY_DAYS = 30;
+
+    function loadTranslationCache() {
+      try {
+        const stored = localStorage.getItem(CACHE_KEY);
+        if (stored) {
+          const { data, timestamp } = JSON.parse(stored);
+          const age = Date.now() - timestamp;
+          if (age < CACHE_EXPIRY_DAYS * 24 * 60 * 60 * 1000) {
+            Object.entries(data).forEach(([k, v]) => translationCache.set(k, v));
+            console.log(`Loaded ${Object.keys(data).length} cached translations`);
+          } else {
+            localStorage.removeItem(CACHE_KEY);
+          }
+        }
+      } catch (e) {
+        console.warn('Failed to load translation cache:', e);
+      }
+    }
+
+    function saveTranslationCache() {
+      try {
+        const data = Object.fromEntries(translationCache);
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+          data,
+          timestamp: Date.now()
+        }));
+      } catch (e) {
+        console.warn('Failed to save translation cache:', e);
+      }
+    }
+
+    // Load cache on startup
+    loadTranslationCache();
+
+    // ===========================================
+    // PRE-TRANSLATED NWS ALERT TYPES
+    // ===========================================
+    const alertTranslations = {
+      es: {
+        'Tornado Warning': 'Advertencia de Tornado',
+        'Tornado Watch': 'Vigilancia de Tornado',
+        'Severe Thunderstorm Warning': 'Advertencia de Tormenta Severa',
+        'Severe Thunderstorm Watch': 'Vigilancia de Tormenta Severa',
+        'Flash Flood Warning': 'Advertencia de Inundación Repentina',
+        'Flash Flood Watch': 'Vigilancia de Inundación Repentina',
+        'Flood Warning': 'Advertencia de Inundación',
+        'Flood Watch': 'Vigilancia de Inundación',
+        'Flood Advisory': 'Aviso de Inundación',
+        'Winter Storm Warning': 'Advertencia de Tormenta Invernal',
+        'Winter Storm Watch': 'Vigilancia de Tormenta Invernal',
+        'Winter Weather Advisory': 'Aviso de Clima Invernal',
+        'Blizzard Warning': 'Advertencia de Ventisca',
+        'Ice Storm Warning': 'Advertencia de Tormenta de Hielo',
+        'Wind Chill Warning': 'Advertencia de Sensación Térmica',
+        'Wind Chill Watch': 'Vigilancia de Sensación Térmica',
+        'Wind Chill Advisory': 'Aviso de Sensación Térmica',
+        'Cold Weather Advisory': 'Aviso de Clima Frío',
+        'Freeze Warning': 'Advertencia de Helada',
+        'Freeze Watch': 'Vigilancia de Helada',
+        'Frost Advisory': 'Aviso de Escarcha',
+        'Hard Freeze Warning': 'Advertencia de Helada Intensa',
+        'Hard Freeze Watch': 'Vigilancia de Helada Intensa',
+        'Excessive Heat Warning': 'Advertencia de Calor Excesivo',
+        'Excessive Heat Watch': 'Vigilancia de Calor Excesivo',
+        'Heat Advisory': 'Aviso de Calor',
+        'Hurricane Warning': 'Advertencia de Huracán',
+        'Hurricane Watch': 'Vigilancia de Huracán',
+        'Tropical Storm Warning': 'Advertencia de Tormenta Tropical',
+        'Tropical Storm Watch': 'Vigilancia de Tormenta Tropical',
+        'High Wind Warning': 'Advertencia de Vientos Fuertes',
+        'High Wind Watch': 'Vigilancia de Vientos Fuertes',
+        'Wind Advisory': 'Aviso de Viento',
+        'Dense Fog Advisory': 'Aviso de Niebla Densa',
+        'Fire Warning': 'Advertencia de Incendio',
+        'Red Flag Warning': 'Advertencia de Bandera Roja',
+        'Special Weather Statement': 'Comunicado Especial del Tiempo',
+        'Hazardous Weather Outlook': 'Perspectiva de Clima Peligroso',
+        'Air Quality Alert': 'Alerta de Calidad del Aire'
+      },
+      ar: {
+        'Tornado Warning': 'تحذير من إعصار',
+        'Tornado Watch': 'مراقبة إعصار',
+        'Severe Thunderstorm Warning': 'تحذير من عاصفة رعدية شديدة',
+        'Flash Flood Warning': 'تحذير من فيضان مفاجئ',
+        'Flood Warning': 'تحذير من فيضان',
+        'Winter Storm Warning': 'تحذير من عاصفة شتوية',
+        'Winter Weather Advisory': 'تنبيه طقس شتوي',
+        'Blizzard Warning': 'تحذير من عاصفة ثلجية',
+        'Cold Weather Advisory': 'تنبيه طقس بارد',
+        'Freeze Warning': 'تحذير من تجمد',
+        'Heat Advisory': 'تنبيه حرارة',
+        'Excessive Heat Warning': 'تحذير من حرارة شديدة',
+        'High Wind Warning': 'تحذير من رياح قوية',
+        'Wind Advisory': 'تنبيه رياح',
+        'Dense Fog Advisory': 'تنبيه ضباب كثيف',
+        'Fire Warning': 'تحذير من حريق',
+        'Air Quality Alert': 'تنبيه جودة الهواء'
+      },
+      ku: {
+        'Tornado Warning': 'ئاگاداری تۆرنادۆ',
+        'Severe Thunderstorm Warning': 'ئاگاداری بروسکە توند',
+        'Flash Flood Warning': 'ئاگاداری لافاوی کاتی',
+        'Flood Warning': 'ئاگاداری لافاو',
+        'Winter Storm Warning': 'ئاگاداری زریانی زستان',
+        'Winter Weather Advisory': 'ڕاوێژی کەشوهەوای زستان',
+        'Blizzard Warning': 'ئاگاداری بۆران',
+        'Cold Weather Advisory': 'ڕاوێژی کەشوهەوای سارد',
+        'Freeze Warning': 'ئاگاداری بەستن',
+        'Heat Advisory': 'ڕاوێژی گەرما',
+        'High Wind Warning': 'ئاگاداری با بەهێز',
+        'Fire Warning': 'ئاگاداری ئاگر',
+        'Air Quality Alert': 'ئاگاداری کوالیتی هەوا'
+      },
+      vi: {
+        'Tornado Warning': 'Cảnh báo Lốc Xoáy',
+        'Tornado Watch': 'Theo dõi Lốc Xoáy',
+        'Severe Thunderstorm Warning': 'Cảnh báo Dông Bão Mạnh',
+        'Flash Flood Warning': 'Cảnh báo Lũ Quét',
+        'Flood Warning': 'Cảnh báo Lũ Lụt',
+        'Winter Storm Warning': 'Cảnh báo Bão Mùa Đông',
+        'Winter Weather Advisory': 'Khuyến cáo Thời tiết Mùa Đông',
+        'Blizzard Warning': 'Cảnh báo Bão Tuyết',
+        'Cold Weather Advisory': 'Khuyến cáo Thời tiết Lạnh',
+        'Freeze Warning': 'Cảnh báo Đóng Băng',
+        'Frost Advisory': 'Khuyến cáo Sương Giá',
+        'Heat Advisory': 'Khuyến cáo Nóng',
+        'Excessive Heat Warning': 'Cảnh báo Nóng Cực Độ',
+        'High Wind Warning': 'Cảnh báo Gió Mạnh',
+        'Wind Advisory': 'Khuyến cáo Gió',
+        'Dense Fog Advisory': 'Khuyến cáo Sương Mù Dày',
+        'Fire Warning': 'Cảnh báo Cháy Rừng',
+        'Red Flag Warning': 'Cảnh báo Cờ Đỏ',
+        'Air Quality Alert': 'Cảnh báo Chất lượng Không khí'
+      }
+    };
+
+    // Look up pre-translated alert type
+    function getPreTranslatedAlert(alertType, lang) {
+      if (lang === 'en' || !alertType) return null;
+      const langAlerts = alertTranslations[lang];
+      return langAlerts && langAlerts[alertType] ? langAlerts[alertType] : null;
+    }
+
+    // ===========================================
+    // TRANSLATION FALLBACK CHAIN
+    // Priority: Pre-translated → Cache → MyMemory → LibreTranslate → English
+    // ===========================================
+    async function tryMyMemory(text, targetLang) {
+      const truncated = text.substring(0, 450);
+      const encoded = encodeURIComponent(truncated);
+      const response = await fetch(
+        `https://api.mymemory.translated.net/get?q=${encoded}&langpair=en|${targetLang}`
+      );
+      if (!response.ok) throw new Error('MyMemory API error');
+      const data = await response.json();
+      if (data.responseStatus === 429 ||
+          (data.responseData?.translatedText || '').includes('MYMEMORY WARNING')) {
+        throw new Error('MyMemory rate limited');
+      }
+      if (data.responseStatus === 200 && data.responseData?.translatedText) {
+        let translated = data.responseData.translatedText;
+        if (translated === translated.toUpperCase() && translated.length > 10) {
+          translated = translated.charAt(0) + translated.slice(1).toLowerCase();
+        }
+        return translated;
+      }
+      throw new Error('MyMemory no translation');
+    }
+
+    async function tryLibreTranslate(text, targetLang) {
+      const instances = [
+        'https://libretranslate.com',
+        'https://translate.argosopentech.com',
+        'https://translate.terraprint.co'
+      ];
+      const truncated = text.substring(0, 450);
+      for (const instance of instances) {
+        try {
+          const response = await fetch(`${instance}/translate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ q: truncated, source: 'en', target: targetLang, format: 'text' })
+          });
+          if (response.ok) {
+            const data = await response.json();
+            if (data.translatedText) return data.translatedText;
+          }
+        } catch (e) { continue; }
+      }
+      throw new Error('LibreTranslate all instances failed');
+    }
+
+    async function translateText(text, targetLang) {
+      if (!text || targetLang === 'en') return text;
+
+      // 1. Check pre-translated alert types (instant)
+      const preTranslated = getPreTranslatedAlert(text, targetLang);
+      if (preTranslated) return preTranslated;
+
+      // 2. Check cache
+      const cacheKey = `${text.substring(0, 100)}|${targetLang}`;
+      if (translationCache.has(cacheKey)) return translationCache.get(cacheKey);
+
+      // 3. Try MyMemory API
+      try {
+        const translated = await tryMyMemory(text, targetLang);
+        translationCache.set(cacheKey, translated);
+        saveTranslationCache();
+        return translated;
+      } catch (err) {
+        console.warn('MyMemory failed:', err.message);
+      }
+
+      // 4. Try LibreTranslate
+      try {
+        const translated = await tryLibreTranslate(text, targetLang);
+        translationCache.set(cacheKey, translated);
+        saveTranslationCache();
+        return translated;
+      } catch (err) {
+        console.warn('LibreTranslate failed:', err.message);
+      }
+
+      // 5. Return original English
+      return text;
+    }
 
     const translations = {
       en: {
@@ -1617,9 +1855,10 @@
       return `${dayName}, ${monthName} ${day}, ${hour12}:${minutes} ${ampm}`;
     }
 
-    function renderAlerts(alerts) {
+    async function renderAlerts(alerts) {
       const container = document.getElementById('alertsContainer');
       container.innerHTML = '';
+      const lang = getCurrentLang();
 
       if (!alerts || alerts.length === 0) {
         container.innerHTML = `
@@ -1639,7 +1878,8 @@
         return (severityOrder[sA] ?? 4) - (severityOrder[sB] ?? 4);
       });
 
-      alerts.forEach((alert, index) => {
+      for (let index = 0; index < alerts.length; index++) {
+        const alert = alerts[index];
         const props = alert.properties;
         const severity = props.severity || 'Unknown';
         const event = props.event || 'Weather Alert';
@@ -1647,6 +1887,10 @@
         const description = props.description || '';
         const effective = props.effective;
         const expires = props.expires;
+
+        // Translate event name and headline
+        const displayEvent = await translateText(event, lang);
+        const displayHeadline = await translateText(headline, lang);
 
         const banner = document.createElement('div');
         banner.className = `alert-banner ${getSeverityClass(severity)}`;
@@ -1656,10 +1900,10 @@
           <i class="ph ${getSeverityIcon(severity)} alert-icon"></i>
           <div class="alert-content">
             <div class="alert-header">
-              <span class="alert-title">${event}</span>
+              <span class="alert-title">${displayEvent}</span>
               <span class="alert-severity-badge">${getSeverityLabel(severity)}</span>
             </div>
-            <p class="alert-description" id="alert-desc-${index}">${headline}</p>
+            <p class="alert-description" id="alert-desc-${index}">${displayHeadline}</p>
             ${description ? `<button class="alert-expand-btn" onclick="toggleAlertExpand(${index}, this)" data-i18n="alert_show_details">${t('alert_show_details')}</button>` : ''}
             <div class="alert-meta">
               ${effective ? `<span><i class="ph ph-clock"></i> ${t('alert_effective')}: ${formatAlertTime(effective)}</span>` : ''}
@@ -1671,19 +1915,21 @@
           </button>
         `;
 
-        // Store full description for expansion
+        // Store original English for expansion and translation
         banner.dataset.fullDescription = description;
-        banner.dataset.headline = headline;
+        banner.dataset.headline = displayHeadline;
+        banner.dataset.originalDescription = description;
 
         container.appendChild(banner);
-      });
+      }
     }
 
-    window.toggleAlertExpand = function(index, btn) {
+    window.toggleAlertExpand = async function(index, btn) {
       const desc = document.getElementById(`alert-desc-${index}`);
       const banner = btn.closest('.alert-banner');
-      const fullDesc = banner.dataset.fullDescription;
+      const originalDesc = banner.dataset.originalDescription;
       const headline = banner.dataset.headline;
+      const lang = getCurrentLang();
 
       if (desc.classList.contains('expanded')) {
         desc.classList.remove('expanded');
@@ -1691,7 +1937,11 @@
         btn.textContent = t('alert_show_details');
       } else {
         desc.classList.add('expanded');
-        desc.textContent = fullDesc;
+        // Show loading indicator
+        btn.innerHTML = '<i class="ph ph-spinner" style="animation: spin 1s linear infinite;"></i>';
+        // Translate description
+        const displayDesc = await translateText(originalDesc, lang);
+        desc.textContent = displayDesc;
         btn.textContent = t('alert_hide_details');
       }
     };
