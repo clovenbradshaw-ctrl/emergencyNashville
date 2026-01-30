@@ -1096,6 +1096,98 @@
       text-decoration: underline;
     }
 
+    .outage-nearby-badge {
+      font-size: 0.55rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: #10b981;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      color: #fff;
+    }
+
+    .outage-section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      margin: 0.75rem 0 0.4rem 0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .outage-section-header i {
+      font-size: 0.9rem;
+      color: #a78bfa;
+    }
+
+    .outage-more-text {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      text-align: center;
+      padding: 0.5rem;
+    }
+
+    .outage-banner.nearby {
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .outage-location-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .outage-location-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(124, 58, 237, 0.15);
+      border: 1px solid rgba(124, 58, 237, 0.3);
+      color: #a78bfa;
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .outage-location-btn:hover {
+      background: rgba(124, 58, 237, 0.25);
+      color: #c4b5fd;
+    }
+
+    .outage-location-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .outage-location-btn i {
+      font-size: 0.9rem;
+    }
+
+    .outage-location-status {
+      font-size: 0.7rem;
+      color: var(--color-text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .outage-location-status.success {
+      color: #10b981;
+    }
+
+    .outage-location-status.error {
+      color: #f87171;
+    }
+
     .alerts-loading i {
       font-size: 1.1rem;
       animation: pulse 1.5s ease-in-out infinite;
@@ -1167,6 +1259,13 @@
 
     <section class="section">
       <div class="section-title" data-i18n="power_outages">Power Outages</div>
+      <div class="outage-location-controls">
+        <button class="outage-location-btn" id="outageLocationBtn" onclick="useMyLocationForOutages()">
+          <i class="ph ph-crosshair"></i>
+          <span data-i18n="outage_use_location">Use My Location</span>
+        </button>
+        <span class="outage-location-status" id="outageLocationStatus"></span>
+      </div>
       <div class="outages-container" id="outagesContainer">
         <div class="outages-loading">
           <i class="ph ph-lightning"></i>
@@ -1647,7 +1746,22 @@
         outage_unassigned: "Awaiting Crew",
         outage_view_map: "View NES Map",
         outages_total: "Total outages",
-        outages_customers: "customers affected"
+        outages_customers: "customers affected",
+        outages_nearby: "near you",
+        outages_near_you: "Near You",
+        outages_other_areas: "Other Areas",
+        outages_more_nearby: "more nearby",
+        outage_miles: "mi away",
+        outage_nearby: "Nearby",
+        outage_view_all: "View all",
+        outages_on_map: "outages on NES Map",
+        outage_use_location: "Use My Location",
+        outage_locating: "Locating...",
+        outage_location_found: "Location found",
+        outage_location_denied: "Location access denied",
+        outage_location_error: "Could not get location",
+        outage_location_unavailable: "Location not available",
+        outage_fetch_error: "Failed to load outages"
       },
       es: {
         title: "Recursos de Invierno en Nashville",
@@ -1715,7 +1829,22 @@
         outage_unassigned: "Esperando Equipo",
         outage_view_map: "Ver Mapa NES",
         outages_total: "Total de cortes",
-        outages_customers: "clientes afectados"
+        outages_customers: "clientes afectados",
+        outages_nearby: "cerca de ti",
+        outages_near_you: "Cerca de Ti",
+        outages_other_areas: "Otras Áreas",
+        outages_more_nearby: "más cercanos",
+        outage_miles: "mi",
+        outage_nearby: "Cercano",
+        outage_view_all: "Ver todos",
+        outages_on_map: "cortes en el Mapa NES",
+        outage_use_location: "Usar Mi Ubicación",
+        outage_locating: "Localizando...",
+        outage_location_found: "Ubicación encontrada",
+        outage_location_denied: "Acceso a ubicación denegado",
+        outage_location_error: "No se pudo obtener ubicación",
+        outage_location_unavailable: "Ubicación no disponible",
+        outage_fetch_error: "Error al cargar cortes"
       },
       ar: {
         title: "موارد الشتاء في ناشفيل",
@@ -1783,7 +1912,22 @@
         outage_unassigned: "في انتظار الطاقم",
         outage_view_map: "عرض خريطة NES",
         outages_total: "إجمالي الانقطاعات",
-        outages_customers: "عملاء متأثرون"
+        outages_customers: "عملاء متأثرون",
+        outages_nearby: "بالقرب منك",
+        outages_near_you: "بالقرب منك",
+        outages_other_areas: "مناطق أخرى",
+        outages_more_nearby: "أكثر قريبة",
+        outage_miles: "ميل",
+        outage_nearby: "قريب",
+        outage_view_all: "عرض الكل",
+        outages_on_map: "انقطاعات على خريطة NES",
+        outage_use_location: "استخدم موقعي",
+        outage_locating: "جارٍ تحديد الموقع...",
+        outage_location_found: "تم العثور على الموقع",
+        outage_location_denied: "تم رفض الوصول للموقع",
+        outage_location_error: "تعذر الحصول على الموقع",
+        outage_location_unavailable: "الموقع غير متاح",
+        outage_fetch_error: "فشل في تحميل الانقطاعات"
       },
       ku: {
         title: "سەرچاوەکانی زستانی ناشڤیل",
@@ -1851,7 +1995,22 @@
         outage_unassigned: "چاوەڕێی تیم",
         outage_view_map: "نەخشەی NES ببینە",
         outages_total: "کۆی پچڕانەکان",
-        outages_customers: "کڕیاری کاریگەر"
+        outages_customers: "کڕیاری کاریگەر",
+        outages_nearby: "لە نزیکت",
+        outages_near_you: "لە نزیکت",
+        outages_other_areas: "ناوچەکانی تر",
+        outages_more_nearby: "زیاتر لە نزیک",
+        outage_miles: "میل",
+        outage_nearby: "نزیک",
+        outage_view_all: "هەموو ببینە",
+        outages_on_map: "پچڕان لە نەخشەی NES",
+        outage_use_location: "شوێنەکەم بەکاربهێنە",
+        outage_locating: "گەڕان بۆ شوێن...",
+        outage_location_found: "شوێن دۆزرایەوە",
+        outage_location_denied: "ڕێگە نەدرا بۆ شوێن",
+        outage_location_error: "نەتوانرا شوێن بدۆزرێتەوە",
+        outage_location_unavailable: "شوێن بەردەست نییە",
+        outage_fetch_error: "شکست هێنا لە بارکردنی پچڕانەکان"
       },
       vi: {
         title: "Tài Nguyên Mùa Đông Nashville",
@@ -1919,7 +2078,22 @@
         outage_unassigned: "Đang Chờ Đội Kỹ Thuật",
         outage_view_map: "Xem Bản Đồ NES",
         outages_total: "Tổng số sự cố",
-        outages_customers: "khách hàng bị ảnh hưởng"
+        outages_customers: "khách hàng bị ảnh hưởng",
+        outages_nearby: "gần bạn",
+        outages_near_you: "Gần Bạn",
+        outages_other_areas: "Khu Vực Khác",
+        outages_more_nearby: "gần hơn",
+        outage_miles: "dặm",
+        outage_nearby: "Gần Đây",
+        outage_view_all: "Xem tất cả",
+        outages_on_map: "sự cố trên Bản Đồ NES",
+        outage_use_location: "Dùng Vị Trí Của Tôi",
+        outage_locating: "Đang định vị...",
+        outage_location_found: "Đã tìm thấy vị trí",
+        outage_location_denied: "Quyền truy cập vị trí bị từ chối",
+        outage_location_error: "Không thể lấy vị trí",
+        outage_location_unavailable: "Vị trí không khả dụng",
+        outage_fetch_error: "Không thể tải sự cố"
       }
     };
 
@@ -2143,8 +2317,20 @@
       }
     }
 
+    // Haversine distance calculation (returns miles)
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+      const R = 3959; // Earth's radius in miles
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
     // NES Power Outage API - data source: github.com/NeckBeardPrince/nes-outage-status-checker
-    async function getNESOutages() {
+    async function getNESOutages(userLat, userLon) {
       try {
         const response = await fetch(
           'https://utilisocial.io/datacapable/v2/p/NES/map/events',
@@ -2156,10 +2342,34 @@
         );
         if (!response.ok) throw new Error('NES API error');
         const data = await response.json();
-        return data || [];
+
+        if (!data || data.length === 0) return { all: [], nearby: [] };
+
+        // Calculate distance for each outage and categorize
+        const NEARBY_RADIUS = 15; // miles
+        const outagesWithDistance = data.map(outage => {
+          // Try different possible coordinate field names
+          const lat = outage.lat || outage.latitude || outage.location?.lat || outage.location?.latitude;
+          const lon = outage.lon || outage.lng || outage.longitude || outage.location?.lon || outage.location?.lng || outage.location?.longitude;
+
+          let distance = null;
+          if (lat && lon && userLat && userLon) {
+            distance = calculateDistance(userLat, userLon, lat, lon);
+          }
+          return { ...outage, distance };
+        });
+
+        // Separate nearby and all outages
+        const nearby = outagesWithDistance
+          .filter(o => o.distance !== null && o.distance <= NEARBY_RADIUS)
+          .sort((a, b) => a.distance - b.distance);
+
+        const all = outagesWithDistance.sort((a, b) => (b.numPeople || 0) - (a.numPeople || 0));
+
+        return { all, nearby, userCoords: { lat: userLat, lon: userLon } };
       } catch (err) {
         console.error('Failed to fetch NES outages:', err);
-        return [];
+        return { all: [], nearby: [] };
       }
     }
 
@@ -2283,11 +2493,15 @@
       return `${dayName}, ${monthName} ${day}, ${hour12}:${minutes} ${ampm}`;
     }
 
-    function renderOutages(outages) {
+    function renderOutages(outageData) {
       const container = document.getElementById('outagesContainer');
       container.innerHTML = '';
 
-      if (!outages || outages.length === 0) {
+      // Handle both old format (array) and new format (object with nearby/all)
+      const nearby = outageData?.nearby || [];
+      const all = outageData?.all || (Array.isArray(outageData) ? outageData : []);
+
+      if (all.length === 0) {
         container.innerHTML = `
           <div class="no-outages">
             <i class="ph ph-check-circle"></i>
@@ -2298,8 +2512,8 @@
       }
 
       // Calculate totals for summary
-      const totalOutages = outages.length;
-      const totalCustomers = outages.reduce((sum, o) => sum + (o.numPeople || 0), 0);
+      const totalOutages = all.length;
+      const totalCustomers = all.reduce((sum, o) => sum + (o.numPeople || 0), 0);
 
       // Show summary card
       const summary = document.createElement('div');
@@ -2317,25 +2531,23 @@
         <div class="outages-summary-stats">
           <span><strong>${totalOutages}</strong> ${t('outages_total')}</span>
           <span><strong>${totalCustomers.toLocaleString()}</strong> ${t('outages_customers')}</span>
+          ${nearby.length > 0 ? `<span><strong>${nearby.length}</strong> ${t('outages_nearby')}</span>` : ''}
         </div>
       `;
       container.appendChild(summary);
 
-      // Sort by number of affected customers (largest first)
-      outages.sort((a, b) => (b.numPeople || 0) - (a.numPeople || 0));
-
-      // Show top 5 outages
-      const displayOutages = outages.slice(0, 5);
-
-      displayOutages.forEach((outage, index) => {
+      // Helper to create outage banner
+      function createOutageBanner(outage, index, isNearby) {
         const isAssigned = outage.crewAssigned === true || outage.crewAssigned === 'true';
         const banner = document.createElement('div');
-        banner.className = `outage-banner ${isAssigned ? 'assigned' : ''}`;
+        banner.className = `outage-banner ${isAssigned ? 'assigned' : ''} ${isNearby ? 'nearby' : ''}`;
         banner.style.animationDelay = `${index * 0.1}s`;
 
         const startTime = outage.startTime ? formatOutageTime(outage.startTime) : '';
         const cause = outage.cause || 'Unknown';
         const numCustomers = outage.numPeople || 0;
+        const distance = outage.distance;
+        const distanceStr = distance !== null ? `${distance.toFixed(1)} ${t('outage_miles')}` : '';
 
         banner.innerHTML = `
           <i class="ph ph-lightning outage-icon ${isAssigned ? '' : 'unassigned'}"></i>
@@ -2343,10 +2555,12 @@
             <div class="outage-header">
               <span class="outage-title">${t('power_outages')}</span>
               <span class="outage-status-badge">${isAssigned ? t('outage_assigned') : t('outage_unassigned')}</span>
+              ${isNearby ? `<span class="outage-nearby-badge">${t('outage_nearby')}</span>` : ''}
             </div>
             <p class="outage-description">${t('outage_cause')}: ${cause}</p>
             <div class="outage-meta">
               <span><i class="ph ph-users"></i> ${numCustomers.toLocaleString()} ${t('outage_customers')}</span>
+              ${distanceStr ? `<span><i class="ph ph-map-pin"></i> ${distanceStr}</span>` : ''}
               ${startTime ? `<span><i class="ph ph-clock"></i> ${t('outage_started')}: ${startTime}</span>` : ''}
             </div>
           </div>
@@ -2355,11 +2569,47 @@
           </button>
         `;
 
-        container.appendChild(banner);
-      });
+        return banner;
+      }
+
+      // Show nearby outages first (if any)
+      if (nearby.length > 0) {
+        const nearbyHeader = document.createElement('div');
+        nearbyHeader.className = 'outage-section-header';
+        nearbyHeader.innerHTML = `<i class="ph ph-map-pin"></i> ${t('outages_near_you')} (${nearby.length})`;
+        container.appendChild(nearbyHeader);
+
+        nearby.slice(0, 5).forEach((outage, index) => {
+          container.appendChild(createOutageBanner(outage, index, true));
+        });
+
+        if (nearby.length > 5) {
+          const moreNearby = document.createElement('div');
+          moreNearby.className = 'outage-more-text';
+          moreNearby.textContent = `+ ${nearby.length - 5} ${t('outages_more_nearby')}`;
+          container.appendChild(moreNearby);
+        }
+      }
+
+      // Show other outages (not nearby) if we have space
+      const otherOutages = all.filter(o => !nearby.some(n => n === o || (n.id && n.id === o.id)));
+      if (otherOutages.length > 0 && nearby.length < 5) {
+        const showCount = Math.min(5 - nearby.length, otherOutages.length);
+
+        if (nearby.length > 0) {
+          const otherHeader = document.createElement('div');
+          otherHeader.className = 'outage-section-header';
+          otherHeader.innerHTML = `<i class="ph ph-lightning"></i> ${t('outages_other_areas')}`;
+          container.appendChild(otherHeader);
+        }
+
+        otherOutages.slice(0, showCount).forEach((outage, index) => {
+          container.appendChild(createOutageBanner(outage, index + nearby.length, false));
+        });
+      }
 
       // If there are more outages, show a link
-      if (outages.length > 5) {
+      if (all.length > 5) {
         const moreLink = document.createElement('a');
         moreLink.href = 'https://nespower.com/outages';
         moreLink.target = '_blank';
@@ -2368,10 +2618,71 @@
         moreLink.style.display = 'flex';
         moreLink.style.justifyContent = 'center';
         moreLink.style.marginTop = '0.5rem';
-        moreLink.innerHTML = `<i class="ph ph-arrow-square-out"></i> View all ${outages.length} outages on NES Map`;
+        moreLink.innerHTML = `<i class="ph ph-arrow-square-out"></i> ${t('outage_view_all')} ${all.length} ${t('outages_on_map')}`;
         container.appendChild(moreLink);
       }
     }
+
+    // Use device location for outage search
+    window.useMyLocationForOutages = async function() {
+      const btn = document.getElementById('outageLocationBtn');
+      const status = document.getElementById('outageLocationStatus');
+
+      if (!navigator.geolocation) {
+        status.className = 'outage-location-status error';
+        status.innerHTML = `<i class="ph ph-warning"></i> ${t('outage_location_unavailable')}`;
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="ph ph-spinner" style="animation: spin 1s linear infinite;"></i> ${t('outage_locating')}`;
+      status.className = 'outage-location-status';
+      status.innerHTML = '';
+
+      document.getElementById('outagesContainer').innerHTML = `
+        <div class="outages-loading">
+          <i class="ph ph-lightning"></i>
+          <span>${t('loading_outages')}</span>
+        </div>
+      `;
+
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+
+          try {
+            const outages = await getNESOutages(latitude, longitude);
+            cachedOutagesData = outages;
+            renderOutages(outages);
+
+            btn.disabled = false;
+            btn.innerHTML = `<i class="ph ph-crosshair"></i> <span data-i18n="outage_use_location">${t('outage_use_location')}</span>`;
+            status.className = 'outage-location-status success';
+            status.innerHTML = `<i class="ph ph-check-circle"></i> ${t('outage_location_found')}`;
+
+            trackActivity('outage_location_used', { method: 'gps' });
+          } catch (err) {
+            console.error('Failed to fetch outages with location:', err);
+            btn.disabled = false;
+            btn.innerHTML = `<i class="ph ph-crosshair"></i> <span data-i18n="outage_use_location">${t('outage_use_location')}</span>`;
+            status.className = 'outage-location-status error';
+            status.innerHTML = `<i class="ph ph-warning"></i> ${t('outage_fetch_error')}`;
+          }
+        },
+        (error) => {
+          console.error('Geolocation error:', error);
+          btn.disabled = false;
+          btn.innerHTML = `<i class="ph ph-crosshair"></i> <span data-i18n="outage_use_location">${t('outage_use_location')}</span>`;
+          status.className = 'outage-location-status error';
+          if (error.code === error.PERMISSION_DENIED) {
+            status.innerHTML = `<i class="ph ph-warning"></i> ${t('outage_location_denied')}`;
+          } else {
+            status.innerHTML = `<i class="ph ph-warning"></i> ${t('outage_location_error')}`;
+          }
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      );
+    };
 
     window.toggleAlertExpand = async function(index, btn) {
       const desc = document.getElementById(`alert-desc-${index}`);
@@ -2476,7 +2787,7 @@
         const [weather, alerts, outages] = await Promise.all([
           getWeather(coords.lat, coords.lon),
           getNWSAlerts(coords.lat, coords.lon),
-          getNESOutages()
+          getNESOutages(coords.lat, coords.lon)
         ]);
 
         // Cache data for re-rendering on language change
