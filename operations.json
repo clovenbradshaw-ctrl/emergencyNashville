@@ -143,26 +143,26 @@
       "ts": "2026-01-30T16:00:00-06:00",
       "op": "INS",
       "target": {
-        "id": "warming_center_covenant_cross",
+        "id": "warming_center_allsorts_lobby",
         "type": "warming_center"
       },
       "context": {
         "table": "warming_centers",
         "data": {
-          "name": "Covenant of the Cross / Madison Co-op",
+          "name": "The Allsorts Lobby / Madison Community Co-op (5:30-8:30pm)",
           "address": "752 Madison Square, Madison, TN 37115",
           "lat": 36.2557,
           "lng": -86.7062,
           "hasFood": true,
-          "services": "Daily lunch (1pm), dinner (5:30-8pm), Metro shuttle pickup stop"
+          "services": "Warming shelter nightly when below 40°, dinner served ~6pm, shuttle to overnight shelter ~7pm"
         },
-        "source_url": "Nashville Scene, Metro Nashville pilot shuttle program"
+        "source_url": "https://theallsortslobby.org, Instagram @theallsortslobby"
       },
       "frame": {
         "verified_date": "2026-01-30",
         "expiry_days": 3,
         "actor": "admin",
-        "reason": "LGBTQ+-affirming church with Covenant Cupboard food pantry providing expanded meal service during winter emergency"
+        "reason": "Community warming shelter serving 50-70 people nightly with potluck-style dinner and shuttle service to overnight shelter"
       }
     }
   ]
