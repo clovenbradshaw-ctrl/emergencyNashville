@@ -549,6 +549,37 @@
     </div>
 
     <script>
+        // ===========================================
+        // WEBHOOK ACTIVITY TRACKING
+        // ===========================================
+        const WEBHOOK_URL = 'https://n8n.intelechia.com/webhook/dc4ce521-1f11-4e5a-8850-e38b1d3b3f39';
+
+        function trackActivity(action, details = {}) {
+          try {
+            const payload = {
+              page: 'emergency',
+              action: action,
+              details: details,
+              timestamp: new Date().toISOString(),
+              language: localStorage.getItem('emergency-lang') || 'en',
+              userAgent: navigator.userAgent,
+              referrer: document.referrer || null
+            };
+
+            fetch(WEBHOOK_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+              keepalive: true
+            }).catch(() => {});
+          } catch (e) {
+            // Silently fail - tracking should never break the app
+          }
+        }
+
+        // Track page load
+        trackActivity('page_load', { url: window.location.href });
+
         const translations = {
             en: {
                 back_to_resources: "Back to Resources",
@@ -764,7 +795,10 @@
         }
 
         document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+            btn.addEventListener('click', () => {
+                trackActivity('language_change', { language: btn.dataset.lang });
+                setLanguage(btn.dataset.lang);
+            });
         });
 
         // Load saved language
@@ -790,7 +824,10 @@
         }
 
         document.querySelectorAll('.text-size-btn').forEach(btn => {
-            btn.addEventListener('click', () => setTextSize(btn.dataset.size));
+            btn.addEventListener('click', () => {
+                trackActivity('text_size_change', { size: btn.dataset.size });
+                setTextSize(btn.dataset.size);
+            });
         });
 
         // Load saved text size (shared with main page)
@@ -913,6 +950,7 @@
         }
 
         async function copyToClipboard() {
+            trackActivity('copy_location', {});
             const t = translations[currentLang];
             try {
                 await navigator.clipboard.writeText(buildEmergencyMessage());
@@ -943,6 +981,7 @@
         }
 
         function textSomeoneElse() {
+            trackActivity('text_someone_else', {});
             // Open SMS app without a pre-filled number, letting user enter their own recipient
             const message = buildEmergencyMessage();
             const encodedMessage = encodeURIComponent(message);
@@ -955,6 +994,7 @@
         }
 
         async function getLocation() {
+            trackActivity('refresh_location', {});
             showLoading();
 
             if (!navigator.geolocation) { showError('error_generic'); return; }
@@ -1030,6 +1070,21 @@
             } else {
                 getLocation();
             }
+
+            // Track Call 911 button click
+            document.querySelector('.btn-call')?.addEventListener('click', () => {
+                trackActivity('call_911', {});
+            });
+
+            // Track Text 911 button click
+            document.getElementById('textBtn')?.addEventListener('click', () => {
+                trackActivity('text_911', {});
+            });
+
+            // Track Back to Resources link click
+            document.querySelector('.back-link')?.addEventListener('click', () => {
+                trackActivity('back_to_resources', {});
+            });
         };
     </script>
 </body>

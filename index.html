@@ -978,6 +978,37 @@
     let cachedAlertsData = null;
 
     // ===========================================
+    // WEBHOOK ACTIVITY TRACKING
+    // ===========================================
+    const WEBHOOK_URL = 'https://n8n.intelechia.com/webhook/dc4ce521-1f11-4e5a-8850-e38b1d3b3f39';
+
+    function trackActivity(action, details = {}) {
+      try {
+        const payload = {
+          page: 'index',
+          action: action,
+          details: details,
+          timestamp: new Date().toISOString(),
+          language: localStorage.getItem('nashville-resources-lang') || 'en',
+          userAgent: navigator.userAgent,
+          referrer: document.referrer || null
+        };
+
+        fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true
+        }).catch(() => {});
+      } catch (e) {
+        // Silently fail - tracking should never break the app
+      }
+    }
+
+    // Track page load
+    trackActivity('page_load', { url: window.location.href });
+
+    // ===========================================
     // TRANSLATION CACHE (localStorage persistence)
     // ===========================================
     const translationCache = new Map();
@@ -1542,7 +1573,10 @@
     }
 
     document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+      btn.addEventListener('click', () => {
+        trackActivity('language_change', { language: btn.dataset.lang });
+        setLanguage(btn.dataset.lang);
+      });
     });
 
     const savedLang = localStorage.getItem('nashville-resources-lang');
@@ -1567,7 +1601,10 @@
     }
 
     document.querySelectorAll('.text-size-btn').forEach(btn => {
-      btn.addEventListener('click', () => setTextSize(btn.dataset.size));
+      btn.addEventListener('click', () => {
+        trackActivity('text_size_change', { size: btn.dataset.size });
+        setTextSize(btn.dataset.size);
+      });
     });
 
     // Load saved text size
@@ -1770,6 +1807,7 @@
         desc.classList.remove('expanded');
         desc.textContent = headline;
         btn.textContent = t('alert_show_details');
+        trackActivity('alert_collapse', { alertIndex: index });
       } else {
         desc.classList.add('expanded');
         // Show loading indicator
@@ -1778,6 +1816,7 @@
         const displayDesc = await translateText(originalDesc, lang);
         desc.textContent = displayDesc;
         btn.textContent = t('alert_hide_details');
+        trackActivity('alert_expand', { alertIndex: index, alertHeadline: headline });
       }
     };
 
@@ -1870,9 +1909,31 @@
       }
     }
 
-    document.getElementById('fetchBtn').addEventListener('click', fetchForecast);
+    document.getElementById('fetchBtn').addEventListener('click', () => {
+      trackActivity('weather_fetch', { zip: document.getElementById('zipInput').value });
+      fetchForecast();
+    });
     document.getElementById('zipInput').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') fetchForecast();
+      if (e.key === 'Enter') {
+        trackActivity('weather_fetch', { zip: document.getElementById('zipInput').value, method: 'enter_key' });
+        fetchForecast();
+      }
+    });
+
+    // Track external link clicks
+    document.querySelectorAll('.external-link').forEach(link => {
+      link.addEventListener('click', () => {
+        const linkText = link.querySelector('span')?.textContent || link.textContent;
+        trackActivity('resource_link_click', {
+          url: link.dataset.href,
+          text: linkText
+        });
+      });
+    });
+
+    // Track emergency link click
+    document.querySelector('.emergency-link')?.addEventListener('click', () => {
+      trackActivity('emergency_link_click', { destination: 'emergency.html' });
     });
 
     // Load forecast on page load
