@@ -777,8 +777,9 @@
         function getLanguageFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
             const lang = urlParams.get('lang');
-            if (lang && translations[lang]) {
-                return lang;
+            // Check if it's a valid language code
+            if (lang && translations[lang.toLowerCase()]) {
+                return lang.toLowerCase();
             }
             return null;
         }
@@ -792,6 +793,18 @@
                 url.searchParams.set('lang', lang);
             }
             window.history.replaceState({}, '', url);
+        }
+
+        // Update internal navigation links to preserve language
+        function updateInternalLinks(lang) {
+            document.querySelectorAll('.emergency-link, .back-link').forEach(link => {
+                const baseUrl = link.getAttribute('href').split('?')[0];
+                if (lang === 'en') {
+                    link.href = baseUrl;
+                } else {
+                    link.href = `${baseUrl}?lang=${lang}`;
+                }
+            });
         }
 
         function setLanguage(lang) {
@@ -811,6 +824,7 @@
             document.documentElement.setAttribute('lang', lang);
 
             localStorage.setItem('emergency-lang', lang);
+            updateInternalLinks(lang);
             updateURLWithLanguage(lang);
 
             if (currentLocation) updateDisplay();
