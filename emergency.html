@@ -573,7 +573,7 @@
               action: action,
               details: details,
               timestamp: new Date().toISOString(),
-              language: localStorage.getItem('emergency-lang') || 'en',
+              language: localStorage.getItem('nashville-resources-lang') || 'en',
               userAgent: navigator.userAgent,
               referrer: document.referrer || null
             };
@@ -849,7 +849,7 @@
             document.documentElement.setAttribute('dir', (lang === 'ar' || lang === 'ku') ? 'rtl' : 'ltr');
             document.documentElement.setAttribute('lang', lang);
 
-            localStorage.setItem('emergency-lang', lang);
+            localStorage.setItem('nashville-resources-lang', lang);
             updateInternalLinks(lang);
             updateURLWithLanguage(lang);
 
@@ -865,7 +865,7 @@
 
         // Check URL parameter first, then localStorage
         const urlLang = getLanguageFromURL();
-        const savedLang = localStorage.getItem('emergency-lang');
+        const savedLang = localStorage.getItem('nashville-resources-lang');
         if (urlLang) {
             setLanguage(urlLang);
         } else if (savedLang && translations[savedLang]) {

@@ -3303,10 +3303,114 @@
       .alerts-card-inner { padding: 0.875rem 1rem; }
       .alerts-btn .btn-text { display: none; }
     }
+
+    /* ===========================================
+       GOOGLE TRANSLATE INTEGRATION
+       =========================================== */
+    /* Hide Google Translate default UI elements */
+    .goog-te-banner-frame, .goog-te-balloon-frame { display: none !important; }
+    .goog-te-gadget { font-family: inherit !important; font-size: 0 !important; }
+    body { top: 0 !important; } /* Prevent Google's bar from pushing content */
+    .skiptranslate { display: none !important; }
+    .VIpgJd-ZVi9od-ORHb-OEVmcd { display: none !important; }
+    #goog-gt-tt { display: none !important; } /* Hide tooltip */
+    .goog-text-highlight { background: none !important; box-shadow: none !important; }
+
+    /* Prevent translation of UI elements */
+    .notranslate, [translate="no"] {
+      font-family: inherit !important;
+    }
+    .alerts-header, .alerts-lang-selector, .alerts-lang-menu, .alerts-btn {
+      font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    /* Custom language selector for alerts screen */
+    .alerts-lang-selector {
+      display: flex;
+      gap: 2px;
+      background: var(--alerts-bg-card);
+      border: 1px solid var(--alerts-border-color);
+      border-radius: 8px;
+      padding: 2px;
+    }
+
+    .alerts-lang-btn {
+      padding: 0.4rem 0.6rem;
+      border: none;
+      background: transparent;
+      color: var(--alerts-text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      min-height: 32px;
+      min-width: 32px;
+    }
+
+    .alerts-lang-btn:hover {
+      background: var(--alerts-bg-card-hover);
+      color: var(--alerts-text-primary);
+    }
+
+    .alerts-lang-btn.active {
+      background: var(--alerts-accent);
+      color: white;
+    }
+
+    .alerts-lang-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.5rem;
+      background: var(--alerts-bg-card);
+      border: 1px solid var(--alerts-border-color);
+      border-radius: 8px;
+      padding: 0.5rem;
+      z-index: 200;
+      min-width: 150px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .alerts-lang-menu.active {
+      display: block;
+    }
+
+    .alerts-lang-menu button {
+      display: block;
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--alerts-text-secondary);
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.85rem;
+      text-align: left;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .alerts-lang-menu button:hover {
+      background: var(--alerts-bg-card-hover);
+      color: var(--alerts-text-primary);
+    }
+
+    .alerts-header-actions {
+      position: relative;
+    }
+
+    @media (max-width: 640px) {
+      .alerts-lang-selector { gap: 1px; padding: 1px; }
+      .alerts-lang-btn { padding: 0.3rem 0.4rem; font-size: 0.65rem; }
+      .alerts-lang-menu { right: -60px; }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container notranslate" translate="no">
     <div class="top-bar">
       <div class="lang-select">
         <button class="lang-btn active" data-lang="en">EN</button>
@@ -3776,6 +3880,22 @@
             </h1>
           </div>
           <div class="alerts-header-actions">
+            <div class="alerts-lang-selector notranslate" translate="no">
+              <button class="alerts-lang-btn active" data-lang="en" onclick="setAlertsLanguage('en')" title="English">🇺🇸</button>
+              <button class="alerts-lang-btn" data-lang="es" onclick="setAlertsLanguage('es')" title="Español">🇲🇽</button>
+              <button class="alerts-lang-btn" data-lang="ar" onclick="setAlertsLanguage('ar')" title="العربية">🇸🇦</button>
+              <button class="alerts-lang-btn" data-lang="ku" onclick="setAlertsLanguage('ku')" title="کوردی">🇮🇶</button>
+              <button class="alerts-lang-btn" data-lang="vi" onclick="setAlertsLanguage('vi')" title="Tiếng Việt">🇻🇳</button>
+              <button class="alerts-lang-btn" onclick="toggleAlertsLangMenu()" title="More languages">+</button>
+            </div>
+            <div class="alerts-lang-menu notranslate" translate="no" id="alertsLangMenu">
+              <button data-lang="so" onclick="setAlertsLanguage('so')">🇸🇴 Soomaali</button>
+              <button data-lang="zh-CN" onclick="setAlertsLanguage('zh-CN')">🇨🇳 中文</button>
+              <button data-lang="ko" onclick="setAlertsLanguage('ko')">🇰🇷 한국어</button>
+              <button data-lang="my" onclick="setAlertsLanguage('my')">🇲🇲 မြန်မာ</button>
+              <button data-lang="am" onclick="setAlertsLanguage('am')">🇪🇹 አማርኛ</button>
+            </div>
+            <div id="google_translate_element" style="display:none;"></div>
             <button class="alerts-btn" id="alertsRefreshBtn" onclick="AlertsFeed.refreshAll()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <path d="M23 4v6h-6M1 20v-6h6"/>
@@ -6600,6 +6720,11 @@
         document.body.style.overflow = 'hidden';
         trackActivity('alerts_screen_open');
 
+        // Restore language selector state
+        if (typeof restoreAlertsLanguage === 'function') {
+          restoreAlertsLanguage();
+        }
+
         // Initialize alerts feed if first time
         if (!AlertsFeed.initialized) {
           AlertsFeed.init();
@@ -7477,6 +7602,106 @@
     window.AlertsFeed = AlertsFeed;
     window.openAlertsScreen = openAlertsScreen;
     window.closeAlertsScreen = closeAlertsScreen;
+
+    // ===========================================
+    // GOOGLE TRANSLATE INTEGRATION FOR ALERTS
+    // ===========================================
+
+    // Shared language key between main page and alerts
+    const LANG_STORAGE_KEY = 'nashville-resources-lang';
+
+    function setAlertsLanguage(lang) {
+      // Update button states in alerts screen
+      document.querySelectorAll('.alerts-lang-btn, .alerts-lang-menu button').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.lang === lang) {
+          btn.classList.add('active');
+        }
+      });
+
+      // Close menu
+      document.getElementById('alertsLangMenu')?.classList.remove('active');
+
+      // Save preference (shared with main page)
+      localStorage.setItem(LANG_STORAGE_KEY, lang);
+
+      // For English, remove translation
+      if (lang === 'en') {
+        // Clear translation cookies
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + window.location.hostname;
+
+        // Reload if currently translated to reset
+        if (document.querySelector('.translated-ltr, .translated-rtl') || document.documentElement.classList.contains('translated-ltr')) {
+          window.location.reload();
+        }
+        return;
+      }
+
+      // Set translation cookies
+      const cookieValue = '/en/' + lang;
+      document.cookie = 'googtrans=' + cookieValue + '; path=/';
+      document.cookie = 'googtrans=' + cookieValue + '; path=/; domain=' + window.location.hostname;
+
+      // Try to trigger Google Translate
+      const select = document.querySelector('.goog-te-combo');
+      if (select) {
+        select.value = lang;
+        select.dispatchEvent(new Event('change'));
+      } else {
+        // Widget not ready - reload with cookie set
+        window.location.reload();
+      }
+    }
+
+    function toggleAlertsLangMenu() {
+      document.getElementById('alertsLangMenu')?.classList.toggle('active');
+    }
+
+    // Close menu on outside click
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.alerts-lang-selector') && !e.target.closest('.alerts-lang-menu')) {
+        document.getElementById('alertsLangMenu')?.classList.remove('active');
+      }
+    });
+
+    // Restore saved language on alerts screen open
+    function restoreAlertsLanguage() {
+      const savedLang = localStorage.getItem(LANG_STORAGE_KEY);
+      if (savedLang) {
+        // Highlight the saved language button
+        document.querySelectorAll('.alerts-lang-btn, .alerts-lang-menu button').forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.dataset.lang === savedLang) {
+            btn.classList.add('active');
+          }
+        });
+        // If English, make sure EN button is active
+        if (savedLang === 'en') {
+          document.querySelector('.alerts-lang-btn[data-lang="en"]')?.classList.add('active');
+        }
+      }
+    }
+
+    // Call restore when page loads
+    restoreAlertsLanguage();
+
+    // Expose functions globally
+    window.setAlertsLanguage = setAlertsLanguage;
+    window.toggleAlertsLangMenu = toggleAlertsLangMenu;
   </script>
+
+  <!-- Google Translate Widget -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'es,ar,ku,so,vi,zh-CN,ko,my,am',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
