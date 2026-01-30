@@ -554,8 +554,18 @@
         // ===========================================
         const WEBHOOK_URL = 'https://n8n.intelechia.com/webhook/dc4ce521-1f11-4e5a-8850-e38b1d3b3f39';
 
+        function checkIfEmbedded() {
+          try {
+            return window.self !== window.top;
+          } catch (e) {
+            // If we can't access window.top due to cross-origin restrictions, we're embedded
+            return true;
+          }
+        }
+
         function trackActivity(action, details = {}) {
           try {
+            const embedded = checkIfEmbedded();
             const payload = {
               page: 'emergency',
               action: action,
@@ -563,29 +573,52 @@
               timestamp: new Date().toISOString(),
               language: localStorage.getItem('emergency-lang') || 'en',
               userAgent: navigator.userAgent,
-              referrer: document.referrer || null
+              referrer: document.referrer || null,
+              embedded: embedded,
+              parentOrigin: embedded ? (document.referrer || 'unknown') : null
             };
 
-            console.log('[Webhook] Sending:', action, payload);
+            const jsonPayload = JSON.stringify(payload);
+            console.log('[Webhook] Sending:', action, payload, 'embedded:', embedded);
 
-            fetch(WEBHOOK_URL, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(payload),
-              keepalive: true
-            })
-            .then(response => {
-              console.log('[Webhook] Response:', response.status, response.statusText);
-              if (!response.ok) {
-                console.error('[Webhook] Failed with status:', response.status);
+            // Use sendBeacon for better reliability in iframes and during page unload
+            // sendBeacon works better with cross-origin restrictions in embedded contexts
+            if (navigator.sendBeacon) {
+              const blob = new Blob([jsonPayload], { type: 'application/json' });
+              const sent = navigator.sendBeacon(WEBHOOK_URL, blob);
+              console.log('[Webhook] sendBeacon result:', sent ? 'queued' : 'failed');
+
+              // If sendBeacon fails, fall back to fetch
+              if (!sent) {
+                sendViaFetch(jsonPayload);
               }
-            })
-            .catch(error => {
-              console.error('[Webhook] Error:', error.message || error);
-            });
+            } else {
+              // Fallback for older browsers
+              sendViaFetch(jsonPayload);
+            }
           } catch (e) {
             console.error('[Webhook] Exception:', e);
           }
+        }
+
+        function sendViaFetch(jsonPayload) {
+          fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: jsonPayload,
+            keepalive: true,
+            mode: 'cors',
+            credentials: 'omit'  // Don't send cookies - helps with cross-origin in iframes
+          })
+          .then(response => {
+            console.log('[Webhook] fetch response:', response.status, response.statusText);
+            if (!response.ok) {
+              console.error('[Webhook] Failed with status:', response.status);
+            }
+          })
+          .catch(error => {
+            console.error('[Webhook] fetch error:', error.message || error);
+          });
         }
 
         // Track page load
