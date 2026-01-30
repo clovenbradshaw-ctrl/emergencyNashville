@@ -6502,16 +6502,14 @@
     }
 
     // Hook into existing outage fetch to update status row
-    const originalFetchMapOutages = typeof fetchMapOutages === 'function' ? fetchMapOutages : null;
-
-    // Override to capture outage data for status row
     const originalUpdateMapStats = window.updateMapStats;
     if (typeof updateMapStats === 'function') {
-      window.updateMapStats = function(customers, crewsAssigned, crewsWaiting) {
+      window.updateMapStats = function() {
         if (originalUpdateMapStats) {
-          originalUpdateMapStats(customers, crewsAssigned, crewsWaiting);
+          originalUpdateMapStats();
         }
-        updateStatusOutageCount(customers);
+        // Read from mapStatsData global after original function updates it
+        updateStatusOutageCount(mapStatsData.customers);
       };
     }
 
