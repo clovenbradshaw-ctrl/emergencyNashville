@@ -1815,6 +1815,525 @@
         font-size: 1.25rem;
       }
     }
+
+    /* ==========================================
+       UX REVAMP - Intent-Based Navigation
+       ========================================== */
+
+    /* Emergency Button - Green Gradient */
+    .location-btn.green-style {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
+      width: 100%;
+      justify-content: center;
+      padding: 0.875rem 1.5rem;
+      border-radius: 24px;
+    }
+
+    .location-btn.green-style:hover {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
+    }
+
+    /* Critical Alert Card */
+    .critical-card {
+      background: linear-gradient(135deg, #1e1e2e, #252538);
+      border: 1px solid #3b3b5c;
+      border-radius: 16px;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .critical-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .critical-label {
+      background: #7c3aed;
+      color: #fff;
+      font-size: 0.625rem;
+      font-weight: 700;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-badge {
+      background: #065f46;
+      color: #34d399;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      padding: 0.25rem 0.625rem;
+      border-radius: 12px;
+    }
+
+    .critical-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+    .critical-address {
+      color: #a0a0b0;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .critical-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .detail-chip {
+      background: #2a2a3c;
+      padding: 0.375rem 0.625rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      color: #c0c0d0;
+    }
+
+    .critical-actions {
+      display: flex;
+      gap: 0.625rem;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 0.75rem;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.375rem;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      min-height: 44px;
+    }
+
+    .action-btn.primary {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .action-btn.primary:hover {
+      background: #3b82f6;
+    }
+
+    .action-btn.secondary {
+      background: #1f1f2e;
+      border: 1px solid #3b3b5c;
+      color: #fff;
+    }
+
+    .action-btn.secondary:hover {
+      background: #2a2a3c;
+    }
+
+    /* Compact Status Row */
+    .status-row {
+      display: flex;
+      gap: 0.625rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .status-card {
+      flex: 1;
+      background: #1a1a24;
+      border: 1px solid #2a2a3c;
+      border-radius: 12px;
+      padding: 0.75rem;
+    }
+
+    .status-card h4 {
+      font-size: 0.6875rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.375rem;
+      font-weight: 600;
+    }
+
+    .status-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .status-value.alert {
+      color: #f97316;
+    }
+
+    .status-sub {
+      font-size: 0.6875rem;
+      color: #666;
+      margin-top: 0.125rem;
+    }
+
+    .expand-link {
+      font-size: 0.6875rem;
+      color: #60a5fa;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 0.375rem;
+    }
+
+    .expand-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Weather Alert Inline */
+    .weather-alert-inline {
+      background: #1c1917;
+      border-left: 3px solid #f97316;
+      padding: 0.75rem 0.875rem;
+      border-radius: 8px;
+      margin-bottom: 1.25rem;
+      font-size: 0.8125rem;
+    }
+
+    .weather-alert-inline strong {
+      color: #fb923c;
+    }
+
+    .weather-alert-inline span {
+      color: #a0a0a0;
+    }
+
+    /* Tab Bar */
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      margin-bottom: 1.25rem;
+      background: #1a1a24;
+      border-radius: 12px;
+      padding: 0.25rem;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 0.625rem;
+      border: none;
+      background: transparent;
+      color: #888;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+      min-height: 44px;
+    }
+
+    .tab-btn.active {
+      background: #2a2a3c;
+      color: #fff;
+    }
+
+    .tab-btn:hover:not(.active) {
+      color: #ccc;
+    }
+
+    /* Section Label */
+    .section-label {
+      font-size: 0.75rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Intent Navigation */
+    .intent-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .intent-card {
+      background: #12121a;
+      border: 1px solid #2a2a3c;
+      border-radius: 14px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .intent-card:hover, .intent-card.expanded {
+      border-color: #3b5998;
+      background: #1a1a28;
+    }
+
+    .intent-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .intent-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .intent-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: #1f2937;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .intent-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .intent-count {
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: 0.125rem;
+    }
+
+    .intent-arrow {
+      color: #666;
+      font-size: 1.125rem;
+      transition: transform 0.2s;
+    }
+
+    .intent-card.expanded .intent-arrow {
+      transform: rotate(90deg);
+    }
+
+    /* Expanded Resource List */
+    .resource-list {
+      margin-top: 0.875rem;
+      padding-top: 0.875rem;
+      border-top: 1px solid #2a2a3c;
+      display: none;
+    }
+
+    .intent-card.expanded .resource-list {
+      display: block;
+    }
+
+    .resource-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #1f1f2a;
+      gap: 0.75rem;
+    }
+
+    .resource-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .resource-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .resource-info h5 {
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .resource-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .resource-status {
+      font-size: 0.6875rem;
+      padding: 0.125rem 0.5rem;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+
+    .resource-status.open {
+      background: #064e3b;
+      color: #34d399;
+    }
+
+    .resource-status.closed {
+      background: #450a0a;
+      color: #f87171;
+    }
+
+    .resource-hours {
+      font-size: 0.6875rem;
+      color: #888;
+    }
+
+    .resource-phone {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      background: #1f2937;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      color: #60a5fa;
+      text-decoration: none;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      white-space: nowrap;
+      flex-shrink: 0;
+      min-height: 44px;
+      transition: background 0.15s ease;
+    }
+
+    .resource-phone:hover {
+      background: #374151;
+    }
+
+    .resource-link {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      color: #60a5fa;
+      text-decoration: none;
+      font-size: 0.8125rem;
+      padding: 0.5rem 0;
+      min-height: 44px;
+    }
+
+    .resource-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Quick Contacts Footer */
+    .quick-contacts {
+      background: #0f0f18;
+      border: 1px solid #2a2a3c;
+      border-radius: 14px;
+      padding: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .quick-contacts h4 {
+      font-size: 0.8125rem;
+      color: #888;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .contact-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.625rem 0;
+      border-bottom: 1px solid #1a1a24;
+      gap: 0.5rem;
+    }
+
+    .contact-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .contact-name {
+      font-size: 0.875rem;
+      color: #e0e0e0;
+    }
+
+    .contact-number {
+      color: #60a5fa;
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .contact-number:hover {
+      text-decoration: underline;
+    }
+
+    /* Tab content visibility */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Map tab content */
+    .map-tab-content {
+      background: #12121a;
+      border: 1px solid #2a2a3c;
+      border-radius: 14px;
+      padding: 1rem;
+    }
+
+    /* Hide old sections when in new mode */
+    .legacy-sections {
+      display: none;
+    }
+
+    .intent-mode .legacy-sections {
+      display: none;
+    }
+
+    .intent-mode .intent-navigation {
+      display: block;
+    }
+
+    /* RTL Support for new components */
+    [dir="rtl"] .intent-left {
+      flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .intent-header {
+      flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .resource-item {
+      flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .contact-row {
+      flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .critical-header {
+      flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .status-row {
+      flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .intent-arrow {
+      transform: rotate(180deg);
+    }
+
+    [dir="rtl"] .intent-card.expanded .intent-arrow {
+      transform: rotate(270deg);
+    }
   </style>
 </head>
 <body>
@@ -1831,129 +2350,381 @@
     </div>
 
     <header>
-      <div class="branding">
-        <img src="https://assets.softr-files.com/applications/26b1b861-7748-4f49-8539-21dc6ca9c679/assets/58e44c7c-d691-468e-a9c0-68bfe0c8fd21.png" alt="Nashville Resources Logo" class="app-logo">
-        <div class="title-group">
-          <h1 data-i18n="title">Nashville Winter Resources</h1>
-          <p class="subtitle" data-i18n="subtitle">Shelter, food & support during extreme weather</p>
-        </div>
-      </div>
+      <h1 data-i18n="title" style="text-align: center; margin-bottom: 0.25rem;">Nashville Winter Resources</h1>
+      <p class="subtitle" data-i18n="subtitle" style="text-align: center; margin-bottom: 1.25rem;">Shelter, food & support during extreme weather</p>
 
-      <a href="emergency.html" class="location-btn">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-        </svg>
+      <a href="emergency.html" class="location-btn green-style">
+        <i class="ph ph-map-pin"></i>
         <span data-i18n="get_location_911">Get My Location for 911</span>
       </a>
     </header>
 
-    <!-- Cold Weather Shelter Alert -->
-    <div id="shelterAlertBanner" class="shelter-alert-banner" role="alert" aria-live="polite">
-      <div class="shelter-alert-header">
-        <i class="ph ph-warning-circle shelter-alert-icon"></i>
-        <div class="shelter-alert-title-group">
-          <span class="shelter-alert-date" data-i18n="shelter_alert_date">January 30, 2026 Update</span>
-          <div class="shelter-alert-title" data-i18n="shelter_alert_title">Metro Emergency Overflow Shelter</div>
-        </div>
-        <span class="shelter-alert-status" data-i18n="shelter_alert_status">Open 24 Hours</span>
+    <!-- Critical Alert Card - Emergency Shelter -->
+    <div id="shelterAlertBanner" class="critical-card" role="alert" aria-live="polite">
+      <div class="critical-header">
+        <span class="critical-label" data-i18n="critical_overflow_open">Emergency Overflow Open</span>
+        <span class="status-badge">● <span data-i18n="shelter_alert_status">24 Hours</span></span>
       </div>
-      <div class="shelter-alert-body">
-        <div class="shelter-alert-details">
-          <div class="shelter-detail-item">
-            <i class="ph ph-map-pin"></i>
-            <span data-i18n="shelter_alert_location">3230 Brick Church Pike, Nashville</span>
-          </div>
-          <div class="shelter-detail-item">
-            <i class="ph ph-users"></i>
-            <span data-i18n="shelter_alert_who">Adults 18+, couples, pets welcome (kennels provided)</span>
-          </div>
-          <div class="shelter-detail-item">
-            <i class="ph ph-bowl-food"></i>
-            <span data-i18n="shelter_alert_services">Hot meals, snacks, mats/cots, showers</span>
-          </div>
-          <div class="shelter-detail-item">
-            <i class="ph ph-bus"></i>
-            <span data-i18n="shelter_alert_transport">Free WeGo Bus Line #23B from WeGo Central after 7pm</span>
-          </div>
-        </div>
-        <div class="shelter-alert-cta">
-          <a href="sms:888-777?body=OHSALERT" class="shelter-cta-btn primary">
-            <i class="ph ph-chat-text"></i>
-            <span data-i18n="shelter_alert_text">Text OHSALERT to 888-777</span>
-          </a>
-          <a href="tel:615-862-6391" class="shelter-cta-btn">
-            <i class="ph ph-phone"></i>
-            <span>615-862-6391</span>
-          </a>
-          <a href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather" class="shelter-cta-btn" target="_blank" rel="noopener noreferrer">
-            <i class="ph ph-arrow-square-out"></i>
-            <span data-i18n="shelter_alert_more">Official Info</span>
-          </a>
-        </div>
-        <p class="shelter-primary-note" data-i18n="shelter_alert_note">Primary shelters: Room In The Inn, Nashville Rescue Mission, Launch Pad, Oasis. Try primary shelters first.</p>
+      <h3 class="critical-title" data-i18n="shelter_alert_title">Metro Emergency Shelter</h3>
+      <p class="critical-address" data-i18n="shelter_alert_location">3230 Brick Church Pike, Nashville</p>
+      <div class="critical-details">
+        <span class="detail-chip" data-i18n="critical_who_short">🧑‍🤝‍🧑 18+, couples, pets OK</span>
+        <span class="detail-chip" data-i18n="critical_meals">🍽️ Hot meals</span>
+        <span class="detail-chip" data-i18n="critical_showers">🚿 Showers</span>
+        <span class="detail-chip" data-i18n="critical_transport">🚌 WeGo #23B after 7pm</span>
+      </div>
+      <div class="critical-actions">
+        <a href="tel:615-862-6391" class="action-btn primary">📞 615-862-6391</a>
+        <a href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather" class="action-btn secondary" target="_blank" rel="noopener noreferrer">ℹ️ <span data-i18n="details">Details</span></a>
       </div>
     </div>
 
-    <section class="section">
-      <div class="section-title" data-i18n="start">Start Here</div>
-      <div class="links">
-        <a href="https://wttin.org/" class="link featured external-link" target="_blank" rel="noopener noreferrer" data-href="https://wttin.org/">
-          <i class="ph ph-compass"></i>
-          <span data-i18n="wttin">Where to Turn in Nashville</span>
-        </a>
+    <!-- Compact Status Row -->
+    <div class="status-row">
+      <div class="status-card">
+        <h4 data-i18n="power_outages">Power Outages</h4>
+        <div class="status-value alert" id="statusOutageCount">--</div>
+        <div class="status-sub" data-i18n="outage_customers">customers affected</div>
+        <a href="#" class="expand-link" onclick="openMapModal(); return false;" data-i18n="status_view_map">View NES map →</a>
       </div>
-    </section>
+      <div class="status-card">
+        <h4 data-i18n="forecast">Forecast</h4>
+        <div class="status-value" id="statusForecastTemp">--</div>
+        <div class="status-sub" id="statusForecastDesc">Loading...</div>
+        <a href="#forecastSection" class="expand-link" data-i18n="status_5day">5-day details →</a>
+      </div>
+    </div>
 
-    <section class="section">
-      <div class="section-title" data-i18n="weather_alerts">Weather Alerts</div>
-      <div class="alerts-container" id="alertsContainer">
-        <div class="alerts-loading">
-          <i class="ph ph-cloud"></i>
-          <span data-i18n="loading_alerts">Checking for alerts...</span>
-        </div>
-      </div>
-    </section>
+    <!-- Weather Alert Inline -->
+    <div class="weather-alert-inline" id="weatherAlertInline" style="display: none;">
+      <strong>⚠️ <span id="weatherAlertTitle">Cold Weather Advisory</span></strong>
+      <span id="weatherAlertExpiry"></span>
+    </div>
 
-    <section class="section">
-      <div class="section-title" data-i18n="power_outages">Power Outages</div>
-      <div class="outage-location-controls">
-        <button class="outage-location-btn" id="outageLocationBtn" onclick="useMyLocationForOutages()">
-          <i class="ph ph-crosshair"></i>
-          <span data-i18n="outage_use_location">Use My Location</span>
-        </button>
-        <span class="outage-location-status" id="outageLocationStatus"></span>
-      </div>
-      <div class="outages-container" id="outagesContainer">
-        <div class="outages-loading">
-          <i class="ph ph-lightning"></i>
-          <span data-i18n="loading_outages">Checking NES outages...</span>
-        </div>
-      </div>
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="find-help" data-i18n="tab_find_help">Find Help</button>
+      <button class="tab-btn" data-tab="resource-map" data-i18n="tab_resource_map">Resource Map</button>
+    </div>
 
-      <!-- Map Preview -->
-      <div class="map-preview-section">
-        <div class="map-preview-container">
-          <div class="map-preview-header">
-            <div class="map-preview-title">
-              <i class="ph ph-map-trifold"></i>
-              <span data-i18n="map_outage_map">Outage Map</span>
-            </div>
-            <button class="map-expand-btn" onclick="openMapModal()">
-              <i class="ph ph-arrows-out"></i>
-              <span data-i18n="map_fullscreen">Full Screen</span>
-            </button>
-          </div>
-          <div class="map-preview-wrapper">
-            <div id="outageMapPreview"></div>
-            <div class="map-preview-legend">
-              <div class="map-legend-item">
-                <div class="map-legend-dot red"></div>
-                <span data-i18n="map_legend_outage">Outage</span>
+    <!-- Find Help Tab Content -->
+    <div class="tab-content active" id="tab-find-help">
+      <div class="section-label" data-i18n="what_do_you_need">What do you need?</div>
+
+      <div class="intent-grid">
+        <!-- Shelter Card -->
+        <div class="intent-card" data-intent="shelter">
+          <div class="intent-header">
+            <div class="intent-left">
+              <div class="intent-icon">🏠</div>
+              <div>
+                <div class="intent-title" data-i18n="intent_shelter">I need a place tonight</div>
+                <div class="intent-count" data-i18n="intent_shelter_count">4 shelters open now</div>
               </div>
-              <div class="map-legend-item">
-                <div class="map-legend-dot blue"></div>
-                <span data-i18n="map_legend_warming">Warming</span>
+            </div>
+            <span class="intent-arrow">›</span>
+          </div>
+          <div class="resource-list">
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Room in the Inn</h5>
+                <div class="resource-meta">
+                  <span class="resource-status open" data-i18n="status_open">Open</span>
+                  <span class="resource-hours" data-i18n="hours_until_7am">Until 7am</span>
+                </div>
+              </div>
+              <a href="tel:615-251-9791" class="resource-phone">📞 615-251-9791</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Nashville Rescue Mission</h5>
+                <div class="resource-meta">
+                  <span class="resource-status open" data-i18n="status_open">Open</span>
+                  <span class="resource-hours" data-i18n="hours_24hr">24hr intake</span>
+                </div>
+              </div>
+              <a href="tel:615-255-2475" class="resource-phone">📞 615-255-2475</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Open Table Nashville</h5>
+                <div class="resource-meta">
+                  <span class="resource-status open" data-i18n="status_open">Open</span>
+                  <span class="resource-hours" data-i18n="hours_warming">Warming only</span>
+                </div>
+              </div>
+              <a href="tel:615-627-7496" class="resource-phone">📞 615-627-7496</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>The Contributor</h5>
+                <div class="resource-meta">
+                  <span class="resource-status open" data-i18n="status_open">Open</span>
+                  <span class="resource-hours" data-i18n="hours_warming">Warming only</span>
+                </div>
+              </div>
+              <a href="tel:615-321-0823" class="resource-phone">📞 615-321-0823</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Food Card -->
+        <div class="intent-card" data-intent="food">
+          <div class="intent-header">
+            <div class="intent-left">
+              <div class="intent-icon">🍲</div>
+              <div>
+                <div class="intent-title" data-i18n="intent_food">I need food</div>
+                <div class="intent-count" data-i18n="intent_food_count">Food banks & meal services</div>
+              </div>
+            </div>
+            <span class="intent-arrow">›</span>
+          </div>
+          <div class="resource-list">
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Second Harvest – Find Food</h5>
+                <div class="resource-meta">
+                  <span class="resource-status open" data-i18n="status_open">Open</span>
+                </div>
+              </div>
+              <a href="tel:615-329-3491" class="resource-phone">📞 615-329-3491</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Dream Streets Mobile Food</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours" data-i18n="hours_mobile">Mobile distribution</span>
+                </div>
+              </div>
+              <a href="https://dreamstreetstn.com/mobilefood" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Power Out Card -->
+        <div class="intent-card" data-intent="power">
+          <div class="intent-header">
+            <div class="intent-left">
+              <div class="intent-icon">⚡</div>
+              <div>
+                <div class="intent-title" data-i18n="intent_power">My power is out</div>
+                <div class="intent-count" data-i18n="intent_power_count">Report outage, warming centers</div>
+              </div>
+            </div>
+            <span class="intent-arrow">›</span>
+          </div>
+          <div class="resource-list">
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5 data-i18n="report_outage">Report Outage to NES</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours" data-i18n="hours_24hr">24/7 hotline</span>
+                </div>
+              </div>
+              <a href="tel:615-234-0000" class="resource-phone">📞 615-234-0000</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5 data-i18n="nes_outage_map">NES Outage Map</h5>
+              </div>
+              <a href="https://nespower.com/outages" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> View map</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Helping Someone Card -->
+        <div class="intent-card" data-intent="helping">
+          <div class="intent-header">
+            <div class="intent-left">
+              <div class="intent-icon">🤝</div>
+              <div>
+                <div class="intent-title" data-i18n="intent_helping">I'm helping someone</div>
+                <div class="intent-count" data-i18n="intent_helping_count">Outreach contacts, transport</div>
+              </div>
+            </div>
+            <span class="intent-arrow">›</span>
+          </div>
+          <div class="resource-list">
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5 data-i18n="homeless_outreach">Homeless Outreach Hotline</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours" data-i18n="hours_24hr">24/7</span>
+                </div>
+              </div>
+              <a href="tel:615-862-9400" class="resource-phone">📞 615-862-9400</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>People Loving Nashville</h5>
+              </div>
+              <a href="https://www.peoplelovingnashville.com/" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Where to Turn in Nashville</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours" data-i18n="resource_directory">Full resource directory</span>
+                </div>
+              </div>
+              <a href="https://wttin.org/" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> wttin.org</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Immigrant Resources Card -->
+        <div class="intent-card" data-intent="immigrant">
+          <div class="intent-header">
+            <div class="intent-left">
+              <div class="intent-icon">🌎</div>
+              <div>
+                <div class="intent-title" data-i18n="intent_immigrant">Immigrant resources</div>
+                <div class="intent-count" data-i18n="intent_immigrant_count">Safe services, language support</div>
+              </div>
+            </div>
+            <span class="intent-arrow">›</span>
+          </div>
+          <div class="resource-list">
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Conexión Américas / Casa Azafrán</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours" data-i18n="multilingual">Multilingual services</span>
+                </div>
+              </div>
+              <a href="tel:615-460-7600" class="resource-phone">📞 615-460-7600</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Legal Help Card -->
+        <div class="intent-card" data-intent="legal">
+          <div class="intent-header">
+            <div class="intent-left">
+              <div class="intent-icon">⚖️</div>
+              <div>
+                <div class="intent-title" data-i18n="intent_legal">Legal help</div>
+                <div class="intent-count" data-i18n="intent_legal_count">Eviction defense, ID recovery</div>
+              </div>
+            </div>
+            <span class="intent-arrow">›</span>
+          </div>
+          <div class="resource-list">
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5 data-i18n="legal_aid">Legal Aid Society of Middle TN</h5>
+              </div>
+              <a href="https://las.org/" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> las.org</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5 data-i18n="npt">NPT Unhoused Resources</h5>
+              </div>
+              <a href="https://www.wnpt.org/agingmatters/unhoused/" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Official Resources Card -->
+        <div class="intent-card" data-intent="official">
+          <div class="intent-header">
+            <div class="intent-left">
+              <div class="intent-icon">🏛️</div>
+              <div>
+                <div class="intent-title" data-i18n="intent_official">Official info hubs</div>
+                <div class="intent-count" data-i18n="intent_official_count">Government resources</div>
+              </div>
+            </div>
+            <span class="intent-arrow">›</span>
+          </div>
+          <div class="resource-list">
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5 data-i18n="nashville_weather">Nashville.gov Winter Weather</h5>
+              </div>
+              <a href="https://www.nashville.gov/departments/emergency-management/news/january-27-winter-weather-update" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5 data-i18n="ohs_extreme">Metro OHS – Extreme Weather</h5>
+              </div>
+              <a href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5 data-i18n="tema_map">TEMA Statewide Shelter Map</h5>
+              </div>
+              <a href="https://www.tn.gov/tema/tennessee-shelters.html" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5 data-i18n="tema_hub">TEMA Winter Weather Hub</h5>
+              </div>
+              <a href="https://www.tn.gov/tema/updates/2026-disasters/january-2026-winter-weather.html" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Contacts -->
+      <div class="quick-contacts">
+        <h4 data-i18n="quick_contacts">Quick Contacts</h4>
+        <div class="contact-row">
+          <span class="contact-name" data-i18n="contact_text_shelter">Text for shelter info</span>
+          <a href="sms:888777?body=OHSALERT" class="contact-number">OHSALERT → 888-777</a>
+        </div>
+        <div class="contact-row">
+          <span class="contact-name" data-i18n="contact_metro_social">Metro Social Services</span>
+          <a href="tel:615-862-6391" class="contact-number">615-862-6391</a>
+        </div>
+        <div class="contact-row">
+          <span class="contact-name" data-i18n="contact_211">Where to Turn (211)</span>
+          <a href="tel:211" class="contact-number">211</a>
+        </div>
+        <div class="contact-row">
+          <span class="contact-name">Conexión Américas</span>
+          <a href="tel:615-460-7600" class="contact-number">615-460-7600</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resource Map Tab Content -->
+    <div class="tab-content" id="tab-resource-map">
+      <div class="map-tab-content">
+        <!-- Outages Hidden Container for API data -->
+        <div id="outagesContainer" style="display: none;"></div>
+
+        <!-- Map Preview -->
+        <div class="map-preview-section" style="margin-top: 0;">
+          <div class="map-preview-container" style="border: none; background: transparent;">
+            <div class="map-preview-header" style="background: transparent; border-bottom: none; padding: 0 0 0.75rem 0;">
+              <div class="map-preview-title">
+                <i class="ph ph-map-trifold"></i>
+                <span data-i18n="map_outage_map">Outage Map</span>
+              </div>
+              <button class="map-expand-btn" onclick="openMapModal()">
+                <i class="ph ph-arrows-out"></i>
+                <span data-i18n="map_fullscreen">Full Screen</span>
+              </button>
+            </div>
+            <div class="map-preview-wrapper" style="height: 300px; border-radius: 12px; overflow: hidden;">
+              <div id="outageMapPreview"></div>
+              <div class="map-preview-legend">
+                <div class="map-legend-item">
+                  <div class="map-legend-dot red"></div>
+                  <span data-i18n="map_legend_outage">Outage</span>
+                </div>
+                <div class="map-legend-item">
+                  <div class="map-legend-dot blue"></div>
+                  <span data-i18n="map_legend_warming">Warming center</span>
+                </div>
+              </div>
+            </div>
+            <div class="map-preview-stats" style="margin-top: 0.75rem;">
+              <div class="map-stat">
+                <div class="map-stat-value red" id="mapStatCustomers">--</div>
+                <div class="map-stat-label" data-i18n="map_stat_affected">Affected</div>
               </div>
               <div class="map-legend-item">
                 <div class="map-legend-dot orange"></div>
@@ -1961,27 +2732,21 @@
               </div>
             </div>
           </div>
-          <div class="map-preview-stats">
-            <div class="map-stat">
-              <div class="map-stat-value red" id="mapStatCustomers">--</div>
-              <div class="map-stat-label" data-i18n="map_stat_affected">Affected</div>
-            </div>
-            <!-- Hidden until crew/waiting data is verified
-            <div class="map-stat">
-              <div class="map-stat-value green" id="mapStatCrews">--</div>
-              <div class="map-stat-label" data-i18n="map_stat_crews">Crews</div>
-            </div>
-            <div class="map-stat">
-              <div class="map-stat-value yellow" id="mapStatWaiting">--</div>
-              <div class="map-stat-label" data-i18n="map_stat_waiting">Waiting</div>
-            </div>
-            -->
-          </div>
+        </div>
+
+        <!-- Outage Location Button -->
+        <div class="outage-location-controls" style="margin-top: 1rem;">
+          <button class="outage-location-btn" id="outageLocationBtn" onclick="useMyLocationForOutages()">
+            <i class="ph ph-crosshair"></i>
+            <span data-i18n="outage_use_location">Use My Location</span>
+          </button>
+          <span class="outage-location-status" id="outageLocationStatus"></span>
         </div>
       </div>
-    </section>
+    </div>
 
-    <section class="forecast-section">
+    <!-- Forecast Section (collapsible) -->
+    <section class="forecast-section" id="forecastSection" style="margin-top: 1.5rem;">
       <div class="forecast-header">
         <div class="section-title" data-i18n="forecast">5-Day Forecast</div>
         <div class="zip-input-wrapper">
@@ -1999,104 +2764,16 @@
       </div>
     </section>
 
-    <section class="section">
-      <div class="section-title" data-i18n="official">Official Resource Hubs</div>
-      <div class="links">
-        <a href="https://www.nashville.gov/departments/emergency-management/news/january-27-winter-weather-update" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.nashville.gov/departments/emergency-management/news/january-27-winter-weather-update">
-          <i class="ph ph-cloud-snow"></i>
-          <span data-i18n="nashville_weather">Nashville.gov Winter Weather Updates</span>
-        </a>
-        <a href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather">
-          <i class="ph ph-thermometer-cold"></i>
-          <span data-i18n="ohs_extreme">Metro OHS – Extreme Weather</span>
-        </a>
-        <a href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather/shelters" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather/shelters">
-          <i class="ph ph-list-bullets"></i>
-          <span data-i18n="shelter_list">Metro Shelter List</span>
-        </a>
-        <a href="https://www.tn.gov/tema/tennessee-shelters.html" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.tn.gov/tema/tennessee-shelters.html">
-          <i class="ph ph-map-trifold"></i>
-          <span data-i18n="tema_map">TEMA Statewide Shelter Map</span>
-        </a>
-        <a href="https://www.tn.gov/tema/updates/2026-disasters/january-2026-winter-weather.html" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.tn.gov/tema/updates/2026-disasters/january-2026-winter-weather.html">
-          <i class="ph ph-warning"></i>
-          <span data-i18n="tema_hub">TEMA Winter Weather Hub</span>
-        </a>
-        <a href="https://www.fema.gov/disaster/2026-winter-storm" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.fema.gov/disaster/2026-winter-storm">
-          <i class="ph ph-flag"></i>
-          <span data-i18n="fema">FEMA 2026 Winter Storm</span>
-        </a>
+    <!-- Weather Alerts Section (kept for detailed alerts) -->
+    <section class="section" style="margin-top: 1rem;">
+      <div class="section-title" data-i18n="weather_alerts">Weather Alerts</div>
+      <div class="alerts-container" id="alertsContainer">
+        <div class="alerts-loading">
+          <i class="ph ph-cloud"></i>
+          <span data-i18n="loading_alerts">Checking for alerts...</span>
+        </div>
       </div>
     </section>
-    
-    <section class="section">
-      <div class="section-title" data-i18n="shelter">Shelter & Outreach</div>
-      <div class="links">
-        <a href="https://www.roomintheinn.org/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.roomintheinn.org/">
-          <i class="ph ph-bed"></i>
-          <span>Room in the Inn</span>
-        </a>
-        <a href="https://www.opentablenashville.org/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.opentablenashville.org/">
-          <i class="ph ph-hand-heart"></i>
-          <span>Open Table Nashville</span>
-        </a>
-        <a href="https://thecontributor.org/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://thecontributor.org/">
-          <i class="ph ph-newspaper"></i>
-          <span>The Contributor</span>
-        </a>
-        <a href="https://www.peoplelovingnashville.com/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.peoplelovingnashville.com/">
-          <i class="ph ph-users"></i>
-          <span>People Loving Nashville</span>
-        </a>
-      </div>
-    </section>
-    
-    <section class="section">
-      <div class="section-title" data-i18n="food">Food</div>
-      <div class="links">
-        <a href="https://www.secondharvestmidtn.org/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.secondharvestmidtn.org/">
-          <i class="ph ph-package"></i>
-          <span data-i18n="second_harvest">Second Harvest Food Bank</span>
-        </a>
-        <a href="https://www.secondharvestmidtn.org/find-resources/find-food/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.secondharvestmidtn.org/find-resources/find-food/">
-          <i class="ph ph-magnifying-glass"></i>
-          <span data-i18n="find_food">Second Harvest – Find Food</span>
-        </a>
-        <a href="https://dreamstreetstn.com/mobilefood" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://dreamstreetstn.com/mobilefood">
-          <i class="ph ph-truck"></i>
-          <span data-i18n="dream_streets">Dream Streets Mobile Food</span>
-        </a>
-      </div>
-    </section>
-    
-    <section class="section">
-      <div class="section-title" data-i18n="immigrant">Immigrant Community</div>
-      <div class="links">
-        <a href="https://www.conexionamericas.org/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.conexionamericas.org/">
-          <i class="ph ph-globe-hemisphere-west"></i>
-          <span>Conexión Américas / Casa Azafrán</span>
-        </a>
-      </div>
-    </section>
-    
-    <section class="section">
-      <div class="section-title" data-i18n="legal">Legal & Other Resources</div>
-      <div class="links">
-        <a href="https://las.org/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://las.org/">
-          <i class="ph ph-scales"></i>
-          <span data-i18n="legal_aid">Legal Aid Society of Middle TN</span>
-        </a>
-        <a href="https://www.wnpt.org/agingmatters/unhoused/" class="link external-link" target="_blank" rel="noopener noreferrer" data-href="https://www.wnpt.org/agingmatters/unhoused/">
-          <i class="ph ph-info"></i>
-          <span data-i18n="npt">NPT Unhoused Resources</span>
-        </a>
-      </div>
-    </section>
-    
-    <div class="outreach">
-      <div class="outreach-label" data-i18n="outreach_label">Homeless Outreach Hotline</div>
-      <a href="tel:6158629400" class="outreach-number">615-862-9400</a>
-    </div>
 
     <footer>
       <span data-i18n="footer">Share widely · Updated Jan 2026</span>
@@ -2576,7 +3253,48 @@
         shelter_alert_transport: "Free WeGo Bus Line #23B from WeGo Central after 7pm",
         shelter_alert_text: "Text OHSALERT to 888-777",
         shelter_alert_more: "Official Info",
-        shelter_alert_note: "Primary shelters: Room In The Inn, Nashville Rescue Mission, Launch Pad, Oasis. Try primary shelters first."
+        shelter_alert_note: "Primary shelters: Room In The Inn, Nashville Rescue Mission, Launch Pad, Oasis. Try primary shelters first.",
+        // UX Revamp translations
+        tab_find_help: "Find Help",
+        tab_resource_map: "Resource Map",
+        what_do_you_need: "What do you need?",
+        intent_shelter: "I need a place tonight",
+        intent_shelter_count: "4 shelters open now",
+        intent_food: "I need food",
+        intent_food_count: "Food banks & meal services",
+        intent_power: "My power is out",
+        intent_power_count: "Report outage, warming centers",
+        intent_helping: "I'm helping someone",
+        intent_helping_count: "Outreach contacts, transport",
+        intent_immigrant: "Immigrant resources",
+        intent_immigrant_count: "Safe services, language support",
+        intent_legal: "Legal help",
+        intent_legal_count: "Eviction defense, ID recovery",
+        intent_official: "Official info hubs",
+        intent_official_count: "Government resources",
+        status_open: "Open",
+        status_closed: "Closed",
+        hours_until_7am: "Until 7am",
+        hours_24hr: "24hr intake",
+        hours_warming: "Warming only",
+        hours_mobile: "Mobile distribution",
+        report_outage: "Report Outage to NES",
+        nes_outage_map: "NES Outage Map",
+        homeless_outreach: "Homeless Outreach Hotline",
+        resource_directory: "Full resource directory",
+        multilingual: "Multilingual services",
+        quick_contacts: "Quick Contacts",
+        contact_text_shelter: "Text for shelter info",
+        contact_metro_social: "Metro Social Services",
+        contact_211: "Where to Turn (211)",
+        critical_overflow_open: "Emergency Overflow Open",
+        critical_who_short: "🧑‍🤝‍🧑 18+, couples, pets OK",
+        critical_meals: "🍽️ Hot meals",
+        critical_showers: "🚿 Showers",
+        critical_transport: "🚌 WeGo #23B after 7pm",
+        details: "Details",
+        status_view_map: "View NES map →",
+        status_5day: "5-day details →"
       },
       es: {
         title: "Recursos de Invierno en Nashville",
@@ -2688,7 +3406,48 @@
         shelter_alert_transport: "Autobús WeGo Línea #23B gratis desde WeGo Central después de las 7pm",
         shelter_alert_text: "Envía OHSALERT al 888-777",
         shelter_alert_more: "Información Oficial",
-        shelter_alert_note: "Refugios principales: Room In The Inn, Nashville Rescue Mission, Launch Pad, Oasis. Pruebe primero los refugios principales."
+        shelter_alert_note: "Refugios principales: Room In The Inn, Nashville Rescue Mission, Launch Pad, Oasis. Pruebe primero los refugios principales.",
+        // UX Revamp translations
+        tab_find_help: "Buscar Ayuda",
+        tab_resource_map: "Mapa de Recursos",
+        what_do_you_need: "¿Qué necesitas?",
+        intent_shelter: "Necesito un lugar esta noche",
+        intent_shelter_count: "4 refugios abiertos ahora",
+        intent_food: "Necesito comida",
+        intent_food_count: "Bancos de alimentos y servicios",
+        intent_power: "Mi electricidad está cortada",
+        intent_power_count: "Reportar corte, centros de calentamiento",
+        intent_helping: "Estoy ayudando a alguien",
+        intent_helping_count: "Contactos de alcance, transporte",
+        intent_immigrant: "Recursos para inmigrantes",
+        intent_immigrant_count: "Servicios seguros, apoyo en idiomas",
+        intent_legal: "Ayuda legal",
+        intent_legal_count: "Defensa de desalojo, recuperación de ID",
+        intent_official: "Centros de información oficiales",
+        intent_official_count: "Recursos gubernamentales",
+        status_open: "Abierto",
+        status_closed: "Cerrado",
+        hours_until_7am: "Hasta las 7am",
+        hours_24hr: "Admisión 24hr",
+        hours_warming: "Solo calentamiento",
+        hours_mobile: "Distribución móvil",
+        report_outage: "Reportar Corte a NES",
+        nes_outage_map: "Mapa de Cortes NES",
+        homeless_outreach: "Línea de Ayuda para Personas sin Hogar",
+        resource_directory: "Directorio completo de recursos",
+        multilingual: "Servicios multilingües",
+        quick_contacts: "Contactos Rápidos",
+        contact_text_shelter: "Envía texto para info de refugios",
+        contact_metro_social: "Servicios Sociales Metro",
+        contact_211: "Dónde Acudir (211)",
+        critical_overflow_open: "Refugio de Emergencia Abierto",
+        critical_who_short: "🧑‍🤝‍🧑 18+, parejas, mascotas OK",
+        critical_meals: "🍽️ Comidas calientes",
+        critical_showers: "🚿 Duchas",
+        critical_transport: "🚌 WeGo #23B después de 7pm",
+        details: "Detalles",
+        status_view_map: "Ver mapa NES →",
+        status_5day: "Pronóstico 5 días →"
       },
       ar: {
         title: "موارد الشتاء في ناشفيل",
@@ -4161,6 +4920,177 @@
 
     // Load forecast on page load
     fetchForecast();
+
+    // ===========================================
+    // UX REVAMP - Tab Switching
+    // ===========================================
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const tabId = this.dataset.tab;
+
+        // Update button states
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        // Update content visibility
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.remove('active');
+        });
+        document.getElementById('tab-' + tabId).classList.add('active');
+
+        // Track tab switch
+        trackActivity('tab_switch', { tab: tabId });
+
+        // Reinitialize map if switching to map tab
+        if (tabId === 'resource-map' && typeof previewMap !== 'undefined' && previewMap) {
+          setTimeout(() => previewMap.invalidateSize(), 100);
+        }
+      });
+    });
+
+    // ===========================================
+    // UX REVAMP - Intent Card Expansion
+    // ===========================================
+    document.querySelectorAll('.intent-card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        // Don't toggle if clicking on a link or phone button
+        if (e.target.closest('.resource-phone') || e.target.closest('.resource-link') || e.target.closest('a')) {
+          return;
+        }
+
+        this.classList.toggle('expanded');
+
+        // Track intent card interaction
+        const intent = this.dataset.intent;
+        const isExpanded = this.classList.contains('expanded');
+        trackActivity('intent_card_toggle', { intent: intent, expanded: isExpanded });
+      });
+    });
+
+    // ===========================================
+    // UX REVAMP - Status Row Updates
+    // ===========================================
+    function updateStatusOutageCount(count) {
+      const statusEl = document.getElementById('statusOutageCount');
+      if (statusEl) {
+        if (count !== null && count !== undefined) {
+          // Format large numbers with K suffix
+          if (count >= 1000) {
+            statusEl.textContent = Math.round(count / 1000) + 'K';
+          } else {
+            statusEl.textContent = count.toLocaleString();
+          }
+        } else {
+          statusEl.textContent = '0';
+        }
+      }
+    }
+
+    function updateStatusForecast(high, low, description) {
+      const tempEl = document.getElementById('statusForecastTemp');
+      const descEl = document.getElementById('statusForecastDesc');
+      if (tempEl && high !== null && low !== null) {
+        tempEl.textContent = high + '° → ' + low + '°';
+      }
+      if (descEl && description) {
+        descEl.textContent = description;
+      }
+    }
+
+    // ===========================================
+    // UX REVAMP - Inline Weather Alert
+    // ===========================================
+    function updateInlineWeatherAlert(alerts) {
+      const inlineAlert = document.getElementById('weatherAlertInline');
+      const titleEl = document.getElementById('weatherAlertTitle');
+      const expiryEl = document.getElementById('weatherAlertExpiry');
+
+      if (!inlineAlert || !alerts || alerts.length === 0) {
+        if (inlineAlert) inlineAlert.style.display = 'none';
+        return;
+      }
+
+      // Show the first/most severe alert
+      const alert = alerts[0];
+      if (titleEl) titleEl.textContent = alert.properties?.event || 'Weather Alert';
+
+      if (expiryEl && alert.properties?.expires) {
+        const expires = new Date(alert.properties.expires);
+        const options = { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
+        expiryEl.textContent = ' through ' + expires.toLocaleDateString('en-US', options);
+      }
+
+      inlineAlert.style.display = 'block';
+    }
+
+    // Hook into existing alert fetch to update inline alert
+    const originalRenderAlerts = typeof renderAlerts === 'function' ? renderAlerts : null;
+    if (originalRenderAlerts) {
+      window.renderAlerts = function(alerts) {
+        originalRenderAlerts(alerts);
+        updateInlineWeatherAlert(alerts);
+      };
+    }
+
+    // Hook into existing outage fetch to update status row
+    const originalFetchMapOutages = typeof fetchMapOutages === 'function' ? fetchMapOutages : null;
+
+    // Override to capture outage data for status row
+    const originalUpdateMapStats = window.updateMapStats;
+    if (typeof updateMapStats === 'function') {
+      window.updateMapStats = function(customers, crewsAssigned, crewsWaiting) {
+        if (originalUpdateMapStats) {
+          originalUpdateMapStats(customers, crewsAssigned, crewsWaiting);
+        }
+        updateStatusOutageCount(customers);
+      };
+    }
+
+    // Hook into forecast to update status row
+    const originalRenderForecast = typeof renderForecast === 'function' ? renderForecast : null;
+    if (originalRenderForecast) {
+      const newRenderForecast = function(data, lang) {
+        originalRenderForecast(data, lang);
+
+        // Update status row with forecast data
+        if (data && data.daily) {
+          const today = data.daily;
+          const todayHigh = Math.round(today.temperature_2m_max[0]);
+          const tomorrowLow = Math.round(today.temperature_2m_min[1] || today.temperature_2m_min[0]);
+
+          // Get description from weather code
+          const days = ['Fri', 'Sat', 'Sun'];
+          const weatherCode = today.weather_code[0];
+          let desc = '';
+
+          // Check for precipitation in next few days
+          const hasRain = today.weather_code.slice(0, 5).some(code =>
+            [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(code)
+          );
+          const hasSnow = today.weather_code.slice(0, 5).some(code =>
+            [71, 73, 75, 77, 85, 86].includes(code)
+          );
+
+          if (hasSnow) {
+            desc = 'Snow expected';
+          } else if (hasRain) {
+            const rainDay = today.weather_code.findIndex(code =>
+              [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(code)
+            );
+            if (rainDay > 0 && rainDay < days.length) {
+              desc = 'Rain ' + days[rainDay];
+            } else {
+              desc = 'Rain expected';
+            }
+          } else {
+            desc = 'Fri–Sat';
+          }
+
+          updateStatusForecast(todayHigh, tomorrowLow, desc);
+        }
+      };
+      window.renderForecast = newRenderForecast;
+    }
   </script>
 </body>
 </html>
