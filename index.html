@@ -6,6 +6,8 @@
   <title>Nashville Winter Resources</title>
   <link rel="icon" type="image/png" href="https://substackcdn.com/image/fetch/w_80,h_80,c_fill,f_png,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4253394d-9735-40dd-961c-daa685b93262_1024x1024.png">
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     :root {
       /* Text scaling - adjustable via JS */
@@ -1229,6 +1231,431 @@
     [dir="rtl"] .alert-meta {
       flex-direction: row-reverse;
     }
+
+    /* Outage Map Preview Styles */
+    .map-preview-section {
+      margin-top: 1rem;
+    }
+
+    .map-preview-container {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .map-preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .map-preview-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    .map-preview-title i {
+      color: var(--color-accent-blue);
+    }
+
+    .map-expand-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--color-accent-blue);
+      border: none;
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      color: white;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      min-height: 36px;
+    }
+
+    .map-expand-btn:hover {
+      background: #3b82f6;
+    }
+
+    .map-expand-btn:active {
+      transform: scale(0.98);
+    }
+
+    .map-preview-wrapper {
+      position: relative;
+      height: 200px;
+    }
+
+    #outageMapPreview {
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .map-preview-legend {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      z-index: 1000;
+      background: rgba(30, 41, 59, 0.95);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.7rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    [dir="rtl"] .map-preview-legend {
+      left: auto;
+      right: 10px;
+    }
+
+    .map-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+      color: #e2e8f0;
+    }
+
+    .map-legend-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .map-legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .map-legend-dot.red { background: #f87171; }
+    .map-legend-dot.yellow { background: #fbbf24; }
+    .map-legend-dot.green { background: #4ade80; }
+    .map-legend-dot.blue { background: #60a5fa; }
+
+    .map-preview-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--color-border);
+    }
+
+    .map-stat {
+      background: var(--color-bg-secondary);
+      padding: 0.6rem;
+      text-align: center;
+    }
+
+    .map-stat-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .map-stat-value.red { color: #f87171; }
+    .map-stat-value.yellow { color: #fbbf24; }
+    .map-stat-value.green { color: #4ade80; }
+
+    .map-stat-label {
+      font-size: 0.65rem;
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+
+    /* Fullscreen Map Modal */
+    .map-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9999;
+      background: var(--color-bg-primary);
+    }
+
+    .map-modal.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .map-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--color-bg-secondary);
+      border-bottom: 1px solid var(--color-border);
+      flex-shrink: 0;
+    }
+
+    .map-modal-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .map-modal-title i {
+      color: var(--color-accent-blue);
+    }
+
+    .map-modal-close {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      color: var(--color-text-primary);
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-size: 1.25rem;
+    }
+
+    .map-modal-close:hover {
+      background: var(--color-surface-hover);
+    }
+
+    .map-modal-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--color-border);
+      flex-shrink: 0;
+    }
+
+    .map-modal-stat {
+      background: var(--color-bg-secondary);
+      padding: 12px;
+      text-align: center;
+    }
+
+    .map-modal-stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .map-modal-stat-value.red { color: #f87171; }
+    .map-modal-stat-value.yellow { color: #fbbf24; }
+    .map-modal-stat-value.green { color: #4ade80; }
+
+    .map-modal-stat-label {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      margin-top: 4px;
+    }
+
+    .map-modal-body {
+      flex: 1;
+      position: relative;
+      min-height: 0;
+    }
+
+    #outageMapFull {
+      width: 100%;
+      height: 100%;
+    }
+
+    .map-modal-legend {
+      position: absolute;
+      bottom: 80px;
+      left: 10px;
+      z-index: 1000;
+      background: rgba(30, 41, 59, 0.95);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.8rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    [dir="rtl"] .map-modal-legend {
+      left: auto;
+      right: 10px;
+    }
+
+    .map-modal-legend-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #94a3b8;
+    }
+
+    .map-modal-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      color: #e2e8f0;
+    }
+
+    .map-modal-legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .map-modal-legend-dot.red { background: #f87171; }
+    .map-modal-legend-dot.yellow { background: #fbbf24; }
+    .map-modal-legend-dot.green { background: #4ade80; }
+    .map-modal-legend-dot.blue { background: #60a5fa; }
+
+    .map-modal-footer {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--color-border);
+      flex-shrink: 0;
+    }
+
+    .map-modal-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 16px;
+      background: var(--color-bg-secondary);
+      border: none;
+      color: var(--color-text-primary);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .map-modal-action:hover {
+      background: var(--color-surface-hover);
+    }
+
+    .map-modal-action.primary {
+      background: var(--color-accent-blue);
+      color: white;
+    }
+
+    .map-modal-action.primary:hover {
+      background: #3b82f6;
+    }
+
+    /* Leaflet popup customization */
+    .leaflet-popup-content-wrapper {
+      background: #1e293b;
+      color: #f1f5f9;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .leaflet-popup-tip {
+      background: #1e293b;
+    }
+
+    .outage-popup {
+      padding: 4px;
+    }
+
+    .outage-popup-status {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .outage-popup-status.assigned {
+      background: rgba(74, 222, 128, 0.2);
+      color: #4ade80;
+    }
+
+    .outage-popup-status.unassigned {
+      background: rgba(248, 113, 113, 0.2);
+      color: #f87171;
+    }
+
+    .outage-popup-status.working {
+      background: rgba(251, 191, 36, 0.2);
+      color: #fbbf24;
+    }
+
+    .outage-popup-info {
+      font-size: 0.875rem;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .warming-center-icon {
+      background: #2563eb;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      border: 2px solid white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    .warming-popup-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      color: #f1f5f9;
+    }
+
+    .warming-popup-status {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: rgba(74, 222, 128, 0.2);
+      color: #4ade80;
+      margin-bottom: 6px;
+    }
+
+    .warming-popup-status.unconfirmed {
+      background: rgba(251, 191, 36, 0.2);
+      color: #fbbf24;
+    }
+
+    @media (max-width: 400px) {
+      .map-preview-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: stretch;
+      }
+
+      .map-expand-btn {
+        justify-content: center;
+      }
+
+      .map-stat-value {
+        font-size: 1rem;
+      }
+
+      .map-modal-stat-value {
+        font-size: 1.25rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1295,6 +1722,57 @@
         <div class="outages-loading">
           <i class="ph ph-lightning"></i>
           <span data-i18n="loading_outages">Checking NES outages...</span>
+        </div>
+      </div>
+
+      <!-- Map Preview -->
+      <div class="map-preview-section">
+        <div class="map-preview-container">
+          <div class="map-preview-header">
+            <div class="map-preview-title">
+              <i class="ph ph-map-trifold"></i>
+              <span data-i18n="map_outage_map">Outage Map</span>
+            </div>
+            <button class="map-expand-btn" onclick="openMapModal()">
+              <i class="ph ph-arrows-out"></i>
+              <span data-i18n="map_fullscreen">Full Screen</span>
+            </button>
+          </div>
+          <div class="map-preview-wrapper">
+            <div id="outageMapPreview"></div>
+            <div class="map-preview-legend">
+              <div class="map-legend-item">
+                <div class="map-legend-dot red"></div>
+                <span data-i18n="map_legend_waiting">Waiting</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="map-legend-dot yellow"></div>
+                <span data-i18n="map_legend_assigned">Assigned</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="map-legend-dot green"></div>
+                <span data-i18n="map_legend_working">Repairing</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="map-legend-dot blue"></div>
+                <span data-i18n="map_legend_warming">Warming</span>
+              </div>
+            </div>
+          </div>
+          <div class="map-preview-stats">
+            <div class="map-stat">
+              <div class="map-stat-value red" id="mapStatCustomers">--</div>
+              <div class="map-stat-label" data-i18n="map_stat_affected">Affected</div>
+            </div>
+            <div class="map-stat">
+              <div class="map-stat-value green" id="mapStatCrews">--</div>
+              <div class="map-stat-label" data-i18n="map_stat_crews">Crews</div>
+            </div>
+            <div class="map-stat">
+              <div class="map-stat-value yellow" id="mapStatWaiting">--</div>
+              <div class="map-stat-label" data-i18n="map_stat_waiting">Waiting</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1421,6 +1899,65 @@
       <p style="margin-top: 0.75rem;">Brought to you by <a href="https://readrichtext.substack.com/" target="_blank" rel="noopener" style="color: var(--color-link);">Rich Text</a> and <a href="https://groundtruthnashville.substack.com/" target="_blank" rel="noopener" style="color: var(--color-link);">Ground Truth Nashville</a></p>
       <p style="margin-top: 0.5rem; font-size: 0.7rem; color: var(--color-text-muted);">NES outage data powered by <a href="https://github.com/NeckBeardPrince/nes-outage-status-checker" target="_blank" rel="noopener" style="color: var(--color-text-muted);">NeckBeardPrince/nes-outage-status-checker</a></p>
     </footer>
+  </div>
+
+  <!-- Fullscreen Map Modal -->
+  <div class="map-modal" id="mapModal">
+    <div class="map-modal-header">
+      <div class="map-modal-title">
+        <i class="ph ph-map-trifold"></i>
+        <span data-i18n="map_outage_map">Outage Map</span>
+      </div>
+      <button class="map-modal-close" onclick="closeMapModal()">
+        <i class="ph ph-x"></i>
+      </button>
+    </div>
+    <div class="map-modal-stats">
+      <div class="map-modal-stat">
+        <div class="map-modal-stat-value red" id="modalStatCustomers">--</div>
+        <div class="map-modal-stat-label" data-i18n="map_stat_affected">Affected</div>
+      </div>
+      <div class="map-modal-stat">
+        <div class="map-modal-stat-value green" id="modalStatCrews">--</div>
+        <div class="map-modal-stat-label" data-i18n="map_stat_crews">Crews</div>
+      </div>
+      <div class="map-modal-stat">
+        <div class="map-modal-stat-value yellow" id="modalStatWaiting">--</div>
+        <div class="map-modal-stat-label" data-i18n="map_stat_waiting">Waiting</div>
+      </div>
+    </div>
+    <div class="map-modal-body">
+      <div id="outageMapFull"></div>
+      <div class="map-modal-legend">
+        <div class="map-modal-legend-title" data-i18n="map_legend_title">Map Key</div>
+        <div class="map-modal-legend-item">
+          <div class="map-modal-legend-dot red"></div>
+          <span data-i18n="map_legend_waiting">Waiting for crew</span>
+        </div>
+        <div class="map-modal-legend-item">
+          <div class="map-modal-legend-dot yellow"></div>
+          <span data-i18n="map_legend_assigned">Crew assigned</span>
+        </div>
+        <div class="map-modal-legend-item">
+          <div class="map-modal-legend-dot green"></div>
+          <span data-i18n="map_legend_working">Being repaired</span>
+        </div>
+        <div class="map-modal-legend-item">
+          <div class="map-modal-legend-dot blue"></div>
+          <span data-i18n="map_legend_warming">Warming center</span>
+        </div>
+      </div>
+    </div>
+    <div class="map-modal-footer">
+      <a href="https://nespower.com/outages" target="_blank" rel="noopener noreferrer" class="map-modal-action">
+        <i class="ph ph-chart-line"></i>
+        <span data-i18n="map_nes_website">NES Website</span>
+      </a>
+      <a href="tel:615-234-0000" class="map-modal-action primary">
+        <i class="ph ph-phone"></i>
+        <span data-i18n="map_report_outage">Report Outage</span>
+      </a>
+    </div>
   </div>
 
   <script>
@@ -1786,7 +2323,25 @@
         outage_location_denied: "Location access denied",
         outage_location_error: "Could not get location",
         outage_location_unavailable: "Location not available",
-        outage_fetch_error: "Failed to load outages"
+        outage_fetch_error: "Failed to load outages",
+        map_outage_map: "Outage Map",
+        map_fullscreen: "Full Screen",
+        map_legend_title: "Map Key",
+        map_legend_waiting: "Waiting for crew",
+        map_legend_assigned: "Crew assigned",
+        map_legend_working: "Being repaired",
+        map_legend_warming: "Warming center",
+        map_stat_affected: "Affected",
+        map_stat_crews: "Crews",
+        map_stat_waiting: "Waiting",
+        map_nes_website: "NES Website",
+        map_report_outage: "Report Outage",
+        map_popup_customers: "customers affected",
+        map_popup_status: "Status",
+        map_warming_open: "Open warming center",
+        map_warming_unconfirmed: "Unconfirmed - verify status",
+        map_warming_food: "Food available 24/7",
+        map_warming_verify_link: "Verify on Nashville.gov"
       },
       es: {
         title: "Recursos de Invierno en Nashville",
@@ -1869,7 +2424,25 @@
         outage_location_denied: "Acceso a ubicación denegado",
         outage_location_error: "No se pudo obtener ubicación",
         outage_location_unavailable: "Ubicación no disponible",
-        outage_fetch_error: "Error al cargar cortes"
+        outage_fetch_error: "Error al cargar cortes",
+        map_outage_map: "Mapa de Cortes",
+        map_fullscreen: "Pantalla Completa",
+        map_legend_title: "Leyenda",
+        map_legend_waiting: "Esperando equipo",
+        map_legend_assigned: "Equipo asignado",
+        map_legend_working: "Reparando",
+        map_legend_warming: "Centro de calentamiento",
+        map_stat_affected: "Afectados",
+        map_stat_crews: "Equipos",
+        map_stat_waiting: "Esperando",
+        map_nes_website: "Sitio Web NES",
+        map_report_outage: "Reportar Corte",
+        map_popup_customers: "clientes afectados",
+        map_popup_status: "Estado",
+        map_warming_open: "Centro de calentamiento abierto",
+        map_warming_unconfirmed: "Sin confirmar - verificar estado",
+        map_warming_food: "Comida disponible 24/7",
+        map_warming_verify_link: "Verificar en Nashville.gov"
       },
       ar: {
         title: "موارد الشتاء في ناشفيل",
@@ -1952,7 +2525,25 @@
         outage_location_denied: "تم رفض الوصول للموقع",
         outage_location_error: "تعذر الحصول على الموقع",
         outage_location_unavailable: "الموقع غير متاح",
-        outage_fetch_error: "فشل في تحميل الانقطاعات"
+        outage_fetch_error: "فشل في تحميل الانقطاعات",
+        map_outage_map: "خريطة الانقطاعات",
+        map_fullscreen: "ملء الشاشة",
+        map_legend_title: "دليل الخريطة",
+        map_legend_waiting: "في انتظار فريق",
+        map_legend_assigned: "تم تعيين فريق",
+        map_legend_working: "جاري الإصلاح",
+        map_legend_warming: "مركز تدفئة",
+        map_stat_affected: "متأثرون",
+        map_stat_crews: "فرق",
+        map_stat_waiting: "انتظار",
+        map_nes_website: "موقع NES",
+        map_report_outage: "إبلاغ عن انقطاع",
+        map_popup_customers: "عملاء متأثرين",
+        map_popup_status: "الحالة",
+        map_warming_open: "مركز تدفئة مفتوح",
+        map_warming_unconfirmed: "غير مؤكد - تحقق من الحالة",
+        map_warming_food: "طعام متاح 24/7",
+        map_warming_verify_link: "تحقق على Nashville.gov"
       },
       ku: {
         title: "سەرچاوەکانی زستانی ناشڤیل",
@@ -2035,7 +2626,25 @@
         outage_location_denied: "ڕێگە نەدرا بۆ شوێن",
         outage_location_error: "نەتوانرا شوێن بدۆزرێتەوە",
         outage_location_unavailable: "شوێن بەردەست نییە",
-        outage_fetch_error: "شکست هێنا لە بارکردنی پچڕانەکان"
+        outage_fetch_error: "شکست هێنا لە بارکردنی پچڕانەکان",
+        map_outage_map: "نەخشەی پچڕان",
+        map_fullscreen: "ڕووپۆشی تەواو",
+        map_legend_title: "ڕێنمایی نەخشە",
+        map_legend_waiting: "چاوەڕوانی تیم",
+        map_legend_assigned: "تیم دیاریکراوە",
+        map_legend_working: "چاککردنەوە دەکرێت",
+        map_legend_warming: "ناوەندی گەرمکردنەوە",
+        map_stat_affected: "کاریگەر",
+        map_stat_crews: "تیمەکان",
+        map_stat_waiting: "چاوەڕوان",
+        map_nes_website: "وێبسایتی NES",
+        map_report_outage: "ڕاپۆرتی پچڕان",
+        map_popup_customers: "کڕیاری کاریگەر",
+        map_popup_status: "دۆخ",
+        map_warming_open: "ناوەندی گەرمکردنەوە کراوەیە",
+        map_warming_unconfirmed: "نەدڵنیا - دۆخەکە پشتڕاست بکەرەوە",
+        map_warming_food: "خواردن بەردەستە 24/7",
+        map_warming_verify_link: "پشتڕاستکردنەوە لە Nashville.gov"
       },
       vi: {
         title: "Tài Nguyên Mùa Đông Nashville",
@@ -2118,7 +2727,25 @@
         outage_location_denied: "Quyền truy cập vị trí bị từ chối",
         outage_location_error: "Không thể lấy vị trí",
         outage_location_unavailable: "Vị trí không khả dụng",
-        outage_fetch_error: "Không thể tải sự cố"
+        outage_fetch_error: "Không thể tải sự cố",
+        map_outage_map: "Bản Đồ Mất Điện",
+        map_fullscreen: "Toàn Màn Hình",
+        map_legend_title: "Chú Thích",
+        map_legend_waiting: "Đang chờ đội",
+        map_legend_assigned: "Đã phân công đội",
+        map_legend_working: "Đang sửa chữa",
+        map_legend_warming: "Trung tâm sưởi ấm",
+        map_stat_affected: "Bị ảnh hưởng",
+        map_stat_crews: "Đội",
+        map_stat_waiting: "Đang chờ",
+        map_nes_website: "Trang Web NES",
+        map_report_outage: "Báo Cáo Mất Điện",
+        map_popup_customers: "khách hàng bị ảnh hưởng",
+        map_popup_status: "Trạng thái",
+        map_warming_open: "Trung tâm sưởi ấm đang mở",
+        map_warming_unconfirmed: "Chưa xác nhận - kiểm tra trạng thái",
+        map_warming_food: "Có thức ăn 24/7",
+        map_warming_verify_link: "Xác minh tại Nashville.gov"
       }
     };
 
@@ -2878,6 +3505,309 @@
     document.querySelector('.location-btn')?.addEventListener('click', () => {
       trackActivity('location_btn_click', { destination: 'emergency.html' });
     });
+
+    // ===========================================
+    // OUTAGE MAP FUNCTIONALITY
+    // ===========================================
+
+    let previewMap = null;
+    let fullMap = null;
+    let previewOutageLayer = null;
+    let fullOutageLayer = null;
+    let cachedMapOutages = [];
+    let mapStatsData = { customers: 0, crews: 0, waiting: 0 };
+
+    // Warming centers data - Official locations from Nashville.gov
+    // Last verified: January 29, 2026
+    // Source: https://www.nashville.gov/departments/emergency-management/news/new-warming-location-opens-at-bellevue-community-center
+    const WARMING_CENTERS_VERIFIED_DATE = '2026-01-29';
+    const WARMING_CENTERS_EXPIRY_DAYS = 3;
+
+    const warmingCenters = [
+      { lat: 36.0679, lng: -86.6675, name: "Southeast Regional Community Center", address: "5260 Hickory Hollow Pkwy, Suite 202, Antioch, TN 37013", hasFood: true },
+      { lat: 36.2573, lng: -86.7093, name: "Madison Community Center", address: "550 N Dupont Ave, Madison, TN 37115", hasFood: true },
+      { lat: 36.1409, lng: -86.7634, name: "Nashville Fairgrounds", address: "401 Wingrove St, Nashville, TN 37203", hasFood: true },
+      { lat: 36.0771, lng: -86.9208, name: "Bellevue Community Center", address: "7638A Highway 70 S, Nashville, TN 37221", hasFood: true }
+    ];
+
+    function isWarmingDataStale() {
+      const verifiedDate = new Date(WARMING_CENTERS_VERIFIED_DATE);
+      const now = new Date();
+      const daysDiff = (now - verifiedDate) / (1000 * 60 * 60 * 24);
+      return daysDiff > WARMING_CENTERS_EXPIRY_DAYS;
+    }
+
+    function getMapStatusColor(status) {
+      const s = (status || '').toLowerCase();
+      if (s.includes('crew en route') || s.includes('crew on site') || s.includes('assessing')) {
+        return '#4ade80'; // green - being worked
+      } else if (s.includes('assigned') || s.includes('scheduled')) {
+        return '#fbbf24'; // yellow - assigned
+      } else {
+        return '#f87171'; // red - unassigned/waiting
+      }
+    }
+
+    function getMapStatusCategory(status) {
+      const s = (status || '').toLowerCase();
+      if (s.includes('crew en route') || s.includes('crew on site') || s.includes('assessing')) {
+        return 'working';
+      } else if (s.includes('assigned') || s.includes('scheduled')) {
+        return 'assigned';
+      } else {
+        return 'unassigned';
+      }
+    }
+
+    function getMapStatusText(status) {
+      const cat = getMapStatusCategory(status);
+      switch(cat) {
+        case 'unassigned': return t('map_legend_waiting');
+        case 'assigned': return t('map_legend_assigned');
+        case 'working': return t('map_legend_working');
+        default: return status || 'Unknown';
+      }
+    }
+
+    function createOutagePopup(customers, status) {
+      const statusClass = getMapStatusCategory(status);
+      return `
+        <div class="outage-popup">
+          <div class="outage-popup-status ${statusClass}">${getMapStatusText(status)}</div>
+          <div class="outage-popup-info">
+            <strong>${customers.toLocaleString()}</strong> ${t('map_popup_customers')}
+          </div>
+        </div>
+      `;
+    }
+
+    function createWarmingCenterPopup(name, address, hasFood) {
+      const isStale = isWarmingDataStale();
+      const statusText = isStale ? t('map_warming_unconfirmed') : t('map_warming_open');
+      const statusClass = isStale ? 'unconfirmed' : '';
+      const foodNote = hasFood ? `<div class="outage-popup-info" style="margin-top: 4px; color: #4ade80;">✓ ${t('map_warming_food')}</div>` : '';
+
+      return `
+        <div class="outage-popup">
+          <div class="warming-popup-title">${name}</div>
+          <div class="warming-popup-status ${statusClass}">${statusText}</div>
+          <div class="outage-popup-info">${address}</div>
+          ${foodNote}
+          <a href="https://www.nashville.gov/departments/emergency-management" target="_blank" rel="noopener"
+             style="display: block; margin-top: 8px; font-size: 0.75rem; color: #60a5fa;">
+            ${t('map_warming_verify_link')} →
+          </a>
+        </div>
+      `;
+    }
+
+    function addOutageMarkers(map, layer) {
+      layer.clearLayers();
+
+      cachedMapOutages.forEach(event => {
+        const lat = event.lat || event.latitude;
+        const lng = event.lng || event.longitude;
+        const customers = event.customersAffected || event.customers_affected || event.numPeople || 1;
+        const status = event.status || event.crewStatus || 'Unassigned';
+
+        if (!lat || !lng) return;
+
+        const color = getMapStatusColor(status);
+        const radius = Math.min(Math.max(Math.sqrt(customers) * 1.2, 6), 30);
+
+        const marker = L.circleMarker([lat, lng], {
+          radius: radius,
+          fillColor: color,
+          color: '#1e293b',
+          weight: 1.5,
+          opacity: 1,
+          fillOpacity: 0.75
+        }).addTo(layer);
+
+        marker.bindPopup(() => createOutagePopup(customers, status));
+      });
+
+      // Add warming center markers
+      const warmingIcon = L.divIcon({
+        className: '',
+        html: '<div class="warming-center-icon">🏠</div>',
+        iconSize: [28, 28],
+        iconAnchor: [14, 14]
+      });
+
+      warmingCenters.forEach(center => {
+        const marker = L.marker([center.lat, center.lng], { icon: warmingIcon }).addTo(layer);
+        marker.bindPopup(() => createWarmingCenterPopup(center.name, center.address, center.hasFood));
+      });
+    }
+
+    function updateMapStats() {
+      // Update preview stats
+      const customersEl = document.getElementById('mapStatCustomers');
+      const crewsEl = document.getElementById('mapStatCrews');
+      const waitingEl = document.getElementById('mapStatWaiting');
+
+      if (customersEl) {
+        customersEl.textContent = mapStatsData.customers > 1000
+          ? Math.round(mapStatsData.customers / 1000) + 'K'
+          : mapStatsData.customers.toLocaleString();
+      }
+      if (crewsEl) crewsEl.textContent = mapStatsData.crews.toLocaleString();
+      if (waitingEl) waitingEl.textContent = mapStatsData.waiting.toLocaleString();
+
+      // Update modal stats
+      const modalCustomersEl = document.getElementById('modalStatCustomers');
+      const modalCrewsEl = document.getElementById('modalStatCrews');
+      const modalWaitingEl = document.getElementById('modalStatWaiting');
+
+      if (modalCustomersEl) {
+        modalCustomersEl.textContent = mapStatsData.customers > 1000
+          ? Math.round(mapStatsData.customers / 1000) + 'K'
+          : mapStatsData.customers.toLocaleString();
+      }
+      if (modalCrewsEl) modalCrewsEl.textContent = mapStatsData.crews.toLocaleString();
+      if (modalWaitingEl) modalWaitingEl.textContent = mapStatsData.waiting.toLocaleString();
+    }
+
+    async function fetchMapOutages() {
+      try {
+        const response = await fetch('https://utilisocial.io/datacapable/v2/p/NES/map/events');
+        const data = await response.json();
+
+        const events = data.events || data || [];
+        cachedMapOutages = events;
+
+        let totalCustomers = 0;
+        let crewsWorking = 0;
+        let unassignedCount = 0;
+
+        events.forEach(event => {
+          const customers = event.customersAffected || event.customers_affected || event.numPeople || 1;
+          const status = event.status || event.crewStatus || 'Unassigned';
+
+          totalCustomers += customers;
+          const cat = getMapStatusCategory(status);
+          if (cat === 'working' || cat === 'assigned') {
+            crewsWorking++;
+          } else {
+            unassignedCount++;
+          }
+        });
+
+        mapStatsData = {
+          customers: totalCustomers,
+          crews: crewsWorking,
+          waiting: unassignedCount
+        };
+
+        updateMapStats();
+
+        if (previewOutageLayer) {
+          addOutageMarkers(previewMap, previewOutageLayer);
+        }
+        if (fullOutageLayer) {
+          addOutageMarkers(fullMap, fullOutageLayer);
+        }
+
+        console.log(`Map: Loaded ${events.length} outage events, ${totalCustomers} customers affected`);
+
+      } catch (error) {
+        console.error('Failed to fetch map outage data:', error);
+      }
+    }
+
+    function initPreviewMap() {
+      if (previewMap) return;
+
+      const mapContainer = document.getElementById('outageMapPreview');
+      if (!mapContainer) return;
+
+      previewMap = L.map('outageMapPreview', {
+        zoomControl: false,
+        attributionControl: false,
+        dragging: false,
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        touchZoom: false
+      }).setView([36.1627, -86.7816], 10);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18
+      }).addTo(previewMap);
+
+      previewOutageLayer = L.layerGroup().addTo(previewMap);
+
+      // If we already have data, add markers
+      if (cachedMapOutages.length > 0) {
+        addOutageMarkers(previewMap, previewOutageLayer);
+      }
+    }
+
+    function initFullMap() {
+      if (fullMap) {
+        // Just invalidate size if already exists
+        setTimeout(() => fullMap.invalidateSize(), 100);
+        return;
+      }
+
+      const mapContainer = document.getElementById('outageMapFull');
+      if (!mapContainer) return;
+
+      fullMap = L.map('outageMapFull', {
+        zoomControl: true
+      }).setView([36.1627, -86.7816], 11);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 18
+      }).addTo(fullMap);
+
+      fullOutageLayer = L.layerGroup().addTo(fullMap);
+
+      // If we already have data, add markers
+      if (cachedMapOutages.length > 0) {
+        addOutageMarkers(fullMap, fullOutageLayer);
+      }
+    }
+
+    function openMapModal() {
+      const modal = document.getElementById('mapModal');
+      if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Initialize or resize the full map
+        setTimeout(() => {
+          initFullMap();
+        }, 50);
+
+        trackActivity('map_modal_open');
+      }
+    }
+
+    function closeMapModal() {
+      const modal = document.getElementById('mapModal');
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeMapModal();
+      }
+    });
+
+    // Initialize preview map when page loads
+    setTimeout(() => {
+      initPreviewMap();
+      fetchMapOutages();
+    }, 500);
+
+    // Refresh map data every 2 minutes
+    setInterval(fetchMapOutages, 120000);
 
     // Load forecast on page load
     fetchForecast();
