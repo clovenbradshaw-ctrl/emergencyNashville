@@ -969,6 +969,10 @@
   </div>
 
   <script>
+    // Store data for re-rendering on language change
+    let cachedWeatherData = null;
+    let cachedAlertsData = null;
+
     const translations = {
       en: {
         title: "Nashville Winter Resources",
@@ -1290,6 +1294,14 @@
 
       updateExternalLinks(lang);
       localStorage.setItem('nashville-resources-lang', lang);
+
+      // Re-render weather data with new language
+      if (cachedWeatherData) {
+        renderForecast(cachedWeatherData);
+      }
+      if (cachedAlertsData) {
+        renderAlerts(cachedAlertsData);
+      }
     }
 
     document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -1451,13 +1463,14 @@
     function formatAlertTime(isoString) {
       if (!isoString) return '';
       const d = new Date(isoString);
-      return d.toLocaleString(undefined, {
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit'
-      });
+      const dayName = getDayName(d.getDay());
+      const monthName = getMonthName(d.getMonth());
+      const day = d.getDate();
+      const hours = d.getHours();
+      const minutes = d.getMinutes().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      const hour12 = hours % 12 || 12;
+      return `${dayName}, ${monthName} ${day}, ${hour12}:${minutes} ${ampm}`;
     }
 
     function renderAlerts(alerts) {
@@ -1613,9 +1626,15 @@
           getNWSAlerts(coords.lat, coords.lon)
         ]);
 
+        // Cache data for re-rendering on language change
+        cachedWeatherData = weather;
+        cachedAlertsData = alerts;
+
         renderAlerts(alerts);
         renderForecast(weather);
       } catch (err) {
+        cachedWeatherData = null;
+        cachedAlertsData = null;
         showForecastError(t('forecast_error'));
         document.getElementById('alertsContainer').innerHTML = '';
         console.error(err);
