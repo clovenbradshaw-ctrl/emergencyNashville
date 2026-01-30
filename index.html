@@ -996,14 +996,25 @@
           referrer: document.referrer || null
         };
 
+        console.log('[Webhook] Sending:', action, payload);
+
         fetch(WEBHOOK_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
           keepalive: true
-        }).catch(() => {});
+        })
+        .then(response => {
+          console.log('[Webhook] Response:', response.status, response.statusText);
+          if (!response.ok) {
+            console.error('[Webhook] Failed with status:', response.status);
+          }
+        })
+        .catch(error => {
+          console.error('[Webhook] Error:', error.message || error);
+        });
       } catch (e) {
-        // Silently fail - tracking should never break the app
+        console.error('[Webhook] Exception:', e);
       }
     }
 
