@@ -1117,11 +1117,36 @@
       margin: 0.75rem 0 0.4rem 0;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .outage-section-header:hover {
+      color: var(--color-text-primary);
     }
 
     .outage-section-header i {
       font-size: 0.9rem;
       color: #a78bfa;
+    }
+
+    .outage-section-header .toggle-icon {
+      margin-left: auto;
+      transition: transform 0.2s ease;
+    }
+
+    .outage-section-header.collapsed .toggle-icon {
+      transform: rotate(-90deg);
+    }
+
+    .outage-list-container {
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.2s ease;
+    }
+
+    .outage-list-container.collapsed {
+      max-height: 0 !important;
+      opacity: 0;
     }
 
     .outage-more-text {
@@ -2575,20 +2600,38 @@
       // Show nearby outages first (if any)
       if (nearby.length > 0) {
         const nearbyHeader = document.createElement('div');
-        nearbyHeader.className = 'outage-section-header';
-        nearbyHeader.innerHTML = `<i class="ph ph-map-pin"></i> ${t('outages_near_you')} (${nearby.length})`;
+        nearbyHeader.className = 'outage-section-header collapsed';
+        nearbyHeader.innerHTML = `<i class="ph ph-map-pin"></i> ${t('outages_near_you')} (${nearby.length}) <i class="ph ph-caret-down toggle-icon"></i>`;
         container.appendChild(nearbyHeader);
 
+        // Create collapsible container for nearby outages
+        const nearbyContainer = document.createElement('div');
+        nearbyContainer.className = 'outage-list-container collapsed';
+        nearbyContainer.id = 'nearbyOutagesList';
+
         nearby.slice(0, 5).forEach((outage, index) => {
-          container.appendChild(createOutageBanner(outage, index, true));
+          nearbyContainer.appendChild(createOutageBanner(outage, index, true));
         });
 
         if (nearby.length > 5) {
           const moreNearby = document.createElement('div');
           moreNearby.className = 'outage-more-text';
           moreNearby.textContent = `+ ${nearby.length - 5} ${t('outages_more_nearby')}`;
-          container.appendChild(moreNearby);
+          nearbyContainer.appendChild(moreNearby);
         }
+
+        container.appendChild(nearbyContainer);
+
+        // Add click handler to toggle collapse
+        nearbyHeader.addEventListener('click', () => {
+          nearbyHeader.classList.toggle('collapsed');
+          nearbyContainer.classList.toggle('collapsed');
+          if (!nearbyContainer.classList.contains('collapsed')) {
+            nearbyContainer.style.maxHeight = nearbyContainer.scrollHeight + 'px';
+          } else {
+            nearbyContainer.style.maxHeight = '0';
+          }
+        });
       }
 
       // Show other outages (not nearby) if we have space
