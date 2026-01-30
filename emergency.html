@@ -409,9 +409,10 @@
                 <button class="lang-btn" data-lang="vi">Tiếng Việt</button>
             </div>
             <div class="text-size-controls" role="group" aria-label="Text size">
-                <button class="text-size-btn" data-size="small" aria-label="Small text" title="Smaller text">A</button>
+                <button class="text-size-btn" data-size="small" aria-label="Small text" title="Smaller text" style="font-size: 12px;">A</button>
                 <button class="text-size-btn active" data-size="normal" aria-label="Normal text" title="Normal text">A</button>
                 <button class="text-size-btn" data-size="large" aria-label="Large text" title="Larger text" style="font-size: 18px;">A</button>
+                <button class="text-size-btn" data-size="xlarge" aria-label="Extra large text" title="Extra large text" style="font-size: 22px;">A</button>
             </div>
         </div>
 
@@ -773,7 +774,7 @@
         }
 
         // Text size controls
-        const textSizes = ['small', 'normal', 'large'];
+        const textSizes = ['small', 'normal', 'large', 'xlarge'];
 
         function setTextSize(size) {
             // Remove all size classes
