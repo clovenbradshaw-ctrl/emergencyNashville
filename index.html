@@ -3190,7 +3190,10 @@
 
       // Helper to create outage banner
       function createOutageBanner(outage, index, isNearby) {
-        const isAssigned = outage.crewAssigned === true || outage.crewAssigned === 'true';
+        // Use status field (consistent with map markers) - API returns status text like "Assigned", "Crew En Route", etc.
+        const status = outage.status || outage.crewStatus || '';
+        const statusCategory = getMapStatusCategory(status);
+        const isAssigned = statusCategory === 'assigned' || statusCategory === 'working';
         const banner = document.createElement('div');
         banner.className = `outage-banner ${isAssigned ? 'assigned' : ''} ${isNearby ? 'nearby' : ''}`;
         banner.style.animationDelay = `${index * 0.1}s`;
