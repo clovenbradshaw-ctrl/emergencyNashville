@@ -798,9 +798,22 @@
 
         // Get language from URL parameter (?es, ?ar, etc.)
         function getLanguageFromURL() {
+            // First check the current page's URL
             const search = window.location.search.slice(1).toLowerCase(); // Remove '?' and lowercase
             if (search && translations[search]) {
                 return search;
+            }
+            // If embedded, also check the referrer URL (parent page) for language parameter
+            if (document.referrer) {
+                try {
+                    const referrerUrl = new URL(document.referrer);
+                    const referrerLang = referrerUrl.search.slice(1).toLowerCase();
+                    if (referrerLang && translations[referrerLang]) {
+                        return referrerLang;
+                    }
+                } catch (e) {
+                    // Invalid referrer URL, ignore
+                }
             }
             return null;
         }
