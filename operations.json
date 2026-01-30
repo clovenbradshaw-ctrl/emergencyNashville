@@ -164,6 +164,33 @@
         "actor": "admin",
         "reason": "LGBTQ+-affirming church with Covenant Cupboard food pantry providing expanded meal service during winter emergency"
       }
+    },
+    {
+      "id": "op_007",
+      "ts": "2026-01-31T12:00:00-06:00",
+      "op": "INS",
+      "target": {
+        "id": "warming_center_riverside_commons",
+        "type": "warming_center"
+      },
+      "context": {
+        "table": "warming_centers",
+        "data": {
+          "name": "Riverside Commons (12pm-7pm Sat 1/31)",
+          "address": "1211 Riverside Drive, Nashville, TN 37206",
+          "lat": 36.1875,
+          "lng": -86.7450,
+          "hasFood": true,
+          "services": "Heat, power stations, food, WiFi, free parking, WeGo #4 to Porter/Greenwood, Music City Jazz Jam 2-4pm"
+        },
+        "source_url": "RCommons.org"
+      },
+      "frame": {
+        "verified_date": "2026-01-30",
+        "expiry_days": 2,
+        "actor": "admin",
+        "reason": "Community warming station in East Nashville - accepting donations (shelf-stable food, prepared food, warm clothing/blankets)"
+      }
     }
   ]
 }
