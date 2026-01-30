@@ -1540,9 +1540,13 @@
 
     // Update URL with current language without adding history entry
     function updateURLWithLanguage(lang) {
-      const url = new URL(window.location);
-      url.search = (lang === 'en') ? '' : `?${lang}`;
-      window.history.replaceState({}, '', url);
+      try {
+        const url = new URL(window.location);
+        url.search = (lang === 'en') ? '' : `?${lang}`;
+        window.history.replaceState({}, '', url);
+      } catch (e) {
+        // May fail in cross-origin iframes - that's ok
+      }
     }
 
     // Update internal navigation links to preserve language

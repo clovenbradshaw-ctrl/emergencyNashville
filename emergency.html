@@ -784,9 +784,13 @@
 
         // Update URL with current language without adding history entry
         function updateURLWithLanguage(lang) {
-            const url = new URL(window.location);
-            url.search = (lang === 'en') ? '' : `?${lang}`;
-            window.history.replaceState({}, '', url);
+            try {
+                const url = new URL(window.location);
+                url.search = (lang === 'en') ? '' : `?${lang}`;
+                window.history.replaceState({}, '', url);
+            } catch (e) {
+                // May fail in cross-origin iframes - that's ok
+            }
         }
 
         // Update internal navigation links to preserve language
@@ -795,6 +799,12 @@
                 const baseUrl = link.getAttribute('href').split('?')[0];
                 link.href = (lang === 'en') ? baseUrl : `${baseUrl}?${lang}`;
             });
+            // Also update "Open in new window" button for embedded mode
+            const openNewBtn = document.getElementById('openNewBtn');
+            if (openNewBtn) {
+                const baseUrl = window.location.href.split('?')[0];
+                openNewBtn.href = (lang === 'en') ? baseUrl : `${baseUrl}?${lang}`;
+            }
         }
 
         function setLanguage(lang) {
