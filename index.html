@@ -6,6 +6,43 @@
   <title>Nashville Winter Resources</title>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <style>
+    :root {
+      /* Text scaling - adjustable via JS */
+      --text-scale: 1;
+
+      /* Core colors - improved contrast */
+      --color-bg-primary: #1a1a2e;
+      --color-bg-secondary: #16213e;
+      --color-bg-tertiary: #0f3460;
+
+      /* Text colors - WCAG AA compliant on dark backgrounds */
+      --color-text-primary: #ffffff;
+      --color-text-secondary: #c8d3e0;  /* Improved from #94a3b8 - now 7:1 contrast */
+      --color-text-muted: #9badc4;       /* Improved from #64748b - now 5.5:1 contrast */
+
+      /* Accent colors */
+      --color-accent-red: #e63946;
+      --color-accent-red-hover: #f1404e;
+      --color-accent-blue: #60a5fa;
+      --color-accent-green: #10b981;
+      --color-accent-orange: #fb923c;    /* Improved from #f97316 */
+      --color-accent-cyan: #67e8f9;      /* Improved from #38bdf8 */
+
+      /* Interactive surfaces */
+      --color-surface: rgba(255, 255, 255, 0.08);
+      --color-surface-hover: rgba(255, 255, 255, 0.15);
+      --color-border: rgba(255, 255, 255, 0.15);
+
+      /* Focus ring */
+      --color-focus: #60a5fa;
+    }
+
+    /* Text size variants */
+    html.text-small { --text-scale: 0.9; }
+    html.text-normal { --text-scale: 1; }
+    html.text-large { --text-scale: 1.15; }
+    html.text-xlarge { --text-scale: 1.3; }
+
     * {
       margin: 0;
       padding: 0;
@@ -15,11 +52,12 @@
 
     html {
       scroll-behavior: smooth;
+      font-size: calc(16px * var(--text-scale));
     }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 50%, var(--color-bg-tertiary) 100%);
       min-height: 100vh;
       min-height: 100dvh;
       padding: 1.5rem 1rem;
@@ -27,7 +65,7 @@
       padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
       padding-left: max(1rem, env(safe-area-inset-left));
       padding-right: max(1rem, env(safe-area-inset-right));
-      color: #fff;
+      color: var(--color-text-primary);
       -webkit-text-size-adjust: 100%;
     }
 
@@ -44,21 +82,30 @@
       }
     }
     
+    /* Accessibility controls row */
+    .a11y-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
     .lang-toggle {
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
       justify-content: center;
-      margin-bottom: 1.5rem;
     }
-    
+
     .lang-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
       border-radius: 8px;
       padding: 0.6rem 0.85rem;
       min-height: 44px;
-      color: #94a3b8;
+      color: var(--color-text-secondary);
       font-size: 0.85rem;
       font-weight: 500;
       cursor: pointer;
@@ -69,25 +116,81 @@
     @media (hover: hover) {
       .lang-btn:hover {
         background: rgba(255, 255, 255, 0.12);
-        color: #fff;
+        color: var(--color-text-primary);
       }
     }
 
     .lang-btn:active {
       background: rgba(255, 255, 255, 0.18);
-      color: #fff;
+      color: var(--color-text-primary);
       transform: scale(0.97);
     }
 
     .lang-btn:focus-visible {
-      outline: 2px solid #60a5fa;
+      outline: 2px solid var(--color-focus);
       outline-offset: 2px;
     }
 
     .lang-btn.active {
       background: rgba(255, 255, 255, 0.2);
       border-color: rgba(255, 255, 255, 0.3);
-      color: #fff;
+      color: var(--color-text-primary);
+    }
+
+    /* Text size controls */
+    .text-size-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 0.25rem;
+    }
+
+    .text-size-btn {
+      background: transparent;
+      border: none;
+      color: var(--color-text-secondary);
+      width: 36px;
+      height: 36px;
+      min-height: 44px;
+      min-width: 44px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+
+    .text-size-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--color-text-primary);
+    }
+
+    .text-size-btn:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 1px;
+    }
+
+    .text-size-btn.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--color-text-primary);
+    }
+
+    .text-size-btn i {
+      font-size: 1.1rem;
+    }
+
+    .text-size-label {
+      color: var(--color-text-muted);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0 0.35rem;
     }
     
     header {
@@ -110,20 +213,20 @@
     }
 
     .subtitle {
-      color: #94a3b8;
+      color: var(--color-text-secondary);
       font-size: 0.95rem;
       line-height: 1.4;
     }
-    
+
     .section {
       margin-bottom: 1.25rem;
     }
-    
+
     .section-title {
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: #64748b;
+      color: var(--color-text-muted);
       margin-bottom: 0.6rem;
       padding-left: 0.25rem;
     }
@@ -138,12 +241,12 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--color-surface);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       padding: 1rem;
       min-height: 52px;
-      color: #fff;
+      color: var(--color-text-primary);
       text-decoration: none;
       font-size: 0.95rem;
       font-weight: 500;
@@ -153,13 +256,13 @@
 
     a.link i {
       font-size: 1.35rem;
-      opacity: 0.8;
+      opacity: 0.85;
       flex-shrink: 0;
     }
 
     @media (hover: hover) {
       a.link:hover {
-        background: rgba(255, 255, 255, 0.15);
+        background: var(--color-surface-hover);
         border-color: rgba(255, 255, 255, 0.2);
         transform: translateY(-2px);
       }
@@ -171,7 +274,7 @@
     }
 
     a.link:focus-visible {
-      outline: 2px solid #60a5fa;
+      outline: 2px solid var(--color-focus);
       outline-offset: 2px;
     }
     
@@ -246,22 +349,24 @@
       padding-top: 1.25rem;
       padding-bottom: 0.5rem;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
-      color: #64748b;
+      color: var(--color-text-muted);
       font-size: 0.8rem;
     }
 
     .admin-link {
-      color: #475569;
+      color: var(--color-text-muted);
       font-size: 0.7rem;
       text-decoration: none;
       cursor: pointer;
       margin-top: 0.75rem;
       display: inline-block;
       transition: color 0.15s ease;
+      opacity: 0.7;
     }
 
     .admin-link:hover {
-      color: #64748b;
+      color: var(--color-text-secondary);
+      opacity: 1;
     }
 
     .modal-overlay {
@@ -331,7 +436,7 @@
 
     .modal-btn.cancel {
       background: rgba(255, 255, 255, 0.1);
-      color: #94a3b8;
+      color: var(--color-text-secondary);
     }
 
     .modal-btn.cancel:hover {
@@ -413,7 +518,7 @@
     }
 
     .zip-input-wrapper i {
-      color: #64748b;
+      color: var(--color-text-muted);
       font-size: 0.9rem;
     }
 
@@ -421,7 +526,7 @@
       background: transparent;
       border: none;
       outline: none;
-      color: #fff;
+      color: var(--color-text-primary);
       font-family: inherit;
       font-size: 0.85rem;
       width: 50px;
@@ -429,13 +534,13 @@
     }
 
     #zipInput::placeholder {
-      color: #64748b;
+      color: var(--color-text-muted);
     }
 
     #fetchBtn {
       background: rgba(255, 255, 255, 0.1);
       border: none;
-      color: #94a3b8;
+      color: var(--color-text-secondary);
       padding: 0.3rem 0.6rem;
       border-radius: 6px;
       font-family: inherit;
@@ -447,7 +552,7 @@
 
     #fetchBtn:hover {
       background: rgba(255, 255, 255, 0.15);
-      color: #fff;
+      color: var(--color-text-primary);
     }
 
     .forecast-grid {
@@ -478,7 +583,7 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: #64748b;
+      color: var(--color-text-muted);
       margin-bottom: 0.25rem;
     }
 
@@ -486,18 +591,18 @@
       font-size: 0.9rem;
       font-weight: 600;
       margin-bottom: 0.5rem;
-      color: #fff;
+      color: var(--color-text-primary);
     }
 
     .weather-icon {
       font-size: 1.75rem;
       margin-bottom: 0.35rem;
-      color: #60a5fa;
+      color: var(--color-accent-blue);
     }
 
     .condition {
       font-size: 0.65rem;
-      color: #94a3b8;
+      color: var(--color-text-secondary);
       margin-bottom: 0.5rem;
       line-height: 1.3;
       min-height: 1.6rem;
@@ -516,12 +621,12 @@
     }
 
     .temp-high {
-      color: #f97316;
+      color: var(--color-accent-orange);
       margin-bottom: 0.15rem;
     }
 
     .temp-low {
-      color: #38bdf8;
+      color: var(--color-accent-cyan);
     }
 
     .temp-high i, .temp-low i {
@@ -532,7 +637,7 @@
       grid-column: 1 / -1;
       text-align: center;
       padding: 2rem 1rem;
-      color: #64748b;
+      color: var(--color-text-muted);
     }
 
     .forecast-loading i {
@@ -559,7 +664,7 @@
 
     .location-display {
       font-size: 0.75rem;
-      color: #64748b;
+      color: var(--color-text-muted);
       text-align: center;
       margin-bottom: 0.5rem;
       min-height: 1rem;
@@ -773,7 +878,7 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      color: #64748b;
+      color: var(--color-text-muted);
       font-size: 0.85rem;
       margin-bottom: 0.5rem;
     }
@@ -798,12 +903,25 @@
 </head>
 <body>
   <div class="container">
-    <div class="lang-toggle">
-      <button class="lang-btn active" data-lang="en">English</button>
-      <button class="lang-btn" data-lang="es">Español</button>
-      <button class="lang-btn" data-lang="ar">العربية</button>
-      <button class="lang-btn" data-lang="ku">کوردی</button>
-      <button class="lang-btn" data-lang="vi">Tiếng Việt</button>
+    <div class="a11y-controls">
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="en">English</button>
+        <button class="lang-btn" data-lang="es">Español</button>
+        <button class="lang-btn" data-lang="ar">العربية</button>
+        <button class="lang-btn" data-lang="ku">کوردی</button>
+        <button class="lang-btn" data-lang="vi">Tiếng Việt</button>
+      </div>
+      <div class="text-size-controls" role="group" aria-label="Text size">
+        <button class="text-size-btn" data-size="small" aria-label="Small text" title="Smaller text">
+          <i class="ph ph-text-aa"></i>
+        </button>
+        <button class="text-size-btn active" data-size="normal" aria-label="Normal text" title="Normal text">
+          <i class="ph ph-text-a"></i>
+        </button>
+        <button class="text-size-btn" data-size="large" aria-label="Large text" title="Larger text">
+          <i class="ph ph-text-aa" style="font-size: 1.3rem;"></i>
+        </button>
+      </div>
     </div>
     
     <header>
@@ -1311,6 +1429,32 @@
     const savedLang = localStorage.getItem('nashville-resources-lang');
     if (savedLang && translations[savedLang]) {
       setLanguage(savedLang);
+    }
+
+    // Text size controls
+    const textSizes = ['small', 'normal', 'large'];
+
+    function setTextSize(size) {
+      // Remove all size classes
+      textSizes.forEach(s => document.documentElement.classList.remove(`text-${s}`));
+      // Add the selected size class
+      document.documentElement.classList.add(`text-${size}`);
+      // Update button states
+      document.querySelectorAll('.text-size-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.size === size);
+      });
+      // Save preference
+      localStorage.setItem('nashville-resources-textsize', size);
+    }
+
+    document.querySelectorAll('.text-size-btn').forEach(btn => {
+      btn.addEventListener('click', () => setTextSize(btn.dataset.size));
+    });
+
+    // Load saved text size
+    const savedTextSize = localStorage.getItem('nashville-resources-textsize');
+    if (savedTextSize && textSizes.includes(savedTextSize)) {
+      setTextSize(savedTextSize);
     }
 
     // Admin modal functionality

@@ -5,11 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>911 Emergency Location</title>
     <style>
+        :root {
+            /* Text scaling - adjustable via JS */
+            --text-scale: 1;
+
+            /* Core colors */
+            --color-bg-primary: #b91c1c;
+            --color-bg-dark: #7f1d1d;
+
+            /* Text colors - improved contrast */
+            --color-text-primary: #ffffff;
+            --color-text-secondary: #fecaca;  /* Light red for contrast on red bg */
+            --color-text-dark: #111827;
+
+            /* Accent colors */
+            --color-focus: #60a5fa;
+        }
+
+        /* Text size variants */
+        html.text-small { --text-scale: 0.9; }
+        html.text-normal { --text-scale: 1; }
+        html.text-large { --text-scale: 1.15; }
+        html.text-xlarge { --text-scale: 1.3; }
+
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        html {
+            font-size: calc(16px * var(--text-scale));
+        }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+            background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-dark) 100%);
             min-height: 100vh;
             min-height: 100dvh;
             padding: 16px;
@@ -46,6 +73,62 @@
         .lang-btn:hover { background: rgba(255,255,255,0.2); }
         .lang-btn:active { transform: scale(0.97); }
         .lang-btn.active { background: white; color: #7f1d1d; border-color: white; }
+        .lang-btn:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+        /* Accessibility controls */
+        .a11y-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        /* Text size controls */
+        .text-size-controls {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .text-size-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.8);
+            width: 36px;
+            height: 36px;
+            min-height: 44px;
+            min-width: 44px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.15s ease;
+            touch-action: manipulation;
+        }
+
+        .text-size-btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .text-size-btn:focus-visible {
+            outline: 2px solid var(--color-focus);
+            outline-offset: 1px;
+        }
+
+        .text-size-btn.active {
+            background: rgba(255,255,255,0.25);
+            color: white;
+        }
 
         .header {
             background: #7f1d1d; color: white;
@@ -58,7 +141,7 @@
             display: flex; align-items: center; justify-content: center; gap: 8px;
         }
 
-        .header p { color: #fca5a5; font-size: 13px; margin-top: 4px; }
+        .header p { color: var(--color-text-secondary); font-size: 13px; margin-top: 4px; }
 
         .privacy-notice {
             background: #065f46;
@@ -317,12 +400,19 @@
             <span data-i18n="back_to_resources">Back to Resources</span>
         </a>
 
-        <div class="lang-selector">
-            <button class="lang-btn active" data-lang="en">English</button>
-            <button class="lang-btn" data-lang="es">Español</button>
-            <button class="lang-btn" data-lang="ar">العربية</button>
-            <button class="lang-btn" data-lang="ku">کوردی</button>
-            <button class="lang-btn" data-lang="vi">Tiếng Việt</button>
+        <div class="a11y-controls">
+            <div class="lang-selector">
+                <button class="lang-btn active" data-lang="en">English</button>
+                <button class="lang-btn" data-lang="es">Español</button>
+                <button class="lang-btn" data-lang="ar">العربية</button>
+                <button class="lang-btn" data-lang="ku">کوردی</button>
+                <button class="lang-btn" data-lang="vi">Tiếng Việt</button>
+            </div>
+            <div class="text-size-controls" role="group" aria-label="Text size">
+                <button class="text-size-btn" data-size="small" aria-label="Small text" title="Smaller text">A</button>
+                <button class="text-size-btn active" data-size="normal" aria-label="Normal text" title="Normal text">A</button>
+                <button class="text-size-btn" data-size="large" aria-label="Large text" title="Larger text" style="font-size: 18px;">A</button>
+            </div>
         </div>
 
         <div id="loadingState" class="loading-container">
@@ -680,6 +770,32 @@
         const savedLang = localStorage.getItem('emergency-lang');
         if (savedLang && translations[savedLang]) {
             setLanguage(savedLang);
+        }
+
+        // Text size controls
+        const textSizes = ['small', 'normal', 'large'];
+
+        function setTextSize(size) {
+            // Remove all size classes
+            textSizes.forEach(s => document.documentElement.classList.remove(`text-${s}`));
+            // Add the selected size class
+            document.documentElement.classList.add(`text-${size}`);
+            // Update button states
+            document.querySelectorAll('.text-size-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.size === size);
+            });
+            // Save preference (shared with main page)
+            localStorage.setItem('nashville-resources-textsize', size);
+        }
+
+        document.querySelectorAll('.text-size-btn').forEach(btn => {
+            btn.addEventListener('click', () => setTextSize(btn.dataset.size));
+        });
+
+        // Load saved text size (shared with main page)
+        const savedTextSize = localStorage.getItem('nashville-resources-textsize');
+        if (savedTextSize && textSizes.includes(savedTextSize)) {
+            setTextSize(savedTextSize);
         }
 
         function formatCoords(lat, lng) {
