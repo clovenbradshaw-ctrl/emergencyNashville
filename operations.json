@@ -88,6 +88,28 @@
         "actor": "admin",
         "reason": "Winter storm road closures"
       }
+    },
+    {
+      "id": "op_004",
+      "ts": "2026-01-30T14:00:00-06:00",
+      "op": "NUL",
+      "target": {
+        "id": "road_closures_dataset",
+        "type": "location_dataset",
+        "ref": "op_003"
+      },
+      "context": {
+        "table": "road_closures",
+        "data": {
+          "source": "api",
+          "api_url": "https://maps.nashville.gov/arcgis/rest/services/NERVE/RoadClosures/MapServer/1/query",
+          "refresh_interval_minutes": 2
+        }
+      },
+      "frame": {
+        "actor": "system",
+        "reason": "Replaced hardcoded road closures with real-time Nashville NERVE API data"
+      }
     }
   ]
 }

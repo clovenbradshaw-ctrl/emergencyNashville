@@ -4577,26 +4577,80 @@
       { lat: 36.0771, lng: -86.9208, name: "Bellevue Community Center", address: "7638A Highway 70 S, Nashville, TN 37221", hasFood: true }
     ];
 
-    // Road closures data - Winter storm related closures
-    // Last verified: January 30, 2026
-    // Source: Hub Nashville / Metro Nashville Public Works
-    const ROAD_CLOSURES_VERIFIED_DATE = '2026-01-30';
-    const ROAD_CLOSURES_EXPIRY_DAYS = 2;
+    // Road closures data - fetched from Nashville NERVE API
+    // Source: Nashville Metro GIS - NERVE Road Closures MapServer
+    // API: http://maps.nashville.gov/arcgis/rest/services/NERVE/RoadClosures/MapServer/1
+    let roadClosures = []; // Populated from API
+    let roadClosuresLastFetched = null;
+    let roadClosuresApiError = false;
 
-    const roadClosures = [
-      { lat: 36.1540, lng: -86.7903, name: "Charlotte Ave Bridge", location: "Charlotte Ave at I-40", reason: "Icy conditions - bridge frozen" },
-      { lat: 36.1866, lng: -86.7852, name: "Ellington Pkwy Ramp", location: "Ellington Pkwy at I-65 N", reason: "Black ice - crews treating" },
-      { lat: 36.1307, lng: -86.7006, name: "Briley Pkwy Section", location: "Briley Pkwy near Opryland", reason: "Multiple vehicle accidents - ice" },
-      { lat: 36.1098, lng: -86.8123, name: "Harding Pl Overpass", location: "Harding Place at I-65", reason: "Frozen overpass - salt crews working" },
-      { lat: 36.2089, lng: -86.6937, name: "Gallatin Pike", location: "Gallatin Pike at Old Hickory", reason: "Downed power lines" },
-      { lat: 36.0458, lng: -86.7142, name: "Nolensville Pike", location: "Nolensville Pike at OHB", reason: "Flooding from water main break" }
-    ];
+    const ROAD_CLOSURES_API_URL = 'https://maps.nashville.gov/arcgis/rest/services/NERVE/RoadClosures/MapServer/1/query?where=1%3D1&outFields=*&returnGeometry=true&f=geojson';
+
+    async function fetchRoadClosures() {
+      try {
+        const response = await fetch(ROAD_CLOSURES_API_URL);
+        if (!response.ok) throw new Error('API response not ok');
+        const data = await response.json();
+
+        if (data.features && Array.isArray(data.features)) {
+          roadClosures = data.features.map(feature => {
+            const props = feature.properties || {};
+            const geom = feature.geometry;
+
+            // Get centroid for polygon geometries, or use point directly
+            let lat, lng;
+            if (geom && geom.type === 'Point') {
+              lng = geom.coordinates[0];
+              lat = geom.coordinates[1];
+            } else if (geom && geom.type === 'Polygon' && geom.coordinates[0]) {
+              // Calculate centroid of polygon
+              const coords = geom.coordinates[0];
+              let sumLat = 0, sumLng = 0;
+              coords.forEach(c => { sumLng += c[0]; sumLat += c[1]; });
+              lng = sumLng / coords.length;
+              lat = sumLat / coords.length;
+            } else if (geom && geom.type === 'MultiPolygon' && geom.coordinates[0]) {
+              // Use first polygon's centroid
+              const coords = geom.coordinates[0][0];
+              let sumLat = 0, sumLng = 0;
+              coords.forEach(c => { sumLng += c[0]; sumLat += c[1]; });
+              lng = sumLng / coords.length;
+              lat = sumLat / coords.length;
+            }
+
+            return {
+              lat: lat,
+              lng: lng,
+              name: props.STREETNAME || props.StreetName || props.NAME || props.name || 'Road Closure',
+              location: props.LOCATION || props.Location || props.ADDRESS || props.address || props.STREETNAME || 'Nashville Area',
+              reason: props.REASON || props.Reason || props.DESCRIPTION || props.Description || props.COMMENTS || props.Comments || props.TYPE || props.Type || 'Road closed',
+              geometry: geom // Keep original geometry for polygon rendering if needed
+            };
+          }).filter(c => c.lat && c.lng); // Only keep closures with valid coordinates
+
+          roadClosuresLastFetched = new Date();
+          roadClosuresApiError = false;
+          console.log(`Fetched ${roadClosures.length} road closures from Nashville NERVE API`);
+        } else {
+          roadClosures = [];
+          roadClosuresLastFetched = new Date();
+        }
+      } catch (error) {
+        console.error('Failed to fetch road closures from Nashville API:', error);
+        roadClosuresApiError = true;
+        roadClosures = []; // No fake data - only show real closures
+      }
+
+      return roadClosures;
+    }
 
     function isRoadClosureDataStale() {
-      const verifiedDate = new Date(ROAD_CLOSURES_VERIFIED_DATE);
+      // Data is stale if we haven't fetched in the last 30 minutes or if there was an API error
+      if (!roadClosuresLastFetched) return true;
+      if (roadClosuresApiError) return true;
       const now = new Date();
-      const daysDiff = (now - verifiedDate) / (1000 * 60 * 60 * 24);
-      return daysDiff > ROAD_CLOSURES_EXPIRY_DAYS;
+      const minutesSinceFetch = (now - roadClosuresLastFetched) / (1000 * 60);
+      return minutesSinceFetch > 30;
     }
 
     function isWarmingDataStale() {
@@ -4689,7 +4743,7 @@
           <div class="outage-popup-info" style="margin-top: 4px;">
             <strong>${t('map_road_closure_reason')}:</strong> ${reason}
           </div>
-          <a href="https://hub.nashville.gov" target="_blank" rel="noopener"
+          <a href="https://www.nashville.gov/departments/transportation/road-closures" target="_blank" rel="noopener"
              style="display: block; margin-top: 8px; font-size: 0.75rem; color: #60a5fa;">
             ${t('map_road_closure_verify')} →
           </a>
@@ -4910,13 +4964,18 @@
     });
 
     // Initialize preview map when page loads
-    setTimeout(() => {
+    setTimeout(async () => {
       initPreviewMap();
-      fetchMapOutages();
+      // Fetch road closures first (needed for addOutageMarkers), then outages
+      await fetchRoadClosures();
+      await fetchMapOutages();
     }, 500);
 
-    // Refresh map data every 2 minutes
-    setInterval(fetchMapOutages, 120000);
+    // Refresh map data every 2 minutes (both outages and road closures)
+    setInterval(async () => {
+      await fetchRoadClosures();
+      await fetchMapOutages();
+    }, 120000);
 
     // Load forecast on page load
     fetchForecast();
