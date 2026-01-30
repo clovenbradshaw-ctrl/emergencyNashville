@@ -8,6 +8,10 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Fonts for Alerts Feed -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       /* Text scaling - adjustable via JS */
@@ -2334,6 +2338,889 @@
     [dir="rtl"] .intent-card.expanded .intent-arrow {
       transform: rotate(270deg);
     }
+
+    /* ===========================================
+       SCREEN SYSTEM (Main vs Alerts)
+       =========================================== */
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* Alerts toggle button in top bar */
+    .alerts-toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      min-height: 36px;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+
+    .alerts-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--color-text-primary);
+    }
+
+    .alerts-toggle-btn:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 2px;
+    }
+
+    .alerts-toggle-btn .alert-count-badge {
+      background: var(--color-accent-red);
+      color: white;
+      font-size: 0.65rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 8px;
+      font-weight: 600;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    .alerts-toggle-btn .pulse-indicator {
+      width: 6px;
+      height: 6px;
+      background: var(--color-accent-red);
+      border-radius: 50%;
+      animation: alertPulse 2s infinite;
+    }
+
+    @keyframes alertPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    /* ===========================================
+       ALERTS FEED SCREEN STYLES
+       =========================================== */
+    .alerts-screen {
+      --alerts-bg-primary: #0a0a0f;
+      --alerts-bg-secondary: #12121a;
+      --alerts-bg-card: #1a1a24;
+      --alerts-bg-card-hover: #22222e;
+      --alerts-border-color: #2a2a3a;
+      --alerts-border-hover: #3a3a4a;
+      --alerts-text-primary: #e8e8ed;
+      --alerts-text-secondary: #a0a0b0;
+      --alerts-text-muted: #6a6a7a;
+
+      --alerts-extreme: #ef4444;
+      --alerts-extreme-bg: rgba(239, 68, 68, 0.12);
+      --alerts-severe: #f97316;
+      --alerts-severe-bg: rgba(249, 115, 22, 0.12);
+      --alerts-moderate: #eab308;
+      --alerts-moderate-bg: rgba(234, 179, 8, 0.12);
+      --alerts-minor: #3b82f6;
+      --alerts-minor-bg: rgba(59, 130, 246, 0.12);
+      --alerts-info: #6b7280;
+      --alerts-info-bg: rgba(107, 114, 128, 0.12);
+      --alerts-resolved: #22c55e;
+      --alerts-resolved-bg: rgba(34, 197, 94, 0.12);
+      --alerts-accent: #6366f1;
+    }
+
+    .alerts-screen {
+      background: var(--alerts-bg-primary);
+      min-height: 100vh;
+      min-height: 100dvh;
+      position: fixed;
+      inset: 0;
+      overflow-y: auto;
+      z-index: 150;
+      font-family: 'Source Sans 3', -apple-system, sans-serif;
+    }
+
+    .alerts-screen::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .alerts-container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Alerts Header */
+    .alerts-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 15, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--alerts-border-color);
+      padding: 1rem 0;
+    }
+
+    .alerts-header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .alerts-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .alerts-back-btn {
+      width: 36px;
+      height: 36px;
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: 8px;
+      border: 1px solid var(--alerts-border-color);
+      background: transparent;
+      color: var(--alerts-text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .alerts-back-btn:hover {
+      background: var(--alerts-bg-card);
+      border-color: var(--alerts-border-hover);
+      color: var(--alerts-text-primary);
+    }
+
+    .alerts-header-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--alerts-text-primary);
+      display: flex;
+      align-items: center;
+    }
+
+    .alerts-counter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: 8px;
+      padding: 4px 10px;
+      background: var(--alerts-extreme-bg);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 16px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--alerts-extreme);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .alerts-counter .pulse-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--alerts-extreme);
+      border-radius: 50%;
+      animation: alertPulse 2s infinite;
+    }
+
+    .alerts-header-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .alerts-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.875rem;
+      border-radius: 8px;
+      border: 1px solid var(--alerts-border-color);
+      background: transparent;
+      color: var(--alerts-text-secondary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 44px;
+    }
+
+    .alerts-btn:hover {
+      background: var(--alerts-bg-card);
+      border-color: var(--alerts-border-hover);
+      color: var(--alerts-text-primary);
+    }
+
+    .alerts-btn.primary {
+      background: var(--alerts-accent);
+      border-color: var(--alerts-accent);
+      color: white;
+    }
+
+    .alerts-btn svg { width: 16px; height: 16px; }
+    .alerts-btn.loading svg { animation: alertsSpin 1s linear infinite; }
+
+    @keyframes alertsSpin { to { transform: rotate(360deg); } }
+
+    /* Alerts Status Bar */
+    .alerts-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--alerts-border-color);
+      margin-bottom: 1rem;
+    }
+
+    .alerts-status-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--alerts-text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .alerts-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--alerts-resolved);
+    }
+
+    .alerts-status-dot.loading { background: var(--alerts-moderate); }
+    .alerts-status-dot.error { background: var(--alerts-extreme); }
+
+    .alerts-source-pills {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .alerts-source-pill {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      background: var(--alerts-bg-card);
+      color: var(--alerts-text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: 1px solid transparent;
+    }
+
+    .alerts-source-pill:hover {
+      background: var(--alerts-bg-card-hover);
+      color: var(--alerts-text-primary);
+    }
+
+    .alerts-source-pill.has-alerts {
+      background: var(--alerts-severe-bg);
+      color: var(--alerts-severe);
+    }
+
+    .alerts-source-pill.active {
+      background: var(--alerts-accent);
+      color: white;
+      border-color: var(--alerts-accent);
+    }
+
+    /* Priority Section */
+    .alerts-priority-section {
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--alerts-severe);
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(239, 68, 68, 0.05);
+    }
+
+    .alerts-priority-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: rgba(239, 68, 68, 0.1);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .alerts-priority-header:hover {
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    .alerts-priority-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: var(--alerts-severe);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .alerts-priority-count {
+      background: var(--alerts-severe);
+      color: white;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+      font-size: 0.75rem;
+    }
+
+    .alerts-priority-toggle {
+      color: var(--alerts-text-muted);
+      font-size: 0.8rem;
+      transition: transform 0.2s;
+    }
+
+    .alerts-priority-section.collapsed .alerts-priority-toggle {
+      transform: rotate(-90deg);
+    }
+
+    .alerts-priority-section.collapsed .alerts-priority-content {
+      display: none;
+    }
+
+    .alerts-priority-content {
+      padding: 0.5rem;
+    }
+
+    .alerts-priority-content .alerts-card {
+      margin-bottom: 0.5rem;
+    }
+
+    .alerts-priority-content .alerts-card:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Filter Bar */
+    .alerts-filter-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: var(--alerts-bg-card);
+      border: 1px solid var(--alerts-border-color);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .alerts-filter-bar.active {
+      display: flex;
+    }
+
+    .alerts-filter-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--alerts-text-secondary);
+    }
+
+    .alerts-filter-source {
+      font-weight: 600;
+      color: var(--alerts-text-primary);
+    }
+
+    .alerts-clear-filter {
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      border: 1px solid var(--alerts-border-color);
+      background: transparent;
+      color: var(--alerts-text-secondary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .alerts-clear-filter:hover {
+      background: var(--alerts-bg-card-hover);
+      color: var(--alerts-text-primary);
+    }
+
+    /* Feed */
+    .alerts-feed { padding-bottom: 2rem; }
+    .alerts-feed.updating { opacity: 0.6; transition: opacity 0.3s; }
+
+    .alerts-time-group { margin-bottom: 1.5rem; }
+
+    .alerts-time-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--alerts-text-muted);
+      margin-bottom: 0.75rem;
+      padding-left: 4px;
+    }
+
+    /* Alert Card */
+    .alerts-card {
+      background: var(--alerts-bg-card);
+      border: 1px solid var(--alerts-border-color);
+      border-radius: 12px;
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .alerts-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--severity-color, var(--alerts-info));
+    }
+
+    .alerts-card:hover {
+      background: var(--alerts-bg-card-hover);
+      border-color: var(--alerts-border-hover);
+      transform: translateY(-1px);
+    }
+
+    .alerts-card.extreme { --severity-color: var(--alerts-extreme); }
+    .alerts-card.severe { --severity-color: var(--alerts-severe); }
+    .alerts-card.moderate { --severity-color: var(--alerts-moderate); }
+    .alerts-card.minor { --severity-color: var(--alerts-minor); }
+    .alerts-card.info { --severity-color: var(--alerts-info); }
+
+    /* Unread indicator */
+    .alerts-card.unread::after {
+      content: '';
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 8px;
+      height: 8px;
+      background: var(--alerts-accent);
+      border-radius: 50%;
+    }
+
+    .alerts-card.unread {
+      background: color-mix(in srgb, var(--alerts-bg-card) 95%, var(--alerts-accent) 5%);
+    }
+
+    /* Smooth entry animation */
+    .alerts-card {
+      animation: alertsCardSlideIn 0.35s ease-out backwards;
+    }
+
+    @keyframes alertsCardSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .alerts-card-inner { padding: 1rem 1.25rem; }
+
+    .alerts-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .alerts-source-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .alerts-source-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      background: var(--alerts-bg-secondary);
+    }
+
+    .alerts-source-name {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--alerts-text-secondary);
+    }
+
+    .alerts-time-ago {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--alerts-text-muted);
+    }
+
+    .alerts-card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--alerts-text-primary);
+      line-height: 1.3;
+    }
+
+    .alerts-card-meta {
+      font-size: 0.85rem;
+      color: var(--alerts-text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .alerts-card-meta strong { color: var(--alerts-text-secondary); }
+
+    .alerts-card-description {
+      font-size: 0.9rem;
+      color: var(--alerts-text-secondary);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .alerts-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--alerts-border-color);
+    }
+
+    .alerts-expand-hint {
+      font-size: 0.8rem;
+      color: var(--alerts-accent);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .alerts-severity-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .alerts-severity-badge.extreme { background: var(--alerts-extreme-bg); color: var(--alerts-extreme); }
+    .alerts-severity-badge.severe { background: var(--alerts-severe-bg); color: var(--alerts-severe); }
+    .alerts-severity-badge.moderate { background: var(--alerts-moderate-bg); color: var(--alerts-moderate); }
+    .alerts-severity-badge.minor { background: var(--alerts-minor-bg); color: var(--alerts-minor); }
+    .alerts-severity-badge.info { background: var(--alerts-info-bg); color: var(--alerts-info); }
+
+    .alerts-severity-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* Expanded state */
+    .alerts-card.expanded .alerts-card-description { -webkit-line-clamp: unset; }
+    .alerts-card.expanded .alerts-expand-content { display: block; }
+
+    .alerts-expand-content {
+      display: none;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--alerts-border-color);
+    }
+
+    .alerts-expand-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+
+    .alerts-expand-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      border: 1px solid var(--alerts-border-color);
+      background: transparent;
+      color: var(--alerts-text-secondary);
+      font-family: inherit;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+
+    .alerts-expand-btn:hover {
+      background: var(--alerts-bg-secondary);
+      color: var(--alerts-text-primary);
+    }
+
+    /* Sources Panel */
+    .alerts-sources-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+
+    .alerts-sources-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .alerts-sources-panel {
+      position: fixed;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 400px;
+      background: var(--alerts-bg-secondary);
+      border-left: 1px solid var(--alerts-border-color);
+      z-index: 201;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .alerts-sources-overlay.active .alerts-sources-panel {
+      transform: translateX(0);
+    }
+
+    .alerts-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--alerts-border-color);
+    }
+
+    .alerts-panel-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--alerts-text-primary);
+    }
+
+    .alerts-panel-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem 1.5rem;
+    }
+
+    .alerts-source-section { margin-bottom: 1.5rem; }
+
+    .alerts-section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--alerts-text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .alerts-source-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.875rem;
+      padding: 0.875rem;
+      border-radius: 10px;
+      margin-bottom: 0.5rem;
+      transition: background 0.15s;
+    }
+
+    .alerts-source-item:hover { background: var(--alerts-bg-card); }
+
+    .alerts-source-item-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--alerts-bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .alerts-source-item-content { flex: 1; min-width: 0; }
+
+    .alerts-source-item-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--alerts-text-primary);
+    }
+
+    .alerts-source-item-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      background: var(--alerts-severe-bg);
+      color: var(--alerts-severe);
+      font-weight: 600;
+    }
+
+    .alerts-source-item-desc {
+      font-size: 0.8rem;
+      color: var(--alerts-text-muted);
+      margin-top: 0.15rem;
+    }
+
+    /* Toggle switch */
+    .alerts-toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .alerts-toggle input { opacity: 0; width: 0; height: 0; }
+
+    .alerts-toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: var(--alerts-bg-primary);
+      border: 1px solid var(--alerts-border-color);
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+
+    .alerts-toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 2px;
+      bottom: 2px;
+      background: var(--alerts-text-muted);
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+
+    .alerts-toggle input:checked + .alerts-toggle-slider {
+      background: var(--alerts-accent);
+      border-color: var(--alerts-accent);
+    }
+
+    .alerts-toggle input:checked + .alerts-toggle-slider::before {
+      transform: translateX(20px);
+      background: white;
+    }
+
+    /* States */
+    .alerts-empty-state, .alerts-loading-state {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .alerts-empty-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.6;
+    }
+
+    .alerts-empty-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--alerts-resolved);
+      margin-bottom: 0.5rem;
+    }
+
+    .alerts-empty-desc {
+      font-size: 0.9rem;
+      color: var(--alerts-text-muted);
+    }
+
+    .alerts-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--alerts-border-color);
+      border-top-color: var(--alerts-text-primary);
+      border-radius: 50%;
+      animation: alertsSpin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    /* Footer */
+    .alerts-footer {
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--alerts-border-color);
+      text-align: center;
+    }
+
+    .alerts-footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+
+    .alerts-footer-links a {
+      color: var(--alerts-text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .alerts-footer-links a:hover { color: var(--alerts-text-primary); }
+
+    .alerts-footer-credit {
+      font-size: 0.75rem;
+      color: var(--alerts-text-muted);
+    }
+
+    .alerts-footer-credit a { color: var(--alerts-text-secondary); }
+
+    @media (max-width: 640px) {
+      .alerts-header-title { font-size: 1rem; }
+      .alerts-counter { display: none; }
+      .alerts-source-pills { display: none; }
+      .alerts-card-inner { padding: 0.875rem 1rem; }
+      .alerts-btn .btn-text { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -2346,7 +3233,14 @@
         <button class="lang-btn" data-lang="ku">کوردی</button>
         <button class="lang-btn" data-lang="vi">VI</button>
       </div>
-      <button class="a11y-toggle" id="textSizeToggle" aria-label="Change text size" title="Change text size">Aa</button>
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <button class="alerts-toggle-btn" id="alertsToggleBtn" onclick="openAlertsScreen()" aria-label="View live alerts feed" title="Live Alerts Feed">
+          <span class="pulse-indicator"></span>
+          <span>Alerts</span>
+          <span class="alert-count-badge" id="mainAlertCountBadge" style="display: none;">--</span>
+        </button>
+        <button class="a11y-toggle" id="textSizeToggle" aria-label="Change text size" title="Change text size">Aa</button>
+      </div>
     </div>
 
     <header>
@@ -2780,6 +3674,262 @@
       <p style="margin-top: 0.75rem;">Brought to you by <a href="https://readrichtext.substack.com/" target="_blank" rel="noopener" style="color: var(--color-link);">Rich Text</a> and <a href="https://groundtruthnashville.substack.com/" target="_blank" rel="noopener" style="color: var(--color-link);">Ground Truth Nashville</a></p>
       <p style="margin-top: 0.5rem; font-size: 0.7rem; color: var(--color-text-muted);">NES outage data powered by <a href="https://github.com/NeckBeardPrince/nes-outage-status-checker" target="_blank" rel="noopener" style="color: var(--color-text-muted);">NeckBeardPrince/nes-outage-status-checker</a></p>
     </footer>
+  </div>
+
+  <!-- Alerts Feed Screen (Alt Screen) -->
+  <div class="screen alerts-screen" id="alertsScreen">
+    <header class="alerts-header">
+      <div class="alerts-container">
+        <div class="alerts-header-inner">
+          <div class="alerts-header-left">
+            <button class="alerts-back-btn" onclick="closeAlertsScreen()" title="Back to Resources">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <h1 class="alerts-header-title">
+              Alerts Feed
+              <span class="alerts-counter" id="alertsCounterBadge">
+                <span class="pulse-dot"></span>
+                <span id="alertsFeedCount">--</span>
+              </span>
+            </h1>
+          </div>
+          <div class="alerts-header-actions">
+            <button class="alerts-btn" id="alertsRefreshBtn" onclick="AlertsFeed.refreshAll()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M23 4v6h-6M1 20v-6h6"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+              <span class="btn-text">Refresh</span>
+            </button>
+            <button class="alerts-btn" onclick="AlertsFeed.toggleSourcesPanel()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+              <span class="btn-text">Sources</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="alerts-container">
+      <div class="alerts-status-bar">
+        <div class="alerts-status-item">
+          <span class="alerts-status-dot" id="alertsStatusDot"></span>
+          <span id="alertsStatusText">Connecting...</span>
+        </div>
+        <div class="alerts-source-pills" id="alertsSourcePills"></div>
+      </div>
+
+      <div class="alerts-filter-bar" id="alertsFilterBar">
+        <div class="alerts-filter-info">
+          <span>Showing only:</span>
+          <span class="alerts-filter-source" id="alertsFilterSourceName"></span>
+        </div>
+        <button class="alerts-clear-filter" onclick="AlertsFeed.clearFilter()">✕ Show All</button>
+      </div>
+
+      <div class="alerts-priority-section" id="alertsPrioritySection" style="display: none;">
+        <div class="alerts-priority-header" onclick="AlertsFeed.togglePriority()">
+          <div class="alerts-priority-title">
+            🚨 Priority Alerts
+            <span class="alerts-priority-count" id="alertsPriorityCount">0</span>
+          </div>
+          <span class="alerts-priority-toggle">▼</span>
+        </div>
+        <div class="alerts-priority-content" id="alertsPriorityContent"></div>
+      </div>
+
+      <div class="alerts-feed" id="alertsFeedContainer">
+        <div class="alerts-loading-state">
+          <div class="alerts-spinner"></div>
+          <p>Loading alerts...</p>
+        </div>
+      </div>
+
+      <footer class="alerts-footer">
+        <div class="alerts-footer-links">
+          <a href="https://groundtruthnashville.org" target="_blank">Ground Truth Nashville</a>
+          <a href="https://bit.ly/help4nash" target="_blank">Winter Resources</a>
+          <a href="https://www.nespower.com/outages/" target="_blank">NES Outage Map</a>
+          <a href="https://smartway.tn.gov/traffic" target="_blank">TDOT Traffic</a>
+        </div>
+        <p class="alerts-footer-credit">
+          Data: NWS • NES • FEMA • TDOT • Metro 311 • r/Nashville • Local TV<br>
+          Built by <a href="https://richtxt.substack.com" target="_blank">{Rich Text}</a> • Auto-refreshes every 2 minutes
+        </p>
+      </footer>
+    </main>
+
+    <!-- Sources Panel -->
+    <div class="alerts-sources-overlay" id="alertsSourcesOverlay" onclick="AlertsFeed.toggleSourcesPanel()">
+      <aside class="alerts-sources-panel" onclick="event.stopPropagation()">
+        <div class="alerts-panel-header">
+          <h2 class="alerts-panel-title">Alert Sources</h2>
+          <button class="alerts-btn primary" onclick="AlertsFeed.toggleSourcesPanel()">Done</button>
+        </div>
+        <div class="alerts-panel-content">
+          <section class="alerts-source-section">
+            <div class="alerts-section-label">Enabled by Default</div>
+
+            <div class="alerts-source-item">
+              <div class="alerts-source-item-icon">🌨️</div>
+              <div class="alerts-source-item-content">
+                <div class="alerts-source-item-name">
+                  NWS Weather
+                  <span class="alerts-source-item-count" id="alerts-nws-count" style="display:none">0</span>
+                </div>
+                <div class="alerts-source-item-desc">Severe weather warnings & watches</div>
+              </div>
+              <label class="alerts-toggle">
+                <input type="checkbox" checked data-source="nws" onchange="AlertsFeed.toggleSource('nws', this.checked)">
+                <span class="alerts-toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="alerts-source-item">
+              <div class="alerts-source-item-icon">⚡</div>
+              <div class="alerts-source-item-content">
+                <div class="alerts-source-item-name">
+                  NES Power Outages
+                  <span class="alerts-source-item-count" id="alerts-nes-count" style="display:none">0</span>
+                </div>
+                <div class="alerts-source-item-desc">Nashville Electric outage events</div>
+              </div>
+              <label class="alerts-toggle">
+                <input type="checkbox" checked data-source="nes" onchange="AlertsFeed.toggleSource('nes', this.checked)">
+                <span class="alerts-toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="alerts-source-item">
+              <div class="alerts-source-item-icon">🚨</div>
+              <div class="alerts-source-item-content">
+                <div class="alerts-source-item-name">
+                  FEMA Disasters
+                  <span class="alerts-source-item-count" id="alerts-fema-count" style="display:none">0</span>
+                </div>
+                <div class="alerts-source-item-desc">Federal disaster declarations for TN</div>
+              </div>
+              <label class="alerts-toggle">
+                <input type="checkbox" checked data-source="fema" onchange="AlertsFeed.toggleSource('fema', this.checked)">
+                <span class="alerts-toggle-slider"></span>
+              </label>
+            </div>
+          </section>
+
+          <section class="alerts-source-section">
+            <div class="alerts-section-label">Additional Sources</div>
+
+            <div class="alerts-source-item">
+              <div class="alerts-source-item-icon">🚗</div>
+              <div class="alerts-source-item-content">
+                <div class="alerts-source-item-name">
+                  TDOT SmartWay
+                  <span class="alerts-source-item-count" id="alerts-traffic-count" style="display:none">0</span>
+                </div>
+                <div class="alerts-source-item-desc">Road closures & traffic incidents</div>
+              </div>
+              <label class="alerts-toggle">
+                <input type="checkbox" checked data-source="traffic" onchange="AlertsFeed.toggleSource('traffic', this.checked)">
+                <span class="alerts-toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="alerts-source-item">
+              <div class="alerts-source-item-icon">🏛️</div>
+              <div class="alerts-source-item-content">
+                <div class="alerts-source-item-name">
+                  Metro 311
+                  <span class="alerts-source-item-count" id="alerts-hub311-count" style="display:none">0</span>
+                </div>
+                <div class="alerts-source-item-desc">Tree limbs, road hazards, debris</div>
+              </div>
+              <label class="alerts-toggle">
+                <input type="checkbox" checked data-source="hub311" onchange="AlertsFeed.toggleSource('hub311', this.checked)">
+                <span class="alerts-toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="alerts-source-item">
+              <div class="alerts-source-item-icon">🔴</div>
+              <div class="alerts-source-item-content">
+                <div class="alerts-source-item-name">
+                  r/Nashville
+                  <span class="alerts-source-item-count" id="alerts-reddit-count" style="display:none">0</span>
+                </div>
+                <div class="alerts-source-item-desc">Community reports & discussions</div>
+              </div>
+              <label class="alerts-toggle">
+                <input type="checkbox" checked data-source="reddit" onchange="AlertsFeed.toggleSource('reddit', this.checked)">
+                <span class="alerts-toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="alerts-source-item">
+              <div class="alerts-source-item-icon">📺</div>
+              <div class="alerts-source-item-content">
+                <div class="alerts-source-item-name">
+                  Local News
+                  <span class="alerts-source-item-count" id="alerts-localNews-count" style="display:none">0</span>
+                </div>
+                <div class="alerts-source-item-desc">WKRN, WSMV, NC5, Fox17, WPLN</div>
+              </div>
+              <label class="alerts-toggle">
+                <input type="checkbox" checked data-source="localNews" onchange="AlertsFeed.toggleSource('localNews', this.checked)">
+                <span class="alerts-toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="alerts-source-item">
+              <div class="alerts-source-item-icon">🌍</div>
+              <div class="alerts-source-item-content">
+                <div class="alerts-source-item-name">
+                  USGS Earthquakes
+                  <span class="alerts-source-item-count" id="alerts-usgs-count" style="display:none">0</span>
+                </div>
+                <div class="alerts-source-item-desc">Seismic activity (300km radius)</div>
+              </div>
+              <label class="alerts-toggle">
+                <input type="checkbox" data-source="usgs" onchange="AlertsFeed.toggleSource('usgs', this.checked)">
+                <span class="alerts-toggle-slider"></span>
+              </label>
+            </div>
+          </section>
+
+          <section class="alerts-source-section">
+            <div class="alerts-section-label">Coming Soon</div>
+
+            <div class="alerts-source-item" style="opacity: 0.5;">
+              <div class="alerts-source-item-icon">🌬️</div>
+              <div class="alerts-source-item-content">
+                <div class="alerts-source-item-name">AirNow AQI</div>
+                <div class="alerts-source-item-desc">Requires API key registration</div>
+              </div>
+              <label class="alerts-toggle">
+                <input type="checkbox" disabled>
+                <span class="alerts-toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="alerts-source-item" style="opacity: 0.5;">
+              <div class="alerts-source-item-icon">🏠</div>
+              <div class="alerts-source-item-content">
+                <div class="alerts-source-item-name">TEMA Shelters</div>
+                <div class="alerts-source-item-desc">Warming/cooling centers</div>
+              </div>
+              <label class="alerts-toggle">
+                <input type="checkbox" disabled>
+                <span class="alerts-toggle-slider"></span>
+              </label>
+            </div>
+          </section>
+        </div>
+      </aside>
+    </div>
   </div>
 
   <!-- Fullscreen Map Modal -->
@@ -5091,6 +6241,898 @@
       };
       window.renderForecast = newRenderForecast;
     }
+
+    // ===========================================
+    // ALERTS FEED - ALTERNATE SCREEN
+    // ===========================================
+
+    // Screen toggle functions
+    function openAlertsScreen() {
+      const alertsScreen = document.getElementById('alertsScreen');
+      if (alertsScreen) {
+        alertsScreen.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        trackActivity('alerts_screen_open');
+
+        // Initialize alerts feed if first time
+        if (!AlertsFeed.initialized) {
+          AlertsFeed.init();
+        } else {
+          // Refresh on re-open if stale (> 1 min old)
+          const lastUpdate = AlertsFeed.lastUpdate || 0;
+          if (Date.now() - lastUpdate > 60000) {
+            AlertsFeed.refreshAll();
+          }
+        }
+      }
+    }
+
+    function closeAlertsScreen() {
+      const alertsScreen = document.getElementById('alertsScreen');
+      if (alertsScreen) {
+        alertsScreen.classList.remove('active');
+        document.body.style.overflow = '';
+        trackActivity('alerts_screen_close');
+      }
+    }
+
+    // Alerts Feed Module
+    const AlertsFeed = {
+      initialized: false,
+      lastUpdate: 0,
+      isLoading: false,
+      refreshInterval: 120000,
+      allAlerts: [],
+      activeFilter: null,
+
+      CONFIG: {
+        nashvilleCoords: { lat: 36.1627, lon: -86.7816 },
+        nwsZones: ['TNZ063', 'TNZ064', 'TNZ065'],
+      },
+
+      CORS_PROXIES: [
+        'https://corsproxy.io/?',
+        'https://api.allorigins.win/raw?url='
+      ],
+
+      SOURCES: {
+        nws: {
+          name: 'NWS Weather',
+          icon: '🌨️',
+          enabled: true,
+          alerts: []
+        },
+        nes: {
+          name: 'NES Power',
+          icon: '⚡',
+          enabled: true,
+          alerts: []
+        },
+        fema: {
+          name: 'FEMA',
+          icon: '🚨',
+          enabled: true,
+          alerts: []
+        },
+        traffic: {
+          name: 'TDOT Traffic',
+          icon: '🚗',
+          enabled: true,
+          alerts: []
+        },
+        hub311: {
+          name: 'hubNashville 311',
+          icon: '🏛️',
+          enabled: true,
+          alerts: []
+        },
+        reddit: {
+          name: 'r/Nashville',
+          icon: '🔴',
+          enabled: true,
+          alerts: []
+        },
+        localNews: {
+          name: 'Local News',
+          icon: '📺',
+          enabled: true,
+          feeds: [
+            { name: 'WKRN', url: 'https://www.wkrn.com/feed' },
+            { name: 'WSMV', url: 'https://www.wsmv.com/search/?f=rss&t=article' },
+            { name: 'NC5', url: 'https://www.newschannel5.com/index.rss' },
+            { name: 'Fox17', url: 'https://fox17.com/feed' },
+            { name: 'WPLN', url: 'https://wpln.org/feed' }
+          ],
+          alerts: []
+        },
+        usgs: {
+          name: 'USGS',
+          icon: '🌍',
+          enabled: false,
+          alerts: []
+        }
+      },
+
+      // Local state management
+      LocalState: {
+        KEY: 'gtn_alert_state',
+        get() {
+          try {
+            return JSON.parse(localStorage.getItem(this.KEY)) || { read: {}, dismissed: {}, lastSeen: null };
+          } catch { return { read: {}, dismissed: {}, lastSeen: null }; }
+        },
+        save(state) {
+          localStorage.setItem(this.KEY, JSON.stringify(state));
+        },
+        markRead(alertId) {
+          const state = this.get();
+          state.read[alertId] = Date.now();
+          this.save(state);
+        },
+        isRead(alertId) {
+          return !!this.get().read[alertId];
+        }
+      },
+
+      init() {
+        this.loadPrefs();
+        this.refreshAll();
+        this.initialized = true;
+
+        // Set up auto-refresh
+        setInterval(() => {
+          if (document.getElementById('alertsScreen')?.classList.contains('active')) {
+            this.refreshAll();
+          }
+        }, this.refreshInterval);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && document.getElementById('alertsScreen')?.classList.contains('active')) {
+            if (document.getElementById('alertsSourcesOverlay')?.classList.contains('active')) {
+              this.toggleSourcesPanel();
+            } else if (this.activeFilter) {
+              this.clearFilter();
+            } else {
+              closeAlertsScreen();
+            }
+          }
+        });
+      },
+
+      loadPrefs() {
+        try {
+          const saved = localStorage.getItem('alertSources');
+          if (saved) {
+            const prefs = JSON.parse(saved);
+            Object.keys(prefs).forEach(k => {
+              if (this.SOURCES[k]) {
+                this.SOURCES[k].enabled = prefs[k];
+                const toggle = document.querySelector(`#alertsScreen input[data-source="${k}"]`);
+                if (toggle) toggle.checked = prefs[k];
+              }
+            });
+          }
+        } catch (e) {}
+      },
+
+      async refreshAll() {
+        if (this.isLoading) return;
+        this.isLoading = true;
+
+        const btn = document.getElementById('alertsRefreshBtn');
+        if (btn) {
+          btn.classList.add('loading');
+          const btnText = btn.querySelector('.btn-text');
+          if (btnText) btnText.textContent = 'Loading...';
+        }
+        this.updateStatus('loading', 'Fetching alerts...');
+
+        const feedContainer = document.getElementById('alertsFeedContainer');
+        if (feedContainer) feedContainer.classList.add('updating');
+
+        const isFreshLoad = this.allAlerts.length === 0;
+        Object.values(this.SOURCES).forEach(s => s.alerts = []);
+
+        if (isFreshLoad) {
+          this.allAlerts = [];
+          this.renderAlerts();
+        }
+
+        this.updateSourcePills();
+
+        try {
+          const fetchers = [
+            { fn: () => this.fetchNWSAlerts(), key: 'nws' },
+            { fn: () => this.fetchNESOutages(), key: 'nes' },
+            { fn: () => this.fetchFEMADisasters(), key: 'fema' },
+            { fn: () => this.fetchTrafficEvents(), key: 'traffic' },
+            { fn: () => this.fetchHub311(), key: 'hub311' },
+            { fn: () => this.fetchReddit(), key: 'reddit' },
+            { fn: () => this.fetchLocalNews(), key: 'localNews' },
+            { fn: () => this.fetchUSGSEarthquakes(), key: 'usgs' }
+          ];
+
+          const promises = fetchers.map(async ({ fn, key }) => {
+            if (!this.SOURCES[key]?.enabled) return;
+            try {
+              await fn();
+              this.rebuildAndRender();
+              this.updateStatus('loading', `Got ${this.SOURCES[key].name}...`);
+            } catch (e) {
+              console.error(`${key} failed:`, e);
+            }
+          });
+
+          await Promise.race([
+            Promise.allSettled(promises),
+            new Promise(resolve => setTimeout(resolve, 15000))
+          ]);
+
+        } finally {
+          if (feedContainer) feedContainer.classList.remove('updating');
+          this.isLoading = false;
+          this.lastUpdate = Date.now();
+          if (btn) {
+            btn.classList.remove('loading');
+            const btnText = btn.querySelector('.btn-text');
+            if (btnText) btnText.textContent = 'Refresh';
+          }
+          this.updateStatus('success', `Updated ${new Date().toLocaleTimeString()}`);
+        }
+      },
+
+      rebuildAndRender() {
+        this.allAlerts = [];
+        Object.values(this.SOURCES).forEach(s => {
+          if (s.enabled) this.allAlerts = this.allAlerts.concat(s.alerts);
+        });
+
+        this.allAlerts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        this.allAlerts = this.interleaveBySource(this.allAlerts);
+
+        this.updateAlertCount();
+        this.updateSourcePills();
+        this.updateSourceCounts();
+        this.renderAlerts();
+      },
+
+      interleaveBySource(alerts, maxPerSource = 6) {
+        if (alerts.length === 0) return alerts;
+
+        const bySource = {};
+        alerts.forEach(a => {
+          if (!bySource[a.source]) bySource[a.source] = [];
+          if (bySource[a.source].length < maxPerSource) {
+            bySource[a.source].push(a);
+          }
+        });
+
+        const sourcePriority = ['nws', 'nes', 'fema', 'traffic', 'hub311', 'localNews', 'reddit', 'usgs'];
+        const result = [];
+        const sourceQueues = {};
+        let totalItems = 0;
+
+        sourcePriority.forEach(src => {
+          if (bySource[src] && bySource[src].length > 0) {
+            sourceQueues[src] = [...bySource[src]];
+            totalItems += sourceQueues[src].length;
+          }
+        });
+
+        Object.keys(bySource).forEach(src => {
+          if (!sourceQueues[src] && bySource[src].length > 0) {
+            sourceQueues[src] = [...bySource[src]];
+            totalItems += sourceQueues[src].length;
+          }
+        });
+
+        let lastSource = null;
+        while (result.length < totalItems) {
+          const sources = Object.keys(sourceQueues).filter(s => sourceQueues[s].length > 0);
+          if (sources.length === 0) break;
+
+          let nextSource = sources.find(s => s !== lastSource) || sources[0];
+
+          if (nextSource && sourceQueues[nextSource].length > 0) {
+            const item = sourceQueues[nextSource].shift();
+            result.push(item);
+            lastSource = nextSource;
+          } else {
+            break;
+          }
+        }
+
+        return result;
+      },
+
+      formatTimeAgo(timestamp) {
+        if (!timestamp) return '';
+        const now = Date.now();
+        const diff = now - new Date(timestamp).getTime();
+        const minutes = Math.floor(diff / 60000);
+
+        if (minutes < 1) return 'Just now';
+        if (minutes < 60) return `${minutes}m ago`;
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours}h ago`;
+        const days = Math.floor(hours / 24);
+        return `${days}d ago`;
+      },
+
+      updateStatus(status, text) {
+        const dot = document.getElementById('alertsStatusDot');
+        if (dot) dot.className = 'alerts-status-dot' + (status === 'loading' ? ' loading' : status === 'error' ? ' error' : '');
+        const textEl = document.getElementById('alertsStatusText');
+        if (textEl) textEl.textContent = text;
+      },
+
+      updateAlertCount() {
+        let count = this.allAlerts.length;
+        if (this.activeFilter && this.SOURCES[this.activeFilter]) {
+          count = this.SOURCES[this.activeFilter].alerts.length;
+        }
+
+        const feedCount = document.getElementById('alertsFeedCount');
+        if (feedCount) feedCount.textContent = count;
+
+        const counterBadge = document.getElementById('alertsCounterBadge');
+        if (counterBadge) counterBadge.style.display = count > 0 ? 'inline-flex' : 'none';
+
+        // Update main screen badge
+        const mainBadge = document.getElementById('mainAlertCountBadge');
+        if (mainBadge) {
+          mainBadge.textContent = this.allAlerts.length;
+          mainBadge.style.display = this.allAlerts.length > 0 ? 'inline' : 'none';
+        }
+      },
+
+      updateSourceCounts() {
+        Object.keys(this.SOURCES).forEach(key => {
+          const el = document.getElementById(`alerts-${key}-count`);
+          if (el) {
+            const count = this.SOURCES[key].alerts.length;
+            el.textContent = count;
+            el.style.display = count > 0 ? 'inline' : 'none';
+          }
+        });
+      },
+
+      updateSourcePills() {
+        const container = document.getElementById('alertsSourcePills');
+        if (!container) return;
+
+        container.innerHTML = Object.entries(this.SOURCES)
+          .filter(([_, s]) => s.enabled && s.alerts.length > 0)
+          .map(([key, s]) => {
+            const isActive = this.activeFilter === key;
+            return `<span class="alerts-source-pill${s.alerts.length > 0 ? ' has-alerts' : ''}${isActive ? ' active' : ''}"
+                          onclick="AlertsFeed.setFilter('${key}')"
+                          title="Click to filter">${s.icon} ${s.alerts.length}</span>`;
+          })
+          .join('');
+      },
+
+      setFilter(sourceKey) {
+        if (this.activeFilter === sourceKey) {
+          this.clearFilter();
+          return;
+        }
+
+        this.activeFilter = sourceKey;
+        const source = this.SOURCES[sourceKey];
+
+        const filterBar = document.getElementById('alertsFilterBar');
+        if (filterBar) filterBar.classList.add('active');
+
+        const filterName = document.getElementById('alertsFilterSourceName');
+        if (filterName) filterName.textContent = `${source.icon} ${source.name}`;
+
+        this.updateSourcePills();
+        this.updateAlertCount();
+        this.renderAlerts();
+      },
+
+      clearFilter() {
+        this.activeFilter = null;
+        const filterBar = document.getElementById('alertsFilterBar');
+        if (filterBar) filterBar.classList.remove('active');
+        this.updateSourcePills();
+        this.updateAlertCount();
+        this.renderAlerts();
+      },
+
+      togglePriority() {
+        const section = document.getElementById('alertsPrioritySection');
+        if (section) {
+          section.classList.toggle('collapsed');
+          localStorage.setItem('priorityCollapsed', section.classList.contains('collapsed'));
+        }
+      },
+
+      isPriorityAlert(alert) {
+        if (alert.source === 'nws') {
+          const sev = alert.severity?.toLowerCase();
+          return sev === 'extreme' || sev === 'severe';
+        }
+        if (alert.source === 'nes') return true;
+        if (alert.source === 'fema') return alert.severity === 'severe';
+        if (alert.source === 'localNews') {
+          const title = alert.title?.toLowerCase() || '';
+          return ['death', 'killed', 'dies', 'dead', 'fatal', 'emergency', 'evacuate', 'rescue', 'missing', 'tornado', 'flash flood'].some(kw => title.includes(kw));
+        }
+        return false;
+      },
+
+      toggleSourcesPanel() {
+        const overlay = document.getElementById('alertsSourcesOverlay');
+        if (overlay) overlay.classList.toggle('active');
+      },
+
+      toggleSource(key, enabled) {
+        this.SOURCES[key].enabled = enabled;
+        localStorage.setItem('alertSources', JSON.stringify(
+          Object.fromEntries(Object.entries(this.SOURCES).map(([k, v]) => [k, v.enabled]))
+        ));
+        this.refreshAll();
+      },
+
+      // API Fetchers
+      async fetchNWSAlerts() {
+        try {
+          const url = `https://api.weather.gov/alerts/active?zone=${this.CONFIG.nwsZones.join(',')}`;
+          const res = await fetch(url, {
+            headers: { 'User-Agent': 'GroundTruthNashville' },
+            signal: AbortSignal.timeout(8000)
+          });
+          const data = await res.json();
+
+          this.SOURCES.nws.alerts = (data.features || []).map(f => ({
+            id: `nws-${f.id}`,
+            source: 'nws',
+            sourceIcon: '🌨️',
+            sourceName: 'NWS Weather',
+            title: f.properties.event || 'Weather Alert',
+            description: f.properties.description || f.properties.headline,
+            location: f.properties.areaDesc,
+            severity: f.properties.severity?.toLowerCase() || 'unknown',
+            timestamp: f.properties.sent || f.properties.effective,
+            expires: f.properties.expires,
+            url: f.properties['@id']
+          }));
+        } catch (e) {
+          console.error('NWS:', e);
+        }
+      },
+
+      async fetchNESOutages() {
+        const nesUrl = 'https://utilisocial.io/datacapable/v2/p/NES/map/events';
+        const urls = [
+          nesUrl,
+          this.CORS_PROXIES[0] + encodeURIComponent(nesUrl),
+          this.CORS_PROXIES[1] + encodeURIComponent(nesUrl)
+        ];
+
+        for (const url of urls) {
+          try {
+            const res = await fetch(url, {
+              headers: { 'Accept': 'application/json' },
+              signal: AbortSignal.timeout(8000)
+            });
+
+            if (!res.ok) continue;
+            const data = await res.json();
+
+            if (data && Array.isArray(data) && data.length > 0) {
+              const significant = data.filter(e => (e.customersAffected || 0) >= 5);
+
+              this.SOURCES.nes.alerts = significant.slice(0, 8).map(e => ({
+                id: `nes-${e.id || e.eventId}`,
+                source: 'nes',
+                sourceIcon: '⚡',
+                sourceName: 'NES Power',
+                title: `Power Outage - ${(e.customersAffected || 0).toLocaleString()} customers`,
+                description: `Status: ${e.status || e.crewStatus || 'Unknown'}. ${e.cause ? `Cause: ${e.cause}` : 'Cause under investigation.'}`,
+                location: e.area || e.city || e.location || 'Nashville area',
+                severity: (e.status === 'Assigned' || e.crewAssigned) ? 'moderate' : 'severe',
+                timestamp: e.startTime || e.createdAt || e.reportedTime,
+                url: 'https://www.nespower.com/outages/'
+              }));
+              return;
+            }
+          } catch (e) {
+            continue;
+          }
+        }
+
+        // Fallback
+        this.SOURCES.nes.alerts = [{
+          id: 'nes-fallback',
+          source: 'nes',
+          sourceIcon: '⚡',
+          sourceName: 'NES Power',
+          title: 'Power outage data unavailable',
+          description: 'Live data unavailable due to API restrictions. Visit nespower.com/outages for current map.',
+          location: 'Nashville Service Area',
+          severity: 'info',
+          timestamp: new Date().toISOString(),
+          url: 'https://www.nespower.com/outages/'
+        }];
+      },
+
+      async fetchFEMADisasters() {
+        try {
+          const url = "https://www.fema.gov/api/open/v2/DisasterDeclarationsSummaries?$filter=state%20eq%20'TN'&$orderby=declarationDate%20desc&$top=10";
+          const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+          const data = await res.json();
+
+          const cutoff = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
+          const recent = (data.DisasterDeclarationsSummaries || [])
+            .filter(d => new Date(d.declarationDate) > cutoff);
+
+          const byDisaster = {};
+          recent.forEach(d => {
+            const key = d.disasterNumber;
+            if (!byDisaster[key]) {
+              byDisaster[key] = { ...d, counties: [] };
+            }
+            if (d.designatedArea) {
+              byDisaster[key].counties.push(d.designatedArea.replace(' (County)', ''));
+            }
+          });
+
+          this.SOURCES.fema.alerts = Object.values(byDisaster).map(d => {
+            const countyList = d.counties.slice(0, 5).join(', ');
+            const moreCount = d.counties.length > 5 ? ` +${d.counties.length - 5} more` : '';
+
+            return {
+              id: `fema-${d.disasterNumber}`,
+              source: 'fema',
+              sourceIcon: '🚨',
+              sourceName: 'FEMA',
+              title: `${d.declarationType === 'DR' ? 'Major Disaster' : 'Emergency'}: ${d.incidentType}`,
+              description: `${d.declarationTitle}. Designated areas: ${countyList}${moreCount}.`,
+              location: d.counties.length > 3 ? `${d.counties.length} TN Counties` : countyList,
+              severity: d.declarationType === 'DR' ? 'severe' : 'moderate',
+              timestamp: d.declarationDate,
+              url: `https://www.fema.gov/disaster/${d.disasterNumber}`
+            };
+          });
+        } catch (e) {
+          console.error('FEMA:', e);
+        }
+      },
+
+      async fetchTrafficEvents() {
+        if (!this.SOURCES.traffic.enabled) return;
+
+        try {
+          const url = 'https://spatial.tdot.tn.gov/ArcGIS/rest/services/Smartway/Smartway_Events/MapServer/0/query?where=1%3D1&outFields=*&f=json';
+          const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+          const data = await res.json();
+
+          const relevant = (data.features || []).filter(f => {
+            const a = f.attributes;
+            return a.Region === 'Nashville' || a.Region === '3' ||
+              a.County?.toLowerCase().includes('davidson') ||
+              a.County?.toLowerCase().includes('williamson') ||
+              a.County?.toLowerCase().includes('rutherford');
+          });
+
+          this.SOURCES.traffic.alerts = relevant.slice(0, 8).map(f => {
+            const a = f.attributes;
+            return {
+              id: `traffic-${a.OBJECTID}`,
+              source: 'traffic',
+              sourceIcon: '🚗',
+              sourceName: 'TDOT Traffic',
+              title: a.EventType || a.IncidentType || 'Traffic Event',
+              description: a.Description || a.Comments || 'Traffic incident reported.',
+              location: a.Location || a.Route || a.County || 'Middle TN',
+              severity: (a.Severity === 'Major' || a.EventType?.includes('Closed')) ? 'severe' : 'minor',
+              timestamp: a.StartTime || a.CreateDate,
+              url: 'https://smartway.tn.gov/traffic'
+            };
+          });
+        } catch (e) {
+          console.error('Traffic:', e);
+        }
+      },
+
+      async fetchHub311() {
+        if (!this.SOURCES.hub311?.enabled) return;
+
+        try {
+          const url = 'https://services2.arcgis.com/HdTo6HJqh92wn4D8/arcgis/rest/services/hubNashville/FeatureServer/0/query?where=1%3D1&outFields=*&f=json&orderByFields=REQUESTDATE%20DESC&resultRecordCount=20';
+          const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+          const data = await res.json();
+
+          const emergencyTypes = ['TREELIMB', 'TREEHAZ', 'FLOODING', 'SINKHOLE', 'POTHOLE', 'ROADHAZ', 'STREETLIT', 'SIGNDOWN', 'DEBRIS'];
+
+          const relevant = (data.features || []).filter(f => {
+            const type = f.attributes.REQUESTTYPE;
+            return emergencyTypes.some(t => type?.includes(t));
+          });
+
+          this.SOURCES.hub311.alerts = relevant.slice(0, 5).map(f => {
+            const a = f.attributes;
+            return {
+              id: `hub-${a.OBJECTID}`,
+              source: 'hub311',
+              sourceIcon: '🏛️',
+              sourceName: 'Metro 311',
+              title: a.REQUESTTYPE?.replace(/_/g, ' ') || 'Service Request',
+              description: a.DESCRIPTION || `${a.REQUESTTYPE} reported`,
+              location: a.ADDRESS || a.ZIPCODE || 'Nashville',
+              severity: 'info',
+              timestamp: a.REQUESTDATE,
+              url: 'https://hub.nashville.gov'
+            };
+          });
+        } catch (e) {
+          console.error('Hub311:', e);
+        }
+      },
+
+      async fetchReddit() {
+        if (!this.SOURCES.reddit?.enabled) return;
+
+        try {
+          const url = 'https://www.reddit.com/r/nashville/new.json?limit=25';
+          const res = await fetch(url, {
+            headers: { 'User-Agent': 'GroundTruthNashville:1.0' },
+            signal: AbortSignal.timeout(8000)
+          });
+          const data = await res.json();
+
+          const emergencyKeywords = ['power', 'outage', 'nes', 'storm', 'ice', 'snow', 'weather', 'shelter', 'warming', 'closed', 'closure', 'emergency', 'flood', 'fire', 'accident', 'road', 'traffic'];
+
+          const posts = (data.data?.children || []).filter(p => {
+            const title = p.data.title?.toLowerCase() || '';
+            const score = p.data.score || 0;
+            const isEmergency = emergencyKeywords.some(kw => title.includes(kw));
+            return isEmergency || score >= 50;
+          });
+
+          this.SOURCES.reddit.alerts = posts.slice(0, 6).map(p => {
+            const d = p.data;
+            const isUrgent = ['outage', 'emergency', 'shelter', 'closed'].some(kw => d.title?.toLowerCase().includes(kw));
+            return {
+              id: `reddit-${d.id}`,
+              source: 'reddit',
+              sourceIcon: '🔴',
+              sourceName: 'r/Nashville',
+              title: d.title,
+              description: d.selftext?.substring(0, 300) || `${d.num_comments} comments · ${d.score} upvotes`,
+              location: 'Nashville Community',
+              severity: isUrgent ? 'moderate' : 'info',
+              timestamp: d.created_utc * 1000,
+              url: `https://reddit.com${d.permalink}`
+            };
+          });
+        } catch (e) {
+          console.error('Reddit:', e);
+        }
+      },
+
+      async fetchLocalNews() {
+        if (!this.SOURCES.localNews?.enabled) return;
+
+        const emergencyKeywords = ['power', 'outage', 'nes', 'storm', 'ice', 'snow', 'weather', 'shelter', 'warming', 'cold', 'freeze', 'emergency', 'flood', 'fire', 'accident', 'crash', 'death', 'killed', 'road', 'closed', 'closure', 'evacuate', 'rescue', 'missing', 'alert', 'warning', 'school', 'mnps', 'water', 'boil'];
+
+        const allArticles = [];
+
+        const feedPromises = this.SOURCES.localNews.feeds.map(async (feed) => {
+          try {
+            const rss2jsonUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`;
+            const res = await fetch(rss2jsonUrl, { signal: AbortSignal.timeout(6000) });
+            const data = await res.json();
+
+            if (data.status === 'ok' && data.items) {
+              return data.items.map(item => ({ ...item, feedName: feed.name }));
+            }
+          } catch (e) {
+            return [];
+          }
+          return [];
+        });
+
+        const results = await Promise.allSettled(feedPromises);
+        results.forEach(r => {
+          if (r.status === 'fulfilled' && r.value) {
+            allArticles.push(...r.value);
+          }
+        });
+
+        const relevant = allArticles.filter(item => {
+          const title = item.title?.toLowerCase() || '';
+          return emergencyKeywords.some(kw => title.includes(kw));
+        });
+
+        const seen = new Set();
+        this.SOURCES.localNews.alerts = relevant
+          .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
+          .filter(item => {
+            const key = item.title?.substring(0, 40).toLowerCase();
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+          })
+          .slice(0, 8)
+          .map(item => {
+            const isUrgent = ['death', 'killed', 'emergency', 'evacuate', 'rescue'].some(kw => item.title?.toLowerCase().includes(kw));
+            return {
+              id: `news-${item.guid || item.link}`,
+              source: 'localNews',
+              sourceIcon: '📺',
+              sourceName: item.feedName,
+              title: item.title,
+              description: item.description?.replace(/<[^>]*>/g, '').substring(0, 200) || '',
+              location: 'Nashville',
+              severity: isUrgent ? 'severe' : 'moderate',
+              timestamp: item.pubDate,
+              url: item.link
+            };
+          });
+      },
+
+      async fetchUSGSEarthquakes() {
+        if (!this.SOURCES.usgs.enabled) return;
+
+        try {
+          const url = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=${this.CONFIG.nashvilleCoords.lat}&longitude=${this.CONFIG.nashvilleCoords.lon}&maxradiuskm=300&minmagnitude=2.5&limit=20`;
+          const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+          const data = await res.json();
+
+          this.SOURCES.usgs.alerts = (data.features || []).map(f => ({
+            id: `usgs-${f.id}`,
+            source: 'usgs',
+            sourceIcon: '🌍',
+            sourceName: 'USGS',
+            title: `M${f.properties.mag.toFixed(1)} Earthquake`,
+            description: f.properties.place,
+            location: f.properties.place,
+            severity: f.properties.mag >= 4 ? 'severe' : f.properties.mag >= 3 ? 'moderate' : 'minor',
+            timestamp: f.properties.time,
+            url: f.properties.url
+          }));
+        } catch (e) {
+          console.error('USGS:', e);
+        }
+      },
+
+      // Rendering
+      renderAlertCard(a, i = 0) {
+        const sev = a.severity || 'info';
+        const isUnread = !this.LocalState.isRead(a.id);
+        const unreadClass = isUnread ? ' unread' : '';
+
+        return `
+          <article class="alerts-card ${sev}${unreadClass}"
+                   data-alert-id="${a.id}"
+                   style="animation-delay:${i * 0.05}s"
+                   onclick="AlertsFeed.handleCardClick(this, '${a.id}')">
+            <div class="alerts-card-inner">
+              <div class="alerts-card-header">
+                <div class="alerts-source-badge">
+                  <div class="alerts-source-icon">${a.sourceIcon}</div>
+                  <span class="alerts-source-name">${a.sourceName}</span>
+                </div>
+                <span class="alerts-time-ago">${this.formatTimeAgo(a.timestamp)}</span>
+              </div>
+              <h2 class="alerts-card-title">${a.title}</h2>
+              ${a.location ? `<p class="alerts-card-meta"><strong>${a.location}</strong>${a.expires ? ` · Exp ${new Date(a.expires).toLocaleDateString()}` : ''}</p>` : ''}
+              <p class="alerts-card-description">${(a.description || '').substring(0, 200)}</p>
+              <div class="alerts-expand-content">
+                <p style="font-size:0.9rem;color:var(--alerts-text-secondary);line-height:1.6;margin-bottom:1rem;">${a.description || ''}</p>
+                ${a.url ? `<div class="alerts-expand-actions"><a href="${a.url}" target="_blank" class="alerts-expand-btn" onclick="event.stopPropagation()">View Source ↗</a></div>` : ''}
+              </div>
+              <div class="alerts-card-footer">
+                <span class="alerts-expand-hint">Tap to expand ▾</span>
+                <span class="alerts-severity-badge ${sev}"><span class="alerts-severity-dot"></span>${sev}</span>
+              </div>
+            </div>
+          </article>
+        `;
+      },
+
+      handleCardClick(card, alertId) {
+        card.classList.toggle('expanded');
+        if (card.classList.contains('unread')) {
+          card.classList.remove('unread');
+          this.LocalState.markRead(alertId);
+        }
+      },
+
+      renderAlerts() {
+        const container = document.getElementById('alertsFeedContainer');
+        const prioritySection = document.getElementById('alertsPrioritySection');
+        const priorityContent = document.getElementById('alertsPriorityContent');
+        const priorityCount = document.getElementById('alertsPriorityCount');
+
+        if (!container) return;
+
+        let displayAlerts = this.allAlerts;
+        if (this.activeFilter && this.SOURCES[this.activeFilter]) {
+          displayAlerts = this.SOURCES[this.activeFilter].alerts;
+        }
+
+        let priorityAlerts = [];
+        let regularAlerts = displayAlerts;
+
+        if (!this.activeFilter) {
+          priorityAlerts = displayAlerts.filter(a => this.isPriorityAlert(a));
+          regularAlerts = displayAlerts.filter(a => !this.isPriorityAlert(a));
+        }
+
+        if (prioritySection) {
+          if (priorityAlerts.length > 0) {
+            prioritySection.style.display = 'block';
+            if (priorityCount) priorityCount.textContent = priorityAlerts.length;
+
+            if (localStorage.getItem('priorityCollapsed') === 'true') {
+              prioritySection.classList.add('collapsed');
+            }
+
+            if (priorityContent) {
+              priorityContent.innerHTML = priorityAlerts.map((a, i) => this.renderAlertCard(a, i)).join('');
+            }
+          } else {
+            prioritySection.style.display = 'none';
+          }
+        }
+
+        if (regularAlerts.length === 0 && priorityAlerts.length === 0) {
+          container.innerHTML = `
+            <div class="alerts-empty-state">
+              <div class="alerts-empty-icon">✓</div>
+              <div class="alerts-empty-title">${this.activeFilter ? 'No Alerts' : 'All Clear'}</div>
+              <div class="alerts-empty-desc">${this.activeFilter ? `No alerts from ${this.SOURCES[this.activeFilter]?.name || 'this source'}.` : 'No active alerts for the Nashville area.'}</div>
+            </div>
+          `;
+          return;
+        }
+
+        if (regularAlerts.length === 0) {
+          container.innerHTML = '';
+          return;
+        }
+
+        const now = new Date();
+        const groups = { 'Just Now': [], 'Earlier Today': [], 'Yesterday': [], 'This Week': [], 'Older': [] };
+
+        regularAlerts.forEach(alert => {
+          const time = new Date(alert.timestamp);
+          const diffHours = (now - time) / 3600000;
+
+          if (diffHours < 1) groups['Just Now'].push(alert);
+          else if (diffHours < 24 && time.getDate() === now.getDate()) groups['Earlier Today'].push(alert);
+          else if (diffHours < 48) groups['Yesterday'].push(alert);
+          else if (diffHours < 168) groups['This Week'].push(alert);
+          else groups['Older'].push(alert);
+        });
+
+        let html = '';
+        let i = 0;
+
+        Object.entries(groups).forEach(([label, alerts]) => {
+          if (!alerts.length) return;
+          html += `<section class="alerts-time-group"><div class="alerts-time-label">${label}</div>`;
+          alerts.forEach(a => {
+            html += this.renderAlertCard(a, i);
+            i++;
+          });
+          html += '</section>';
+        });
+
+        container.innerHTML = html;
+      }
+    };
+
+    // Expose globally for onclick handlers
+    window.AlertsFeed = AlertsFeed;
+    window.openAlertsScreen = openAlertsScreen;
+    window.closeAlertsScreen = closeAlertsScreen;
   </script>
 </body>
 </html>
