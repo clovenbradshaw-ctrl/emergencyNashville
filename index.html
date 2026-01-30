@@ -1499,6 +1499,7 @@
     .map-legend-dot.yellow { background: #fbbf24; }
     .map-legend-dot.green { background: #4ade80; }
     .map-legend-dot.blue { background: #60a5fa; }
+    .map-legend-dot.orange { background: #f97316; }
 
     .map-preview-stats {
       display: grid;
@@ -1673,6 +1674,7 @@
     .map-modal-legend-dot.yellow { background: #fbbf24; }
     .map-modal-legend-dot.green { background: #4ade80; }
     .map-modal-legend-dot.blue { background: #60a5fa; }
+    .map-modal-legend-dot.orange { background: #f97316; }
 
     .map-modal-footer {
       display: grid;
@@ -2358,7 +2360,7 @@
     </header>
 
     <!-- Critical Alert Card - Emergency Shelter -->
-    <div class="critical-card" role="alert" aria-live="polite">
+    <div id="shelterAlertBanner" class="critical-card" role="alert" aria-live="polite">
       <div class="critical-header">
         <span class="critical-label" data-i18n="critical_overflow_open">Emergency Overflow Open</span>
         <span class="status-badge">● <span data-i18n="shelter_alert_status">24 Hours</span></span>
@@ -2724,6 +2726,10 @@
                 <div class="map-stat-value red" id="mapStatCustomers">--</div>
                 <div class="map-stat-label" data-i18n="map_stat_affected">Affected</div>
               </div>
+              <div class="map-legend-item">
+                <div class="map-legend-dot orange"></div>
+                <span data-i18n="map_legend_road_closed">Road Closed</span>
+              </div>
             </div>
           </div>
         </div>
@@ -2815,6 +2821,10 @@
           <div class="map-modal-legend-dot blue"></div>
           <span data-i18n="map_legend_warming">Warming center</span>
         </div>
+        <div class="map-modal-legend-item">
+          <div class="map-modal-legend-dot orange"></div>
+          <span data-i18n="map_legend_road_closed">Road closed</span>
+        </div>
       </div>
     </div>
     <div class="map-modal-footer">
@@ -2834,6 +2844,28 @@
     let cachedWeatherData = null;
     let cachedAlertsData = null;
     let cachedOutagesData = null;
+
+    // ===========================================
+    // SHELTER ALERT TIME LOCK
+    // ===========================================
+    // Expiration date for the shelter alert banner (Central Time)
+    // Set to February 3, 2026 at midnight CT
+    const SHELTER_ALERT_EXPIRATION = '2026-02-03T00:00:00-06:00';
+
+    function checkShelterAlertExpiration() {
+      const banner = document.getElementById('shelterAlertBanner');
+      if (!banner) return;
+
+      const now = new Date();
+      const expirationDate = new Date(SHELTER_ALERT_EXPIRATION);
+
+      if (now >= expirationDate) {
+        banner.style.display = 'none';
+      }
+    }
+
+    // Check shelter alert expiration on page load
+    checkShelterAlertExpiration();
 
     // ===========================================
     // WEBHOOK ACTIVITY TRACKING
@@ -3198,6 +3230,9 @@
         map_legend_title: "Map Key",
         map_legend_outage: "Outage",
         map_legend_warming: "Warming center",
+        map_legend_road_closed: "Road closed",
+        map_road_closure_reason: "Reason",
+        map_road_closure_verify: "Check Hub Nashville for updates",
         map_stat_affected: "Affected",
         map_stat_crews: "Crews",
         map_stat_waiting: "Waiting",
@@ -3348,6 +3383,9 @@
         map_legend_title: "Leyenda",
         map_legend_outage: "Corte",
         map_legend_warming: "Centro de calentamiento",
+        map_legend_road_closed: "Carretera cerrada",
+        map_road_closure_reason: "Razón",
+        map_road_closure_verify: "Consulte Hub Nashville para actualizaciones",
         map_stat_affected: "Afectados",
         map_stat_crews: "Equipos",
         map_stat_waiting: "Esperando",
@@ -3500,6 +3538,9 @@
         map_legend_assigned: "تم تعيين فريق",
         map_legend_working: "جاري الإصلاح",
         map_legend_warming: "مركز تدفئة",
+        map_legend_road_closed: "طريق مغلق",
+        map_road_closure_reason: "السبب",
+        map_road_closure_verify: "تحقق من Hub Nashville للتحديثات",
         map_stat_affected: "متأثرون",
         map_stat_crews: "فرق",
         map_stat_waiting: "انتظار",
@@ -3611,6 +3652,9 @@
         map_legend_assigned: "تیم دیاریکراوە",
         map_legend_working: "چاککردنەوە دەکرێت",
         map_legend_warming: "ناوەندی گەرمکردنەوە",
+        map_legend_road_closed: "ڕێگا داخراوە",
+        map_road_closure_reason: "هۆکار",
+        map_road_closure_verify: "Hub Nashville بپشکنە بۆ نوێکردنەوە",
         map_stat_affected: "کاریگەر",
         map_stat_crews: "تیمەکان",
         map_stat_waiting: "چاوەڕوان",
@@ -3722,6 +3766,9 @@
         map_legend_assigned: "Đã phân công đội",
         map_legend_working: "Đang sửa chữa",
         map_legend_warming: "Trung tâm sưởi ấm",
+        map_legend_road_closed: "Đường đóng",
+        map_road_closure_reason: "Lý do",
+        map_road_closure_verify: "Kiểm tra Hub Nashville để cập nhật",
         map_stat_affected: "Bị ảnh hưởng",
         map_stat_crews: "Đội",
         map_stat_waiting: "Đang chờ",
@@ -4530,6 +4577,28 @@
       { lat: 36.0771, lng: -86.9208, name: "Bellevue Community Center", address: "7638A Highway 70 S, Nashville, TN 37221", hasFood: true }
     ];
 
+    // Road closures data - Winter storm related closures
+    // Last verified: January 30, 2026
+    // Source: Hub Nashville / Metro Nashville Public Works
+    const ROAD_CLOSURES_VERIFIED_DATE = '2026-01-30';
+    const ROAD_CLOSURES_EXPIRY_DAYS = 2;
+
+    const roadClosures = [
+      { lat: 36.1540, lng: -86.7903, name: "Charlotte Ave Bridge", location: "Charlotte Ave at I-40", reason: "Icy conditions - bridge frozen" },
+      { lat: 36.1866, lng: -86.7852, name: "Ellington Pkwy Ramp", location: "Ellington Pkwy at I-65 N", reason: "Black ice - crews treating" },
+      { lat: 36.1307, lng: -86.7006, name: "Briley Pkwy Section", location: "Briley Pkwy near Opryland", reason: "Multiple vehicle accidents - ice" },
+      { lat: 36.1098, lng: -86.8123, name: "Harding Pl Overpass", location: "Harding Place at I-65", reason: "Frozen overpass - salt crews working" },
+      { lat: 36.2089, lng: -86.6937, name: "Gallatin Pike", location: "Gallatin Pike at Old Hickory", reason: "Downed power lines" },
+      { lat: 36.0458, lng: -86.7142, name: "Nolensville Pike", location: "Nolensville Pike at OHB", reason: "Flooding from water main break" }
+    ];
+
+    function isRoadClosureDataStale() {
+      const verifiedDate = new Date(ROAD_CLOSURES_VERIFIED_DATE);
+      const now = new Date();
+      const daysDiff = (now - verifiedDate) / (1000 * 60 * 60 * 24);
+      return daysDiff > ROAD_CLOSURES_EXPIRY_DAYS;
+    }
+
     function isWarmingDataStale() {
       const verifiedDate = new Date(WARMING_CENTERS_VERIFIED_DATE);
       const now = new Date();
@@ -4607,6 +4676,27 @@
       `;
     }
 
+    function createRoadClosurePopup(name, location, reason) {
+      const isStale = isRoadClosureDataStale();
+      const statusText = isStale ? t('map_warming_unconfirmed') : t('map_legend_road_closed');
+      const statusClass = isStale ? 'unconfirmed' : '';
+
+      return `
+        <div class="outage-popup">
+          <div class="warming-popup-title" style="color: #f97316;">${name}</div>
+          <div class="warming-popup-status ${statusClass}">${statusText}</div>
+          <div class="outage-popup-info">${location}</div>
+          <div class="outage-popup-info" style="margin-top: 4px;">
+            <strong>${t('map_road_closure_reason')}:</strong> ${reason}
+          </div>
+          <a href="https://hub.nashville.gov" target="_blank" rel="noopener"
+             style="display: block; margin-top: 8px; font-size: 0.75rem; color: #60a5fa;">
+            ${t('map_road_closure_verify')} →
+          </a>
+        </div>
+      `;
+    }
+
     function addOutageMarkers(map, layer) {
       layer.clearLayers();
 
@@ -4644,6 +4734,19 @@
       warmingCenters.forEach(center => {
         const marker = L.marker([center.lat, center.lng], { icon: warmingIcon }).addTo(layer);
         marker.bindPopup(() => createWarmingCenterPopup(center.name, center.address, center.hasFood));
+      });
+
+      // Add road closure markers
+      const roadClosureIcon = L.divIcon({
+        className: '',
+        html: '<div class="road-closure-icon" style="background: #f97316; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; border: 2px solid #1e293b; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">✕</div>',
+        iconSize: [28, 28],
+        iconAnchor: [14, 14]
+      });
+
+      roadClosures.forEach(closure => {
+        const marker = L.marker([closure.lat, closure.lng], { icon: roadClosureIcon }).addTo(layer);
+        marker.bindPopup(() => createRoadClosurePopup(closure.name, closure.location, closure.reason));
       });
     }
 

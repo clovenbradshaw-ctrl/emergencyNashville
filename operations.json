@@ -1,0 +1,93 @@
+{
+  "_meta": {
+    "description": "Append-only Event-Sourced Operations Log using Epistemic Operators (EO)",
+    "version": "1.0.0",
+    "documentation": "See OPERATIONS_LOG.md for usage instructions",
+    "operators": {
+      "INS": "Create/instantiate new content",
+      "ALT": "Modify existing content (state transition)",
+      "NUL": "Remove/nullify content (soft delete or scheduled removal)",
+      "SUP": "Superpose/layer additional context onto existing content"
+    }
+  },
+  "operations": [
+    {
+      "id": "op_001",
+      "ts": "2026-01-26T12:00:00-06:00",
+      "op": "INS",
+      "target": {
+        "id": "shelter_alert_banner",
+        "type": "banner"
+      },
+      "context": {
+        "table": "alerts",
+        "data": {
+          "component": "shelterAlertBanner",
+          "message": "Emergency shelter information banner"
+        }
+      },
+      "frame": {
+        "source": "emergency_response",
+        "actor": "admin",
+        "expires_at": "2026-02-03T00:00:00-06:00",
+        "reason": "Winter storm emergency shelter alert"
+      }
+    },
+    {
+      "id": "op_002",
+      "ts": "2026-01-29T10:00:00-06:00",
+      "op": "INS",
+      "target": {
+        "id": "warming_centers_dataset",
+        "type": "location_dataset"
+      },
+      "context": {
+        "table": "warming_centers",
+        "data": {
+          "locations": [
+            { "name": "Southeast Regional Community Center", "address": "5260 Hickory Hollow Pkwy, Suite 202, Antioch, TN 37013", "lat": 36.0679, "lng": -86.6675, "hasFood": true },
+            { "name": "Madison Community Center", "address": "550 N Dupont Ave, Madison, TN 37115", "lat": 36.2573, "lng": -86.7093, "hasFood": true },
+            { "name": "Nashville Fairgrounds", "address": "401 Wingrove St, Nashville, TN 37203", "lat": 36.1409, "lng": -86.7634, "hasFood": true },
+            { "name": "Bellevue Community Center", "address": "7638A Highway 70 S, Nashville, TN 37221", "lat": 36.0771, "lng": -86.9208, "hasFood": true }
+          ]
+        },
+        "source_url": "https://www.nashville.gov/departments/emergency-management/news/new-warming-location-opens-at-bellevue-community-center"
+      },
+      "frame": {
+        "verified_date": "2026-01-29",
+        "expiry_days": 3,
+        "actor": "admin",
+        "reason": "Winter storm warming center locations"
+      }
+    },
+    {
+      "id": "op_003",
+      "ts": "2026-01-30T08:00:00-06:00",
+      "op": "INS",
+      "target": {
+        "id": "road_closures_dataset",
+        "type": "location_dataset"
+      },
+      "context": {
+        "table": "road_closures",
+        "data": {
+          "locations": [
+            { "name": "Charlotte Ave Bridge", "location": "Charlotte Ave at I-40", "lat": 36.1540, "lng": -86.7903, "reason": "Icy conditions - bridge frozen" },
+            { "name": "Ellington Pkwy Ramp", "location": "Ellington Pkwy at I-65 N", "lat": 36.1866, "lng": -86.7852, "reason": "Black ice - crews treating" },
+            { "name": "Briley Pkwy Section", "location": "Briley Pkwy near Opryland", "lat": 36.1307, "lng": -86.7006, "reason": "Multiple vehicle accidents - ice" },
+            { "name": "Harding Pl Overpass", "location": "Harding Place at I-65", "lat": 36.1098, "lng": -86.8123, "reason": "Frozen overpass - salt crews working" },
+            { "name": "Gallatin Pike", "location": "Gallatin Pike at Old Hickory", "lat": 36.2089, "lng": -86.6937, "reason": "Downed power lines" },
+            { "name": "Nolensville Pike", "location": "Nolensville Pike at OHB", "lat": 36.0458, "lng": -86.7142, "reason": "Flooding from water main break" }
+          ]
+        },
+        "source_url": "Hub Nashville / Metro Nashville Public Works"
+      },
+      "frame": {
+        "verified_date": "2026-01-30",
+        "expiry_days": 2,
+        "actor": "admin",
+        "reason": "Winter storm road closures"
+      }
+    }
+  ]
+}
