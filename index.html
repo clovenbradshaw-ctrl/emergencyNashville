@@ -1632,6 +1632,11 @@
       margin-bottom: 6px;
     }
 
+    .warming-popup-status.unconfirmed {
+      background: rgba(251, 191, 36, 0.2);
+      color: #fbbf24;
+    }
+
     @media (max-width: 400px) {
       .map-preview-header {
         flex-direction: column;
@@ -2333,7 +2338,10 @@
         map_report_outage: "Report Outage",
         map_popup_customers: "customers affected",
         map_popup_status: "Status",
-        map_warming_open: "Open warming center"
+        map_warming_open: "Open warming center",
+        map_warming_unconfirmed: "Unconfirmed - verify status",
+        map_warming_food: "Food available 24/7",
+        map_warming_verify_link: "Verify on Nashville.gov"
       },
       es: {
         title: "Recursos de Invierno en Nashville",
@@ -2431,7 +2439,10 @@
         map_report_outage: "Reportar Corte",
         map_popup_customers: "clientes afectados",
         map_popup_status: "Estado",
-        map_warming_open: "Centro de calentamiento abierto"
+        map_warming_open: "Centro de calentamiento abierto",
+        map_warming_unconfirmed: "Sin confirmar - verificar estado",
+        map_warming_food: "Comida disponible 24/7",
+        map_warming_verify_link: "Verificar en Nashville.gov"
       },
       ar: {
         title: "موارد الشتاء في ناشفيل",
@@ -2529,7 +2540,10 @@
         map_report_outage: "إبلاغ عن انقطاع",
         map_popup_customers: "عملاء متأثرين",
         map_popup_status: "الحالة",
-        map_warming_open: "مركز تدفئة مفتوح"
+        map_warming_open: "مركز تدفئة مفتوح",
+        map_warming_unconfirmed: "غير مؤكد - تحقق من الحالة",
+        map_warming_food: "طعام متاح 24/7",
+        map_warming_verify_link: "تحقق على Nashville.gov"
       },
       ku: {
         title: "سەرچاوەکانی زستانی ناشڤیل",
@@ -2627,7 +2641,10 @@
         map_report_outage: "ڕاپۆرتی پچڕان",
         map_popup_customers: "کڕیاری کاریگەر",
         map_popup_status: "دۆخ",
-        map_warming_open: "ناوەندی گەرمکردنەوە کراوەیە"
+        map_warming_open: "ناوەندی گەرمکردنەوە کراوەیە",
+        map_warming_unconfirmed: "نەدڵنیا - دۆخەکە پشتڕاست بکەرەوە",
+        map_warming_food: "خواردن بەردەستە 24/7",
+        map_warming_verify_link: "پشتڕاستکردنەوە لە Nashville.gov"
       },
       vi: {
         title: "Tài Nguyên Mùa Đông Nashville",
@@ -2725,7 +2742,10 @@
         map_report_outage: "Báo Cáo Mất Điện",
         map_popup_customers: "khách hàng bị ảnh hưởng",
         map_popup_status: "Trạng thái",
-        map_warming_open: "Trung tâm sưởi ấm đang mở"
+        map_warming_open: "Trung tâm sưởi ấm đang mở",
+        map_warming_unconfirmed: "Chưa xác nhận - kiểm tra trạng thái",
+        map_warming_food: "Có thức ăn 24/7",
+        map_warming_verify_link: "Xác minh tại Nashville.gov"
       }
     };
 
@@ -3497,15 +3517,25 @@
     let cachedMapOutages = [];
     let mapStatsData = { customers: 0, crews: 0, waiting: 0 };
 
-    // Warming centers data
+    // Warming centers data - Official locations from Nashville.gov
+    // Last verified: January 29, 2026
+    // Source: https://www.nashville.gov/departments/emergency-management/news/new-warming-location-opens-at-bellevue-community-center
+    const WARMING_CENTERS_VERIFIED_DATE = '2026-01-29';
+    const WARMING_CENTERS_EXPIRY_DAYS = 3;
+
     const warmingCenters = [
-      { lat: 36.1665, lng: -86.7849, name: "Nashville Public Library - Main", address: "615 Church St" },
-      { lat: 36.1486, lng: -86.7554, name: "East Park Community Center", address: "700 Woodland St" },
-      { lat: 36.1256, lng: -86.8511, name: "Coleman Park Community Center", address: "384 Thompson Ln" },
-      { lat: 36.1902, lng: -86.7684, name: "Looby Community Center", address: "2301 Metro Center Blvd" },
-      { lat: 36.1051, lng: -86.8139, name: "Southeast Community Center", address: "5260 Hickory Hollow Pkwy" },
-      { lat: 36.2105, lng: -86.8867, name: "Bordeaux Library", address: "4000 Clarksville Pike" }
+      { lat: 36.0679, lng: -86.6675, name: "Southeast Regional Community Center", address: "5260 Hickory Hollow Pkwy, Suite 202, Antioch, TN 37013", hasFood: true },
+      { lat: 36.2573, lng: -86.7093, name: "Madison Community Center", address: "550 N Dupont Ave, Madison, TN 37115", hasFood: true },
+      { lat: 36.1409, lng: -86.7634, name: "Nashville Fairgrounds", address: "401 Wingrove St, Nashville, TN 37203", hasFood: true },
+      { lat: 36.0771, lng: -86.9208, name: "Bellevue Community Center", address: "7638A Highway 70 S, Nashville, TN 37221", hasFood: true }
     ];
+
+    function isWarmingDataStale() {
+      const verifiedDate = new Date(WARMING_CENTERS_VERIFIED_DATE);
+      const now = new Date();
+      const daysDiff = (now - verifiedDate) / (1000 * 60 * 60 * 24);
+      return daysDiff > WARMING_CENTERS_EXPIRY_DAYS;
+    }
 
     function getMapStatusColor(status) {
       const s = (status || '').toLowerCase();
@@ -3551,12 +3581,22 @@
       `;
     }
 
-    function createWarmingCenterPopup(name, address) {
+    function createWarmingCenterPopup(name, address, hasFood) {
+      const isStale = isWarmingDataStale();
+      const statusText = isStale ? t('map_warming_unconfirmed') : t('map_warming_open');
+      const statusClass = isStale ? 'unconfirmed' : '';
+      const foodNote = hasFood ? `<div class="outage-popup-info" style="margin-top: 4px; color: #4ade80;">✓ ${t('map_warming_food')}</div>` : '';
+
       return `
         <div class="outage-popup">
           <div class="warming-popup-title">${name}</div>
-          <div class="warming-popup-status">${t('map_warming_open')}</div>
+          <div class="warming-popup-status ${statusClass}">${statusText}</div>
           <div class="outage-popup-info">${address}</div>
+          ${foodNote}
+          <a href="https://www.nashville.gov/departments/emergency-management" target="_blank" rel="noopener"
+             style="display: block; margin-top: 8px; font-size: 0.75rem; color: #60a5fa;">
+            ${t('map_warming_verify_link')} →
+          </a>
         </div>
       `;
     }
@@ -3597,7 +3637,7 @@
 
       warmingCenters.forEach(center => {
         const marker = L.marker([center.lat, center.lng], { icon: warmingIcon }).addTo(layer);
-        marker.bindPopup(() => createWarmingCenterPopup(center.name, center.address));
+        marker.bindPopup(() => createWarmingCenterPopup(center.name, center.address, center.hasFood));
       });
     }
 
