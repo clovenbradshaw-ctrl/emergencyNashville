@@ -1529,6 +1529,27 @@
       vi: 'vi'
     };
 
+    // Get language from URL parameter (?lang=es, ?lang=ar, etc.)
+    function getLanguageFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const lang = urlParams.get('lang');
+      if (lang && translations[lang]) {
+        return lang;
+      }
+      return null;
+    }
+
+    // Update URL with current language without adding history entry
+    function updateURLWithLanguage(lang) {
+      const url = new URL(window.location);
+      if (lang === 'en') {
+        url.searchParams.delete('lang');
+      } else {
+        url.searchParams.set('lang', lang);
+      }
+      window.history.replaceState({}, '', url);
+    }
+
     function updateExternalLinks(lang) {
       document.querySelectorAll('.external-link').forEach(link => {
         const originalUrl = link.dataset.href;
@@ -1562,6 +1583,7 @@
 
       updateExternalLinks(lang);
       localStorage.setItem('nashville-resources-lang', lang);
+      updateURLWithLanguage(lang);
 
       // Re-render weather data with new language
       if (cachedWeatherData) {
@@ -1579,8 +1601,12 @@
       });
     });
 
+    // Check URL parameter first, then localStorage
+    const urlLang = getLanguageFromURL();
     const savedLang = localStorage.getItem('nashville-resources-lang');
-    if (savedLang && translations[savedLang]) {
+    if (urlLang) {
+      setLanguage(urlLang);
+    } else if (savedLang && translations[savedLang]) {
       setLanguage(savedLang);
     }
 
