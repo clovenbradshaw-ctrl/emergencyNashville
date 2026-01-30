@@ -3544,10 +3544,13 @@
       const s = (status || '').toLowerCase();
       if (s.includes('crew en route') || s.includes('crew on site') || s.includes('assessing')) {
         return '#4ade80'; // green - being worked
+      } else if (s.includes('unassigned') || s.includes('waiting')) {
+        // Check unassigned BEFORE assigned (since 'unassigned' contains 'assigned')
+        return '#f87171'; // red - unassigned/waiting
       } else if (s.includes('assigned') || s.includes('scheduled')) {
         return '#fbbf24'; // yellow - assigned
       } else {
-        return '#f87171'; // red - unassigned/waiting
+        return '#f87171'; // red - unknown defaults to waiting
       }
     }
 
@@ -3555,10 +3558,13 @@
       const s = (status || '').toLowerCase();
       if (s.includes('crew en route') || s.includes('crew on site') || s.includes('assessing')) {
         return 'working';
+      } else if (s.includes('unassigned') || s.includes('waiting')) {
+        // Check unassigned BEFORE assigned (since 'unassigned' contains 'assigned')
+        return 'unassigned';
       } else if (s.includes('assigned') || s.includes('scheduled')) {
         return 'assigned';
       } else {
-        return 'unassigned';
+        return 'unassigned'; // unknown defaults to waiting
       }
     }
 
