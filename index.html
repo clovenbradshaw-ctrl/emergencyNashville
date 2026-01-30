@@ -83,34 +83,80 @@
       }
     }
     
-    /* Accessibility controls row */
-    .a11y-controls {
+    /* Top bar - language left, a11y right */
+    .top-bar {
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
       margin-bottom: 1.5rem;
+      gap: 1rem;
     }
 
-    .lang-toggle {
+    .lang-select {
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
+    }
+
+    .a11y-toggle {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      min-height: 44px;
+      min-width: 44px;
+      display: flex;
+      align-items: center;
       justify-content: center;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+      flex-shrink: 0;
+    }
+
+    .a11y-toggle:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--color-text-primary);
+    }
+
+    .a11y-toggle:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 2px;
+    }
+
+    .a11y-toggle.active {
+      background: rgba(255, 255, 255, 0.2);
+      color: var(--color-text-primary);
+    }
+
+    /* Status banner */
+    .status-banner {
+      background: #166534;
+      color: #fff;
+      text-align: center;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .status-banner strong {
+      color: #4ade80;
     }
 
     .lang-btn {
       background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: 8px;
-      padding: 0.6rem 0.85rem;
-      min-height: 44px;
+      border: none;
+      border-radius: 6px;
+      padding: 0.4rem 0.75rem;
+      min-height: 36px;
       color: var(--color-text-secondary);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
       touch-action: manipulation;
     }
 
@@ -133,8 +179,7 @@
     }
 
     .lang-btn.active {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: rgba(255, 255, 255, 0.3);
+      background: #3b82f6;
       color: var(--color-text-primary);
     }
 
@@ -196,33 +241,113 @@
     
     header {
       text-align: center;
-      margin-bottom: 1.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .branding {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
     }
 
     .app-logo {
-      width: 60px;
-      height: auto;
-      margin-bottom: 0.75rem;
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      flex-shrink: 0;
     }
-    
+
+    .title-group {
+      text-align: left;
+    }
+
+    [dir="rtl"] .title-group {
+      text-align: right;
+    }
+
     h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
       letter-spacing: -0.02em;
       line-height: 1.2;
     }
 
     @media (max-width: 360px) {
       h1 {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
       }
     }
 
     .subtitle {
       color: var(--color-text-secondary);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       line-height: 1.4;
+    }
+
+    /* Location button - prominent CTA */
+    .location-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+      text-decoration: none;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+
+    .location-btn:hover {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+    }
+
+    .location-btn:active {
+      transform: scale(0.98);
+    }
+
+    .location-btn:focus-visible {
+      outline: 2px solid #f87171;
+      outline-offset: 2px;
+    }
+
+    .location-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Outreach section */
+    .outreach {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .outreach-label {
+      color: var(--color-text-secondary);
+      font-size: 0.85rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .outreach-number {
+      color: var(--color-text-primary);
+      font-size: 1.25rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .outreach-number:hover {
+      text-decoration: underline;
     }
 
     .section {
@@ -807,40 +932,37 @@
 </head>
 <body>
   <div class="container">
-    <div class="a11y-controls">
-      <div class="lang-toggle">
-        <button class="lang-btn active" data-lang="en">English</button>
-        <button class="lang-btn" data-lang="es">Español</button>
+    <div class="top-bar">
+      <div class="lang-select">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="es">ES</button>
         <button class="lang-btn" data-lang="ar">العربية</button>
         <button class="lang-btn" data-lang="ku">کوردی</button>
-        <button class="lang-btn" data-lang="vi">Tiếng Việt</button>
+        <button class="lang-btn" data-lang="vi">VI</button>
       </div>
+      <button class="a11y-toggle" id="textSizeToggle" aria-label="Change text size" title="Change text size">Aa</button>
+    </div>
+
+    <div class="status-banner" id="statusBanner">
+      <strong data-i18n="warming_centers_open">Warming centers OPEN</strong> <span data-i18n="status_tonight">tonight — temps below 28°F</span>
     </div>
 
     <header>
-      <img src="https://assets.softr-files.com/applications/26b1b861-7748-4f49-8539-21dc6ca9c679/assets/58e44c7c-d691-468e-a9c0-68bfe0c8fd21.png" alt="Nashville Resources Logo" class="app-logo">
-      <div class="header-utility">
-        <div class="text-size-controls" role="group" aria-label="Text size">
-          <button class="text-size-btn" data-size="small" aria-label="Small text" title="Smaller text">
-            <i class="ph ph-text-aa" style="font-size: 0.85rem;"></i>
-          </button>
-          <button class="text-size-btn active" data-size="normal" aria-label="Normal text" title="Normal text">
-            <i class="ph ph-text-aa"></i>
-          </button>
-          <button class="text-size-btn" data-size="large" aria-label="Large text" title="Larger text">
-            <i class="ph ph-text-aa" style="font-size: 1.2rem;"></i>
-          </button>
-          <button class="text-size-btn" data-size="xlarge" aria-label="Extra large text" title="Extra large text">
-            <i class="ph ph-text-aa" style="font-size: 1.4rem;"></i>
-          </button>
+      <div class="branding">
+        <img src="https://assets.softr-files.com/applications/26b1b861-7748-4f49-8539-21dc6ca9c679/assets/58e44c7c-d691-468e-a9c0-68bfe0c8fd21.png" alt="Nashville Resources Logo" class="app-logo">
+        <div class="title-group">
+          <h1 data-i18n="title">Nashville Winter Resources</h1>
+          <p class="subtitle" data-i18n="subtitle">Shelter, food & support during extreme weather</p>
         </div>
-        <a href="emergency.html" class="emergency-link">
-          <i class="ph ph-siren"></i>
-          <span data-i18n="emergency_911">911 Location</span>
-        </a>
       </div>
-      <h1 data-i18n="title">Nashville Winter Resources</h1>
-      <p class="subtitle" data-i18n="subtitle">Shelter, food & support during extreme weather</p>
+
+      <a href="emergency.html" class="location-btn">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <span data-i18n="get_location_911">Get My Location for 911</span>
+      </a>
     </header>
 
     <section class="section">
@@ -975,6 +1097,11 @@
       </div>
     </section>
     
+    <div class="outreach">
+      <div class="outreach-label" data-i18n="outreach_label">Homeless Outreach Hotline</div>
+      <a href="tel:6158629400" class="outreach-number">615-862-9400</a>
+    </div>
+
     <footer>
       <span data-i18n="footer">Share widely · Updated Jan 2026</span>
       <p style="margin-top: 0.75rem;">Brought to you by <a href="https://readrichtext.substack.com/" target="_blank" rel="noopener" style="color: var(--color-link);">Rich Text</a> and <a href="https://groundtruthnashville.substack.com/" target="_blank" rel="noopener" style="color: var(--color-link);">Ground Truth Nashville</a></p>
@@ -1315,7 +1442,11 @@
         severity_severe: "Severe",
         severity_moderate: "Moderate",
         severity_minor: "Minor",
-        severity_unknown: "Unknown"
+        severity_unknown: "Unknown",
+        warming_centers_open: "Warming centers OPEN",
+        status_tonight: "tonight — temps below 28°F",
+        get_location_911: "Get My Location for 911",
+        outreach_label: "Homeless Outreach Hotline"
       },
       es: {
         title: "Recursos de Invierno en Nashville",
@@ -1370,7 +1501,11 @@
         severity_severe: "Severa",
         severity_moderate: "Moderada",
         severity_minor: "Menor",
-        severity_unknown: "Desconocida"
+        severity_unknown: "Desconocida",
+        warming_centers_open: "Centros de calentamiento ABIERTOS",
+        status_tonight: "esta noche — temp. bajo 28°F",
+        get_location_911: "Obtener Mi Ubicación para 911",
+        outreach_label: "Línea de Ayuda para Personas sin Hogar"
       },
       ar: {
         title: "موارد الشتاء في ناشفيل",
@@ -1425,7 +1560,11 @@
         severity_severe: "شديدة",
         severity_moderate: "متوسطة",
         severity_minor: "طفيفة",
-        severity_unknown: "غير معروفة"
+        severity_unknown: "غير معروفة",
+        warming_centers_open: "مراكز التدفئة مفتوحة",
+        status_tonight: "الليلة — درجة الحرارة أقل من 28°F",
+        get_location_911: "الحصول على موقعي لـ 911",
+        outreach_label: "خط مساعدة المشردين"
       },
       ku: {
         title: "سەرچاوەکانی زستانی ناشڤیل",
@@ -1480,7 +1619,11 @@
         severity_severe: "توند",
         severity_moderate: "مامناوەند",
         severity_minor: "سووک",
-        severity_unknown: "نەزانراو"
+        severity_unknown: "نەزانراو",
+        warming_centers_open: "ناوەندەکانی گەرمکردنەوە کراوەن",
+        status_tonight: "ئەمشەو — پلە لە خوارەوەی 28°F",
+        get_location_911: "شوێنەکەم بۆ 911 وەربگرە",
+        outreach_label: "هێڵی یارمەتی بێماڵان"
       },
       vi: {
         title: "Tài Nguyên Mùa Đông Nashville",
@@ -1535,7 +1678,11 @@
         severity_severe: "Nghiêm Trọng",
         severity_moderate: "Trung Bình",
         severity_minor: "Nhẹ",
-        severity_unknown: "Không Rõ"
+        severity_unknown: "Không Rõ",
+        warming_centers_open: "Trung tâm sưởi ấm MỞ CỬA",
+        status_tonight: "tối nay — nhiệt độ dưới 28°F",
+        get_location_911: "Lấy Vị Trí Của Tôi Cho 911",
+        outreach_label: "Đường Dây Hỗ Trợ Người Vô Gia Cư"
       }
     };
 
@@ -1580,7 +1727,7 @@
 
     // Update internal navigation links to preserve language
     function updateInternalLinks(lang) {
-      document.querySelectorAll('.emergency-link, .back-link').forEach(link => {
+      document.querySelectorAll('.location-btn, .back-link').forEach(link => {
         const baseUrl = link.getAttribute('href').split('?')[0];
         link.href = (lang === 'en') ? baseUrl : `${baseUrl}?${lang}`;
       });
@@ -1648,31 +1795,35 @@
     }
 
     // Text size controls
-    const textSizes = ['small', 'normal', 'large', 'xlarge'];
+    const textSizes = ['normal', 'large', 'xlarge'];
+    let currentTextSizeIndex = 0;
 
     function setTextSize(size) {
       // Remove all size classes
-      textSizes.forEach(s => document.documentElement.classList.remove(`text-${s}`));
+      ['small', 'normal', 'large', 'xlarge'].forEach(s => document.documentElement.classList.remove(`text-${s}`));
       // Add the selected size class
       document.documentElement.classList.add(`text-${size}`);
-      // Update button states
-      document.querySelectorAll('.text-size-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.size === size);
-      });
+      // Update toggle button state
+      const toggle = document.getElementById('textSizeToggle');
+      if (toggle) {
+        toggle.classList.toggle('active', size !== 'normal');
+      }
       // Save preference
       localStorage.setItem('nashville-resources-textsize', size);
     }
 
-    document.querySelectorAll('.text-size-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        trackActivity('text_size_change', { size: btn.dataset.size });
-        setTextSize(btn.dataset.size);
-      });
+    // Text size toggle - cycles through sizes
+    document.getElementById('textSizeToggle')?.addEventListener('click', () => {
+      currentTextSizeIndex = (currentTextSizeIndex + 1) % textSizes.length;
+      const newSize = textSizes[currentTextSizeIndex];
+      trackActivity('text_size_change', { size: newSize });
+      setTextSize(newSize);
     });
 
     // Load saved text size
     const savedTextSize = localStorage.getItem('nashville-resources-textsize');
     if (savedTextSize && textSizes.includes(savedTextSize)) {
+      currentTextSizeIndex = textSizes.indexOf(savedTextSize);
       setTextSize(savedTextSize);
     }
 
@@ -1994,9 +2145,9 @@
       });
     });
 
-    // Track emergency link click
-    document.querySelector('.emergency-link')?.addEventListener('click', () => {
-      trackActivity('emergency_link_click', { destination: 'emergency.html' });
+    // Track location button click
+    document.querySelector('.location-btn')?.addEventListener('click', () => {
+      trackActivity('location_btn_click', { destination: 'emergency.html' });
     });
 
     // Load forecast on page load
