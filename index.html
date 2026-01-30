@@ -1847,7 +1847,7 @@
     </header>
 
     <!-- Cold Weather Shelter Alert -->
-    <div class="shelter-alert-banner" role="alert" aria-live="polite">
+    <div id="shelterAlertBanner" class="shelter-alert-banner" role="alert" aria-live="polite">
       <div class="shelter-alert-header">
         <i class="ph ph-warning-circle shelter-alert-icon"></i>
         <div class="shelter-alert-title-group">
@@ -2173,6 +2173,28 @@
     let cachedWeatherData = null;
     let cachedAlertsData = null;
     let cachedOutagesData = null;
+
+    // ===========================================
+    // SHELTER ALERT TIME LOCK
+    // ===========================================
+    // Expiration date for the shelter alert banner (Central Time)
+    // Set to February 3, 2026 at midnight CT
+    const SHELTER_ALERT_EXPIRATION = '2026-02-03T00:00:00-06:00';
+
+    function checkShelterAlertExpiration() {
+      const banner = document.getElementById('shelterAlertBanner');
+      if (!banner) return;
+
+      const now = new Date();
+      const expirationDate = new Date(SHELTER_ALERT_EXPIRATION);
+
+      if (now >= expirationDate) {
+        banner.style.display = 'none';
+      }
+    }
+
+    // Check shelter alert expiration on page load
+    checkShelterAlertExpiration();
 
     // ===========================================
     // WEBHOOK ACTIVITY TRACKING
