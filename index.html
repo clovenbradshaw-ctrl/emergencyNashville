@@ -4071,6 +4071,7 @@
     let cachedWeatherData = null;
     let cachedAlertsData = null;
     let cachedOutagesData = null;
+    let cachedUserCoords = null;
 
     // ===========================================
     // SHELTER ALERT TIME LOCK
@@ -4417,6 +4418,7 @@
         weather_95: "Thunderstorm", weather_96: "Thunderstorm with Hail", weather_99: "Severe Thunderstorm",
         weather_alerts: "Weather Alerts",
         loading_alerts: "Checking for alerts...",
+        click_load_alerts: "Tap to load weather alerts",
         no_alerts: "No active weather alerts for this area",
         alert_effective: "Effective",
         alert_expires: "Expires",
@@ -4572,6 +4574,7 @@
         weather_95: "Tormenta Eléctrica", weather_96: "Tormenta con Granizo", weather_99: "Tormenta Severa",
         weather_alerts: "Alertas Meteorológicas",
         loading_alerts: "Buscando alertas...",
+        click_load_alerts: "Toca para cargar alertas",
         no_alerts: "No hay alertas meteorológicas activas para esta área",
         alert_effective: "Efectiva",
         alert_expires: "Expira",
@@ -4727,6 +4730,7 @@
         weather_95: "عاصفة رعدية", weather_96: "عاصفة رعدية مع برد", weather_99: "عاصفة رعدية شديدة",
         weather_alerts: "تنبيهات الطقس",
         loading_alerts: "جارٍ البحث عن تنبيهات...",
+        click_load_alerts: "انقر لتحميل تنبيهات الطقس",
         no_alerts: "لا توجد تنبيهات طقس نشطة لهذه المنطقة",
         alert_effective: "ساري من",
         alert_expires: "ينتهي",
@@ -4882,6 +4886,7 @@
         weather_95: "بروسکە", weather_96: "بروسکە لەگەڵ تەرزە", weather_99: "بروسکەی توند",
         weather_alerts: "ئاگاداریی کەشوهەوا",
         loading_alerts: "گەڕان بۆ ئاگاداریی...",
+        click_load_alerts: "کرتە بکە بۆ بارکردنی ئاگاداریی",
         no_alerts: "هیچ ئاگاداریی کەشوهەوای چالاک نییە بۆ ئەم ناوچەیە",
         alert_effective: "کاریگەر لە",
         alert_expires: "کۆتایی دێت",
@@ -5037,6 +5042,7 @@
         weather_95: "Giông Bão", weather_96: "Giông Bão Có Mưa Đá", weather_99: "Giông Bão Dữ Dội",
         weather_alerts: "Cảnh Báo Thời Tiết",
         loading_alerts: "Đang kiểm tra cảnh báo...",
+        click_load_alerts: "Nhấn để tải cảnh báo thời tiết",
         no_alerts: "Không có cảnh báo thời tiết nào cho khu vực này",
         alert_effective: "Có hiệu lực",
         alert_expires: "Hết hạn",
@@ -5836,49 +5842,97 @@
         </div>
       `;
 
-      document.getElementById('alertsContainer').innerHTML = `
+      // Defer alerts - only show if user clicks to expand
+      const alertsContainer = document.getElementById('alertsContainer');
+      if (alertsContainer && !cachedAlertsData) {
+        alertsContainer.innerHTML = `
+          <div class="alerts-click-to-load" onclick="loadNWSAlerts()" style="padding: 1rem; text-align: center; cursor: pointer; color: var(--text-secondary);">
+            <i class="ph ph-cloud-warning" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block;"></i>
+            <span data-i18n="click_load_alerts">Tap to load weather alerts</span>
+          </div>
+        `;
+      }
+
+      // Use cached outage data from fetchMapOutages if available
+      const outagesContainer = document.getElementById('outagesContainer');
+      if (outagesContainer) {
+        if (cachedMapOutages && cachedMapOutages.length > 0) {
+          // Use already-fetched map outage data
+          outagesContainer.innerHTML = `
+            <div style="padding: 1rem; text-align: center; color: var(--text-secondary);">
+              <i class="ph ph-lightning" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block; color: #fbbf24;"></i>
+              <span>${mapStatsData.customers.toLocaleString()} ${t('outage_customers')}</span>
+              <a href="#" onclick="openMapModal(); return false;" style="display: block; margin-top: 0.5rem; color: var(--link-color);">${t('status_view_map')}</a>
+            </div>
+          `;
+        } else {
+          outagesContainer.innerHTML = `
+            <div style="padding: 1rem; text-align: center; color: var(--text-secondary);">
+              <i class="ph ph-check-circle" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block; color: #4ade80;"></i>
+              <span data-i18n="no_outages">${t('no_outages')}</span>
+            </div>
+          `;
+        }
+      }
+
+      try {
+        const coords = await getCoordinates(zip);
+        document.getElementById('locationDisplay').textContent = coords.name;
+
+        // Fetch only weather initially - alerts deferred until user clicks
+        const weather = await getWeather(coords.lat, coords.lon);
+
+        // Cache data for re-rendering on language change
+        cachedWeatherData = weather;
+        cachedUserCoords = coords;
+
+        renderForecast(weather);
+      } catch (err) {
+        cachedWeatherData = null;
+        cachedUserCoords = null;
+        showForecastError(t('forecast_error'));
+        console.error(err);
+      }
+    }
+
+    // Lazy load NWS alerts when user clicks
+    async function loadNWSAlerts() {
+      const alertsContainer = document.getElementById('alertsContainer');
+      if (!alertsContainer) return;
+
+      alertsContainer.innerHTML = `
         <div class="alerts-loading">
           <i class="ph ph-cloud"></i>
           <span>${t('loading_alerts')}</span>
         </div>
       `;
 
-      document.getElementById('outagesContainer').innerHTML = `
-        <div class="outages-loading">
-          <i class="ph ph-lightning"></i>
-          <span>${t('loading_outages')}</span>
-        </div>
-      `;
-
       try {
-        const coords = await getCoordinates(zip);
-        document.getElementById('locationDisplay').textContent = coords.name;
+        // Use cached coords or get from ZIP
+        let coords = cachedUserCoords;
+        if (!coords) {
+          const zip = document.getElementById('zipInput').value.trim();
+          if (!/^\d{5}$/.test(zip)) {
+            alertsContainer.innerHTML = '';
+            return;
+          }
+          coords = await getCoordinates(zip);
+          cachedUserCoords = coords;
+        }
 
-        // Fetch weather, NWS alerts, and NES outages in parallel
-        const [weather, alerts, outages] = await Promise.all([
-          getWeather(coords.lat, coords.lon),
-          getNWSAlerts(coords.lat, coords.lon),
-          getNESOutages(coords.lat, coords.lon)
-        ]);
-
-        // Cache data for re-rendering on language change
-        cachedWeatherData = weather;
+        const alerts = await getNWSAlerts(coords.lat, coords.lon);
         cachedAlertsData = alerts;
-        cachedOutagesData = outages;
-
         renderAlerts(alerts);
-        renderOutages(outages);
-        renderForecast(weather);
       } catch (err) {
-        cachedWeatherData = null;
-        cachedAlertsData = null;
-        cachedOutagesData = null;
-        showForecastError(t('forecast_error'));
-        document.getElementById('alertsContainer').innerHTML = '';
-        document.getElementById('outagesContainer').innerHTML = '';
-        console.error(err);
+        console.error('Failed to load NWS alerts:', err);
+        alertsContainer.innerHTML = `
+          <div style="padding: 1rem; text-align: center; color: var(--text-secondary);">
+            <span>${t('forecast_error')}</span>
+          </div>
+        `;
       }
     }
+    window.loadNWSAlerts = loadNWSAlerts;
 
     document.getElementById('fetchBtn').addEventListener('click', () => {
       trackActivity('weather_fetch', { zip: document.getElementById('zipInput').value });
@@ -6319,13 +6373,13 @@
       }
     });
 
-    // Initialize preview map when page loads
-    setTimeout(async () => {
+    // Initialize preview map when page loads - fetch outages immediately for status row
+    (async () => {
       initPreviewMap();
-      // Fetch road closures first (needed for addOutageMarkers), then outages
-      await fetchRoadClosures();
+      // Fetch outages first (priority for status row), then road closures
       await fetchMapOutages();
-    }, 500);
+      await fetchRoadClosures();
+    })();
 
     // Refresh map data every 2 minutes (both outages and road closures)
     setInterval(async () => {
