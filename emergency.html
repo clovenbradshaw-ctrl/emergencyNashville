@@ -945,9 +945,13 @@
         function textSomeoneElse() {
             // Open SMS app without a pre-filled number, letting user enter their own recipient
             const message = buildEmergencyMessage();
-            // On iOS, sms: without a number opens the Messages app
-            // On Android, sms: also works similarly
-            window.location.href = `sms:?body=${encodeURIComponent(message)}`;
+            const encodedMessage = encodeURIComponent(message);
+
+            // iOS requires &body= format, Android requires ?body= format
+            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+            const separator = isIOS ? '&' : '?';
+
+            window.location.href = `sms:${separator}body=${encodedMessage}`;
         }
 
         async function getLocation() {
