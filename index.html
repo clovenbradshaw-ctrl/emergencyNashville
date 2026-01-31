@@ -4767,6 +4767,256 @@
         padding-left: 95px;
       }
     }
+
+    /* NSWX Section Module */
+    .nswx-section {
+      background: #1a1a2e;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #2a2a40;
+      margin-bottom: 1.25rem;
+    }
+
+    /* NSWX Ticker */
+    .nswx-ticker {
+      background: #252540;
+      padding: 10px 0;
+      overflow: hidden;
+      border-bottom: 1px solid #2a2a40;
+    }
+
+    .nswx-ticker-content {
+      display: inline-block;
+      white-space: nowrap;
+      animation: nswxTickerScroll 60s linear infinite;
+    }
+
+    .nswx-ticker-content:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes nswxTickerScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .nswx-ticker-content a {
+      color: #a0a0a0;
+      font-size: 13px;
+      text-decoration: none;
+      padding: 0 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nswx-ticker-content a:hover {
+      color: #fff;
+    }
+
+    .nswx-ticker-content .nswx-avatar {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .nswx-ticker-content .nswx-post-image {
+      height: 16px;
+      width: auto;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .nswx-ticker-loading {
+      color: #666;
+      padding: 0 20px;
+      font-size: 13px;
+    }
+
+    /* NSWX Header */
+    .nswx-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid #2a2a40;
+    }
+
+    .nswx-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nswx-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .nswx-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .nswx-subtitle {
+      font-size: 11px;
+      color: #888;
+    }
+
+    .nswx-nav {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .nswx-nav a {
+      color: #6b9fff;
+      text-decoration: none;
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: #252540;
+      transition: background 0.15s;
+    }
+
+    .nswx-nav a:hover {
+      background: #303050;
+    }
+
+    /* NSWX Posts */
+    .nswx-posts {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nswx-post {
+      padding: 16px 20px;
+      border-bottom: 1px solid #2a2a40;
+      display: flex;
+      gap: 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+
+    .nswx-post:last-child {
+      border-bottom: none;
+    }
+
+    .nswx-post:hover {
+      background: #202035;
+    }
+
+    .nswx-post-thumb {
+      width: 80px;
+      height: 60px;
+      background: #252540;
+      border-radius: 6px;
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+
+    .nswx-post-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .nswx-post-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      line-height: 1.3;
+      color: #fff;
+    }
+
+    .nswx-post-meta {
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    .nswx-post-excerpt {
+      font-size: 12px;
+      color: #aaa;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* NSWX Footer */
+    .nswx-footer {
+      padding: 12px 20px;
+      background: #252540;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .nswx-footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .nswx-footer-links a {
+      color: #888;
+      text-decoration: none;
+      font-size: 11px;
+      transition: color 0.15s;
+    }
+
+    .nswx-footer-links a:hover {
+      color: #fff;
+    }
+
+    .nswx-archive-link {
+      color: #6b9fff;
+      text-decoration: none;
+      font-size: 12px;
+      transition: color 0.15s;
+    }
+
+    .nswx-archive-link:hover {
+      color: #8cb4ff;
+    }
+
+    .nswx-posts-loading {
+      padding: 40px;
+      text-align: center;
+      color: #666;
+      font-size: 13px;
+    }
+
+    /* NSWX Mobile Responsive */
+    @media (max-width: 600px) {
+      .nswx-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .nswx-post {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .nswx-post-thumb {
+        width: 100%;
+        height: 120px;
+      }
+
+      .nswx-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
   </style>
 </head>
 <body>
@@ -4880,6 +5130,45 @@
         </div>
       </div>
     </section>
+
+    <!-- NSWX Section Module -->
+    <div class="nswx-section" id="nswxSection">
+      <!-- Bluesky Ticker -->
+      <div class="nswx-ticker">
+        <div class="nswx-ticker-content" id="nswxTicker">
+          <span class="nswx-ticker-loading">Loading updates...</span>
+        </div>
+      </div>
+
+      <!-- Header -->
+      <div class="nswx-header">
+        <div class="nswx-brand">
+          <img class="nswx-logo" id="nswxLogo" src="https://cdn.bsky.app/img/avatar/plain/did:plc:ozcgbn2p6t4pb5xynk7xy6mt/bafkreigwz7e5us3na35g7lsbzospuama2mlwjqzgnxqliycizrnnx2yzeq@jpeg" alt="NSWX">
+          <div>
+            <div class="nswx-title">Nashville Severe Weather</div>
+            <div class="nswx-subtitle">Davidson &amp; Williamson Counties</div>
+          </div>
+        </div>
+        <div class="nswx-nav">
+          <a href="https://nashvillesevereweather.com/radar/" target="_blank" rel="noopener noreferrer">Radar</a>
+          <a href="https://bsky.app/profile/nashseverewx.com" target="_blank" rel="noopener noreferrer">Bluesky</a>
+        </div>
+      </div>
+
+      <!-- Blog Posts -->
+      <div class="nswx-posts" id="nswxPosts">
+        <div class="nswx-posts-loading">Loading forecasts...</div>
+      </div>
+
+      <!-- Footer -->
+      <div class="nswx-footer">
+        <div class="nswx-footer-links">
+          <a href="https://www.patreon.com/NashSevereWx" target="_blank" rel="noopener noreferrer">Support on Patreon</a>
+          <a href="https://nashvillesevereweather.com/shop/" target="_blank" rel="noopener noreferrer">Merch</a>
+        </div>
+        <a class="nswx-archive-link" href="https://nashvillesevereweather.com/2026/01/" target="_blank" rel="noopener noreferrer">View all January posts →</a>
+      </div>
+    </div>
 
     <!-- Side-by-Side: Resource Guide & Map -->
     <div class="side-by-side-container">
@@ -10774,6 +11063,208 @@
 
       // Periodically check for alerts
       setInterval(initWeatherTicker, TICKER_CHECK_INTERVAL);
+    })();
+  </script>
+
+  <!-- NSWX Section Module Script -->
+  <script>
+    (function() {
+      const NSWX_HANDLE = 'nashseverewx.com';
+      const NSWX_BLOG_URL = 'https://nashvillesevereweather.com';
+
+      // Format date for ticker
+      function formatNswxTickerDate(dateStr) {
+        const date = new Date(dateStr);
+        const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+        const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+        return `${days[date.getDay()]} ${months[date.getMonth()]} ${date.getDate()}`;
+      }
+
+      // Format date for blog posts
+      function formatNswxPostDate(dateStr) {
+        const date = new Date(dateStr);
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+      }
+
+      // Fetch Bluesky posts for ticker
+      async function fetchNswxBlueskyPosts() {
+        try {
+          const res = await fetch(`https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${NSWX_HANDLE}&limit=5`);
+          const data = await res.json();
+
+          // Update logo with avatar
+          const avatar = data.feed[0]?.post.author.avatar || '';
+          if (avatar) {
+            const logoEl = document.getElementById('nswxLogo');
+            if (logoEl) logoEl.src = avatar;
+          }
+
+          return data.feed.map(item => {
+            const post = item.post;
+            const record = post.record;
+
+            let imageUrl = null;
+            if (post.embed?.images?.[0]?.thumb) {
+              imageUrl = post.embed.images[0].thumb;
+            } else if (post.embed?.media?.images?.[0]?.thumb) {
+              imageUrl = post.embed.media.images[0].thumb;
+            }
+
+            return {
+              text: record.text,
+              link: `https://bsky.app/profile/${NSWX_HANDLE}/post/${post.uri.split('/').pop()}`,
+              date: formatNswxTickerDate(record.createdAt),
+              avatar: post.author.avatar || '',
+              image: imageUrl
+            };
+          });
+        } catch (err) {
+          console.error('Failed to fetch NSWX Bluesky posts:', err);
+          return [];
+        }
+      }
+
+      // Fetch blog posts via WordPress REST API
+      async function fetchNswxBlogPosts() {
+        try {
+          const apiUrl = `${NSWX_BLOG_URL}/wp-json/wp/v2/posts?per_page=3&_embed`;
+          const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`);
+          const posts = await res.json();
+
+          return posts.map(post => {
+            // Get featured image if available
+            let thumb = '';
+            if (post._embedded?.['wp:featuredmedia']?.[0]?.source_url) {
+              thumb = post._embedded['wp:featuredmedia'][0].source_url;
+            }
+
+            // Get author name
+            let author = 'Staff';
+            if (post._embedded?.author?.[0]?.name) {
+              author = post._embedded.author[0].name;
+            }
+
+            // Strip HTML from excerpt
+            const excerpt = post.excerpt?.rendered
+              ?.replace(/<[^>]*>/g, '')
+              ?.replace(/\[&hellip;\]/g, '...')
+              ?.replace(/&nbsp;/g, ' ')
+              ?.trim() || '';
+
+            // Decode HTML entities in title
+            const title = post.title.rendered
+              ?.replace(/&#8217;/g, "'")
+              ?.replace(/&#8216;/g, "'")
+              ?.replace(/&#8220;/g, '"')
+              ?.replace(/&#8221;/g, '"')
+              ?.replace(/&amp;/g, '&')
+              || '';
+
+            return {
+              title,
+              link: post.link,
+              date: formatNswxPostDate(post.date),
+              author,
+              excerpt,
+              thumb
+            };
+          });
+        } catch (err) {
+          console.error('Failed to fetch NSWX blog posts:', err);
+          return [];
+        }
+      }
+
+      // Render ticker
+      function renderNswxTicker(posts) {
+        const ticker = document.getElementById('nswxTicker');
+        if (!ticker) return;
+
+        if (posts.length === 0) {
+          ticker.innerHTML = '<span class="nswx-ticker-loading">Follow @nashseverewx.com for updates</span>';
+          return;
+        }
+
+        let html = '';
+        // Duplicate posts for seamless infinite scroll
+        for (let i = 0; i < 2; i++) {
+          posts.forEach(post => {
+            const avatar = post.avatar ? `<img class="nswx-avatar" src="${post.avatar}" alt="">` : '';
+            const postImg = post.image ? `<img class="nswx-post-image" src="${post.image}" alt="">` : '';
+            const text = (post.text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            html += `<a href="${post.link}" target="_blank" rel="noopener noreferrer">${avatar}@${NSWX_HANDLE} ${post.date}: ${text}${postImg}</a>`;
+          });
+        }
+        ticker.innerHTML = html;
+      }
+
+      // Render blog posts
+      function renderNswxPosts(posts) {
+        const container = document.getElementById('nswxPosts');
+        if (!container) return;
+
+        if (posts.length === 0) {
+          container.innerHTML = '<div class="nswx-posts-loading">No posts found</div>';
+          return;
+        }
+
+        container.innerHTML = posts.map(post => `
+          <a class="nswx-post" href="${post.link}" target="_blank" rel="noopener noreferrer">
+            ${post.thumb ? `<img class="nswx-post-thumb" src="${post.thumb}" alt="">` : '<div class="nswx-post-thumb"></div>'}
+            <div class="nswx-post-content">
+              <div class="nswx-post-title">${post.title}</div>
+              <div class="nswx-post-meta">${post.date} • ${post.author}</div>
+              <div class="nswx-post-excerpt">${post.excerpt}</div>
+            </div>
+          </a>
+        `).join('');
+      }
+
+      // Update archive link with current month
+      function updateArchiveLink() {
+        const archiveLink = document.querySelector('.nswx-archive-link');
+        if (!archiveLink) return;
+
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        archiveLink.href = `${NSWX_BLOG_URL}/${year}/${month}/`;
+        archiveLink.textContent = `View all ${monthNames[now.getMonth()]} posts →`;
+      }
+
+      // Initialize NSWX section
+      async function initNswxSection() {
+        try {
+          updateArchiveLink();
+
+          const [blueskyPosts, blogPosts] = await Promise.all([
+            fetchNswxBlueskyPosts(),
+            fetchNswxBlogPosts()
+          ]);
+
+          renderNswxTicker(blueskyPosts);
+          renderNswxPosts(blogPosts);
+        } catch (e) {
+          console.error('NSWX section init error:', e);
+          const postsContainer = document.getElementById('nswxPosts');
+          if (postsContainer) {
+            postsContainer.innerHTML = '<div class="nswx-posts-loading">Failed to load</div>';
+          }
+        }
+      }
+
+      // Initialize on page load
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initNswxSection);
+      } else {
+        initNswxSection();
+      }
+
+      // Refresh every 5 minutes
+      setInterval(initNswxSection, 5 * 60 * 1000);
     })();
   </script>
 
