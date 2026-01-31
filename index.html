@@ -81,6 +81,19 @@
       margin: 0 auto;
     }
 
+    /* Widen container for side-by-side layout on larger screens */
+    @media (min-width: 768px) {
+      .container {
+        max-width: 1000px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .container {
+        max-width: 1200px;
+      }
+    }
+
     @media (max-width: 360px) {
       body {
         padding: 1rem 0.75rem;
@@ -2761,6 +2774,323 @@
       padding: 1rem;
     }
 
+    /* ===========================================
+       SIDE-BY-SIDE LAYOUT - Map & Resource Guide
+       =========================================== */
+    .side-by-side-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .side-by-side-panel {
+      background: #12121a;
+      border: 1px solid #2a2a3c;
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      background: rgba(30, 41, 59, 0.5);
+      border-bottom: 1px solid #2a2a3c;
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    .panel-title i {
+      font-size: 1.1rem;
+      color: var(--color-accent-blue);
+    }
+
+    .panel-expand-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      padding: 0.4rem 0.65rem;
+      color: var(--color-text-secondary);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .panel-expand-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--color-text-primary);
+    }
+
+    .panel-expand-btn i {
+      font-size: 0.9rem;
+    }
+
+    .panel-body {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Resource Guide Panel - scrollable content */
+    .resource-guide-panel .panel-body {
+      max-height: 350px;
+      overflow-y: auto;
+      padding: 0.75rem;
+    }
+
+    .resource-guide-panel .panel-body::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .resource-guide-panel .panel-body::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+    }
+
+    .resource-guide-panel .panel-body::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+    }
+
+    /* Map Panel */
+    .map-panel .panel-body {
+      height: 350px;
+    }
+
+    .map-panel #sideBySideMap {
+      width: 100%;
+      height: 100%;
+    }
+
+    .map-panel-controls {
+      padding: 0.75rem;
+      background: rgba(30, 41, 59, 0.3);
+      border-top: 1px solid #2a2a3c;
+    }
+
+    .map-panel-toggles {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .map-panel-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+    }
+
+    .map-panel-toggle input {
+      width: 14px;
+      height: 14px;
+    }
+
+    .map-panel-toggle input[type="checkbox"] {
+      accent-color: #60a5fa;
+    }
+
+    .map-legend-dot-small {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .map-legend-dot-small.red { background: #f87171; }
+    .map-legend-dot-small.blue { background: #60a5fa; }
+    .map-legend-dot-small.orange { background: #f97316; }
+
+    /* Compact resource cards in side-by-side view */
+    .side-by-side-container .intent-card {
+      margin-bottom: 0.5rem;
+      padding: 0.75rem;
+    }
+
+    .side-by-side-container .intent-title {
+      font-size: 0.85rem;
+    }
+
+    .side-by-side-container .intent-icon {
+      font-size: 1.1rem;
+    }
+
+    .side-by-side-container .resource-list {
+      max-height: none;
+    }
+
+    /* Resource Guide Modal */
+    .resource-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--color-bg-primary);
+      z-index: 2000;
+      flex-direction: column;
+      animation: modalFadeIn 0.2s ease;
+    }
+
+    .resource-modal.active {
+      display: flex;
+    }
+
+    .resource-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: rgba(30, 41, 59, 0.8);
+      border-bottom: 1px solid #2a2a3c;
+    }
+
+    .resource-modal-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    .resource-modal-title i {
+      color: var(--color-accent-blue);
+    }
+
+    .resource-modal-close {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .resource-modal-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: var(--color-text-primary);
+    }
+
+    .resource-modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+
+    .resource-modal-footer {
+      padding: 1rem;
+      background: rgba(30, 41, 59, 0.8);
+      border-top: 1px solid #2a2a3c;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .resource-modal-action {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: var(--color-text-primary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.15s ease;
+    }
+
+    .resource-modal-action:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .resource-modal-action.primary {
+      background: #3b82f6;
+      border-color: #3b82f6;
+    }
+
+    .resource-modal-action.primary:hover {
+      background: #2563eb;
+    }
+
+    /* Desktop/Tablet: Side-by-side layout */
+    @media (min-width: 768px) {
+      .side-by-side-container {
+        flex-direction: row;
+      }
+
+      .side-by-side-panel {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .resource-guide-panel .panel-body {
+        max-height: 450px;
+      }
+
+      .map-panel .panel-body {
+        height: 450px;
+      }
+
+      /* Hide tab bar on larger screens - we show side by side */
+      .tab-bar.side-by-side-mode {
+        display: none;
+      }
+    }
+
+    /* Larger screens */
+    @media (min-width: 1024px) {
+      .side-by-side-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .resource-guide-panel .panel-body {
+        max-height: 550px;
+      }
+
+      .map-panel .panel-body {
+        height: 550px;
+      }
+    }
+
+    /* Mobile: Keep stacked layout with adjusted heights */
+    @media (max-width: 767px) {
+      .side-by-side-container {
+        flex-direction: column;
+      }
+
+      .resource-guide-panel .panel-body {
+        max-height: 300px;
+      }
+
+      .map-panel .panel-body {
+        height: 280px;
+      }
+    }
+
     /* Hide old sections when in new mode */
     .legacy-sections {
       display: none;
@@ -4368,18 +4698,26 @@
       </div>
     </section>
 
-    <!-- Tab Bar -->
-    <div class="tab-bar">
-      <button class="tab-btn active" data-tab="find-help" data-i18n="tab_find_help">Find Help</button>
-      <button class="tab-btn" data-tab="resource-map" data-i18n="tab_resource_map">Map</button>
-    </div>
+    <!-- Side-by-Side: Resource Guide & Map -->
+    <div class="side-by-side-container">
 
-    <!-- Find Help Tab Content -->
-    <div class="tab-content active" id="tab-find-help">
-      <div class="section-label" data-i18n="what_do_you_need">What do you need?</div>
+      <!-- Resource Guide Panel -->
+      <div class="side-by-side-panel resource-guide-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <i class="ph ph-book-open"></i>
+            <span data-i18n="panel_resource_guide">Resource Guide</span>
+          </div>
+          <button class="panel-expand-btn" onclick="openResourceModal()">
+            <i class="ph ph-arrows-out"></i>
+            <span data-i18n="panel_expand">Expand</span>
+          </button>
+        </div>
+        <div class="panel-body" id="resourceGuideContent">
+          <div class="section-label" data-i18n="what_do_you_need">What do you need?</div>
 
-      <!-- Featured WTTIN Banner -->
-      <div class="wttin-banner">
+          <!-- Featured WTTIN Banner -->
+          <div class="wttin-banner">
         <div class="wttin-banner-content">
           <div class="wttin-banner-icon">
             <img src="https://wttin.org/wp-content/uploads/2024/05/Group-184-1.png" alt="Where to Turn in Nashville logo">
@@ -5365,69 +5703,65 @@
               <a href="https://www.tn.gov/tema/updates/2026-disasters/january-2026-winter-weather.html" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
             </div>
           </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Resource Map Tab Content -->
-    <div class="tab-content" id="tab-resource-map">
-      <div class="map-tab-content">
-        <!-- Outages Hidden Container for API data -->
-        <div id="outagesContainer" style="display: none;"></div>
-
-        <!-- Map Preview -->
-        <div class="map-preview-section" style="margin-top: 0;">
-          <div class="map-preview-container" style="border: none; background: transparent;">
-            <div class="map-preview-header" style="background: transparent; border-bottom: none; padding: 0 0 0.75rem 0;">
-              <div class="map-preview-title">
-                <i class="ph ph-map-trifold"></i>
-                <span data-i18n="map_outage_map">Power Outage Map</span>
-              </div>
-              <button class="map-expand-btn" onclick="openMapModal()">
-                <i class="ph ph-arrows-out"></i>
-                <span data-i18n="map_fullscreen">Full Screen</span>
-              </button>
-            </div>
-            <div class="map-preview-wrapper" style="height: 300px; border-radius: 12px; overflow: hidden;">
-              <div id="outageMapPreview"></div>
-            </div>
-            <div class="map-toggles" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.75rem; padding: 0.75rem; background: rgba(30, 41, 59, 0.5); border-radius: 8px;">
-              <label class="map-toggle-item" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.85rem;">
-                <input type="checkbox" id="toggleOutages" checked onchange="toggleMapLayer('outages')" style="accent-color: #f87171;">
-                <span class="map-legend-dot red" style="width: 10px; height: 10px;"></span>
-                <span data-i18n="map_legend_outage">Power Outages</span>
-              </label>
-              <label class="map-toggle-item" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.85rem;">
-                <input type="checkbox" id="toggleWarmingCenters" checked onchange="toggleMapLayer('warmingCenters')" style="accent-color: #60a5fa;">
-                <span class="map-legend-dot blue" style="width: 10px; height: 10px;"></span>
-                <span data-i18n="map_legend_warming">Warming centers</span>
-              </label>
-              <label class="map-toggle-item" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.85rem;">
-                <input type="checkbox" id="toggleRoadClosures" checked onchange="toggleMapLayer('roadClosures')" style="accent-color: #f97316;">
-                <span class="map-legend-dot orange" style="width: 10px; height: 10px;"></span>
-                <span data-i18n="map_legend_road_closed">Road closures</span>
-              </label>
-            </div>
-            <div class="map-preview-stats" style="margin-top: 0.75rem;">
-              <div class="map-stat">
-                <div class="map-stat-value red" id="mapStatCustomers">--</div>
-                <div class="map-stat-label" data-i18n="map_stat_affected">Affected</div>
-              </div>
-            </div>
           </div>
         </div>
+        <!-- End intent-grid -->
+        </div>
+        <!-- End panel-body -->
+      </div>
+      <!-- End Resource Guide Panel -->
 
-        <!-- Outage Location Button -->
-        <div class="outage-location-controls" style="margin-top: 1rem;">
-          <button class="outage-location-btn" id="outageLocationBtn" onclick="useMyLocationForOutages()">
-            <i class="ph ph-crosshair"></i>
-            <span data-i18n="outage_use_location">Use My Location</span>
+      <!-- Map Panel -->
+      <div class="side-by-side-panel map-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <i class="ph ph-map-trifold"></i>
+            <span data-i18n="map_outage_map">Power Outage Map</span>
+          </div>
+          <button class="panel-expand-btn" onclick="openMapModal()">
+            <i class="ph ph-arrows-out"></i>
+            <span data-i18n="map_fullscreen">Full Screen</span>
           </button>
-          <span class="outage-location-status" id="outageLocationStatus"></span>
+        </div>
+        <div class="panel-body">
+          <!-- Outages Hidden Container for API data -->
+          <div id="outagesContainer" style="display: none;"></div>
+          <div id="sideBySideMap"></div>
+        </div>
+        <div class="map-panel-controls">
+          <div class="map-panel-toggles">
+            <label class="map-panel-toggle">
+              <input type="checkbox" id="toggleOutagesSBS" checked onchange="toggleSideBySideMapLayer('outages')">
+              <span class="map-legend-dot-small red"></span>
+              <span data-i18n="map_legend_outage">Power Outages</span>
+            </label>
+            <label class="map-panel-toggle">
+              <input type="checkbox" id="toggleWarmingCentersSBS" checked onchange="toggleSideBySideMapLayer('warmingCenters')">
+              <span class="map-legend-dot-small blue"></span>
+              <span data-i18n="map_legend_warming">Warming centers</span>
+            </label>
+            <label class="map-panel-toggle">
+              <input type="checkbox" id="toggleRoadClosuresSBS" checked onchange="toggleSideBySideMapLayer('roadClosures')">
+              <span class="map-legend-dot-small orange"></span>
+              <span data-i18n="map_legend_road_closed">Road closures</span>
+            </label>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+            <div class="map-stat" style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="map-stat-value red" id="mapStatCustomersSBS" style="font-size: 0.9rem; font-weight: 600;">--</span>
+              <span class="map-stat-label" data-i18n="map_stat_affected" style="font-size: 0.75rem; color: var(--color-text-muted);">Affected</span>
+            </div>
+            <button class="outage-location-btn" id="outageLocationBtnSBS" onclick="useMyLocationForOutagesSBS()" style="font-size: 0.75rem; padding: 0.4rem 0.6rem;">
+              <i class="ph ph-crosshair"></i>
+              <span data-i18n="outage_use_location">Use My Location</span>
+            </button>
+          </div>
         </div>
       </div>
+      <!-- End Map Panel -->
+
     </div>
+    <!-- End Side-by-Side Container -->
 
     <footer>
       <span data-i18n="footer">Share widely · Updated Jan 2026</span>
@@ -5761,6 +6095,28 @@
       <a href="tel:615-234-0000" class="map-modal-action primary">
         <i class="ph ph-phone"></i>
         <span data-i18n="map_report_outage">Report Power Outage</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Fullscreen Resource Guide Modal -->
+  <div class="resource-modal" id="resourceModal">
+    <div class="resource-modal-header">
+      <div class="resource-modal-title">
+        <i class="ph ph-book-open"></i>
+        <span data-i18n="panel_resource_guide">Resource Guide</span>
+      </div>
+      <button class="resource-modal-close" onclick="closeResourceModal()">
+        <i class="ph ph-x"></i>
+      </button>
+    </div>
+    <div class="resource-modal-body" id="resourceModalContent">
+      <!-- Content will be cloned from the panel -->
+    </div>
+    <div class="resource-modal-footer">
+      <a href="https://wttin.org/" class="resource-modal-action primary" target="_blank" rel="noopener noreferrer">
+        <i class="ph ph-arrow-square-out"></i>
+        <span data-i18n="wttin_visit">Browse all on wttin.org</span>
       </a>
     </div>
   </div>
@@ -7980,13 +8336,24 @@
 
     let previewMap = null;
     let fullMap = null;
+    let sideBySideMap = null;
     let previewOutageLayer = null;
     let fullOutageLayer = null;
+    let sideBySideOutageLayer = null;
+    let sideBySideWarmingLayer = null;
+    let sideBySideRoadClosureLayer = null;
     let cachedMapOutages = [];
     let mapStatsData = { customers: 0, crews: 0, waiting: 0 };
 
     // Map layer toggle state
     let mapToggles = {
+      outages: true,
+      warmingCenters: true,
+      roadClosures: true
+    };
+
+    // Side-by-side map layer toggle state
+    let sideBySideMapToggles = {
       outages: true,
       warmingCenters: true,
       roadClosures: true
@@ -8561,10 +8928,207 @@
       }
     }
 
-    // Close modal with Escape key
+    // ===========================================
+    // SIDE-BY-SIDE MAP FUNCTIONALITY
+    // ===========================================
+    function initSideBySideMap() {
+      if (sideBySideMap) {
+        setTimeout(() => sideBySideMap.invalidateSize(), 100);
+        return;
+      }
+
+      const mapContainer = document.getElementById('sideBySideMap');
+      if (!mapContainer) return;
+
+      sideBySideMap = L.map('sideBySideMap', {
+        zoomControl: true,
+        attributionControl: false
+      }).setView([36.1627, -86.7816], 10);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18
+      }).addTo(sideBySideMap);
+
+      // Create layer groups
+      sideBySideOutageLayer = L.layerGroup().addTo(sideBySideMap);
+      sideBySideWarmingLayer = L.layerGroup().addTo(sideBySideMap);
+      sideBySideRoadClosureLayer = L.layerGroup().addTo(sideBySideMap);
+
+      // Add outage markers if data exists
+      if (cachedMapOutages.length > 0) {
+        addOutageMarkers(sideBySideMap, sideBySideOutageLayer);
+        updateSideBySideStats();
+      }
+
+      // Add warming center markers
+      addWarmingMarkersToSideBySide();
+
+      // Fetch road closures if not already done
+      fetchRoadClosuresIfNeeded().then(() => {
+        addRoadClosureMarkersToSideBySide();
+      });
+
+      console.log('Side-by-side map initialized');
+    }
+
+    function addWarmingMarkersToSideBySide() {
+      if (!sideBySideWarmingLayer || !sideBySideMap) return;
+
+      sideBySideWarmingLayer.clearLayers();
+
+      warmingLocations.forEach(loc => {
+        const marker = L.circleMarker([loc.lat, loc.lng], {
+          radius: 8,
+          fillColor: '#60a5fa',
+          color: '#1e3a5f',
+          weight: 2,
+          opacity: 1,
+          fillOpacity: 0.8
+        });
+
+        marker.bindPopup(`
+          <strong>${loc.name}</strong><br>
+          ${loc.address}<br>
+          <em>${loc.hours}</em>
+          ${loc.services ? '<br>' + loc.services : ''}
+        `);
+
+        marker.addTo(sideBySideWarmingLayer);
+      });
+    }
+
+    function addRoadClosureMarkersToSideBySide() {
+      if (!sideBySideRoadClosureLayer || !sideBySideMap || !roadClosures) return;
+
+      sideBySideRoadClosureLayer.clearLayers();
+
+      roadClosures.forEach(closure => {
+        const marker = L.circleMarker([closure.lat, closure.lng], {
+          radius: 6,
+          fillColor: '#f97316',
+          color: '#7c2d12',
+          weight: 2,
+          opacity: 1,
+          fillOpacity: 0.8
+        });
+
+        marker.bindPopup(`
+          <strong>Road Closure</strong><br>
+          ${closure.name || closure.description || 'Road closed'}
+        `);
+
+        marker.addTo(sideBySideRoadClosureLayer);
+      });
+    }
+
+    function toggleSideBySideMapLayer(layerName) {
+      if (!sideBySideMap) return;
+
+      const checkbox = document.getElementById(`toggle${layerName.charAt(0).toUpperCase() + layerName.slice(1)}SBS`);
+      const isEnabled = checkbox ? checkbox.checked : !sideBySideMapToggles[layerName];
+      sideBySideMapToggles[layerName] = isEnabled;
+
+      let layer;
+      switch (layerName) {
+        case 'outages':
+          layer = sideBySideOutageLayer;
+          break;
+        case 'warmingCenters':
+          layer = sideBySideWarmingLayer;
+          break;
+        case 'roadClosures':
+          layer = sideBySideRoadClosureLayer;
+          break;
+      }
+
+      if (layer) {
+        if (isEnabled) {
+          sideBySideMap.addLayer(layer);
+        } else {
+          sideBySideMap.removeLayer(layer);
+        }
+      }
+    }
+
+    function updateSideBySideStats() {
+      const statsEl = document.getElementById('mapStatCustomersSBS');
+      if (statsEl && mapStatsData.customers > 0) {
+        if (mapStatsData.customers >= 1000) {
+          statsEl.textContent = (mapStatsData.customers / 1000).toFixed(1) + 'K';
+        } else {
+          statsEl.textContent = mapStatsData.customers.toLocaleString();
+        }
+      }
+    }
+
+    function useMyLocationForOutagesSBS() {
+      if (!navigator.geolocation) {
+        alert('Geolocation is not supported by your browser');
+        return;
+      }
+
+      const btn = document.getElementById('outageLocationBtnSBS');
+      if (btn) btn.disabled = true;
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          if (sideBySideMap) {
+            sideBySideMap.setView([latitude, longitude], 13);
+          }
+          if (btn) btn.disabled = false;
+          trackActivity('side_by_side_map_location', { lat: latitude, lng: longitude });
+        },
+        (error) => {
+          console.error('Geolocation error:', error);
+          if (btn) btn.disabled = false;
+          alert('Unable to get your location. Please check your browser settings.');
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
+      );
+    }
+
+    // ===========================================
+    // RESOURCE GUIDE MODAL FUNCTIONALITY
+    // ===========================================
+    function openResourceModal() {
+      const modal = document.getElementById('resourceModal');
+      const modalContent = document.getElementById('resourceModalContent');
+      const sourceContent = document.getElementById('resourceGuideContent');
+
+      if (modal && modalContent && sourceContent) {
+        // Clone the content from the panel
+        modalContent.innerHTML = sourceContent.innerHTML;
+
+        // Re-attach click handlers for intent cards in modal
+        modalContent.querySelectorAll('.intent-card').forEach(card => {
+          card.addEventListener('click', function(e) {
+            if (e.target.closest('.resource-phone') || e.target.closest('.resource-link') || e.target.closest('a')) {
+              return;
+            }
+            this.classList.toggle('expanded');
+          });
+        });
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        trackActivity('resource_modal_open');
+      }
+    }
+
+    function closeResourceModal() {
+      const modal = document.getElementById('resourceModal');
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Close modals with Escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeMapModal();
+        closeResourceModal();
       }
     });
 
@@ -8592,7 +9156,14 @@
 
       // Then initialize map and fetch outages
       initPreviewMap();
+      initSideBySideMap();
       await fetchMapOutages();
+
+      // Update side-by-side map stats after outages are fetched
+      updateSideBySideStats();
+      if (sideBySideOutageLayer && cachedMapOutages.length > 0) {
+        addOutageMarkers(sideBySideMap, sideBySideOutageLayer);
+      }
 
       // Render warming locations section (time-bound)
       renderWarmingLocationsSection();
@@ -8601,8 +9172,17 @@
     // Refresh outage data every 2 minutes (road closures only if already fetched)
     // Also refresh weather forecast every 15 minutes
     setInterval(() => {
-      fetchMapOutages();
-      if (roadClosuresFetched) fetchRoadClosures();
+      fetchMapOutages().then(() => {
+        updateSideBySideStats();
+        if (sideBySideOutageLayer && cachedMapOutages.length > 0) {
+          addOutageMarkers(sideBySideMap, sideBySideOutageLayer);
+        }
+      });
+      if (roadClosuresFetched) {
+        fetchRoadClosures().then(() => {
+          addRoadClosureMarkersToSideBySide();
+        });
+      }
     }, 120000);
 
     setInterval(() => {
