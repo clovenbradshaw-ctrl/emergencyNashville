@@ -2315,8 +2315,16 @@
     }
 
     .wttin-banner-icon {
-      font-size: 1.75rem;
       flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+    }
+
+    .wttin-banner-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
     }
 
     .wttin-banner-text h4 {
@@ -3558,7 +3566,9 @@
       <!-- Featured WTTIN Banner -->
       <div class="wttin-banner">
         <div class="wttin-banner-content">
-          <div class="wttin-banner-icon">📖</div>
+          <div class="wttin-banner-icon">
+            <img src="https://i0.wp.com/wttin.org/wp-content/uploads/2024/04/logo.png?w=796&ssl=1" alt="Where to Turn in Nashville logo">
+          </div>
           <div class="wttin-banner-text">
             <h4 data-i18n="wttin_title">Verified by Where to Turn in Nashville</h4>
             <p data-i18n="wttin_desc">273 resources verified • Look for "via wttin.org" badges</p>
