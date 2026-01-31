@@ -191,6 +191,54 @@
         "actor": "admin",
         "reason": "Community warming station in East Nashville - accepting donations (shelf-stable food, prepared food, warm clothing/blankets)"
       }
+    },
+    {
+      "id": "op_008",
+      "ts": "2026-01-31T15:00:00-06:00",
+      "op": "ALT",
+      "target": {
+        "id": "resource_directory",
+        "type": "resource_dataset"
+      },
+      "context": {
+        "table": "resources",
+        "data": {
+          "total_resources_verified": 273,
+          "categories_updated": [
+            "emergency_shelter",
+            "food",
+            "rent_utilities",
+            "personal_care",
+            "immigrant_refugee",
+            "health_medical",
+            "mental_health",
+            "addiction_services"
+          ],
+          "new_resources_added": [
+            "Room In The Inn",
+            "Metro Nashville Overflow Shelter",
+            "Oasis Center (Youth 13-17)",
+            "Madison Church of Christ",
+            "Adventist Community Services",
+            "NeedLink Nashville",
+            "Rooftop",
+            "SAFPAW",
+            "Showers of Blessing",
+            "Shower UP",
+            "Siloam Health",
+            "Tennessee Redline",
+            "Mental Health Cooperative"
+          ],
+          "verification_badge": "via wttin.org"
+        },
+        "source_url": "https://wttin.org"
+      },
+      "frame": {
+        "verified_date": "2026-01-31",
+        "expiry_days": 30,
+        "actor": "admin",
+        "reason": "Integrated 273 verified resources from Where to Turn in Nashville (WTTIN.org) directory. Added 'via wttin.org' badges to resources using WTTIN data. Enhanced phone numbers, hours, service details, and added new high-priority resources across shelter, food, utilities, personal care, immigrant, and health categories."
+      }
     }
   ]
 }

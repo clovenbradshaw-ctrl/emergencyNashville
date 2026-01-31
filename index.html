@@ -2186,6 +2186,25 @@
       color: #f87171;
     }
 
+    .wttin-verified {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 6px;
+      font-size: 0.625rem;
+      font-weight: 500;
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      border-radius: 4px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .wttin-verified:hover {
+      background: rgba(59, 130, 246, 0.25);
+      color: #bfdbfe;
+    }
+
     .resource-hours {
       font-size: 0.6875rem;
       color: #888;
@@ -3540,8 +3559,8 @@
         <div class="wttin-banner-content">
           <div class="wttin-banner-icon">📖</div>
           <div class="wttin-banner-text">
-            <h4 data-i18n="wttin_title">Powered by Where to Turn in Nashville</h4>
-            <p data-i18n="wttin_desc">Resources below link to WTTIN's comprehensive directory</p>
+            <h4 data-i18n="wttin_title">Verified by Where to Turn in Nashville</h4>
+            <p data-i18n="wttin_desc">273 resources verified • Look for "via wttin.org" badges</p>
           </div>
         </div>
         <a href="https://wttin.org/" class="wttin-banner-link" target="_blank" rel="noopener noreferrer">
@@ -3570,19 +3589,71 @@
                 <div class="resource-meta">
                   <span class="resource-status open" data-i18n="status_open">Open</span>
                   <span class="resource-hours" data-i18n="hours_24hr">24hr intake</span>
+                  <a href="https://wttin.org/emergency-shelter/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
+                <div class="resource-address">Showers, hygiene, meals, diapers/formula at Women's Campus</div>
               </div>
-              <a href="tel:615-255-2475" class="resource-phone">📞 615-255-2475</a>
+              <a href="tel:615-312-1574" class="resource-phone">📞 615-312-1574</a>
             </div>
             <div class="resource-item">
               <div class="resource-info">
-                <h5>Salvation Army Nashville</h5>
+                <h5>Room In The Inn</h5>
                 <div class="resource-meta">
                   <span class="resource-status open" data-i18n="status_open">Open</span>
-                  <span class="resource-hours" data-i18n="hours_24hr">24hr intake</span>
+                  <span class="resource-hours">Nov-Mar: 150-300 beds nightly</span>
+                  <a href="https://wttin.org/emergency-shelter/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
+                <div class="resource-address">Men: 5:15pm at 705 Drexel | Women: 2:30pm | Families call first</div>
+              </div>
+              <a href="tel:615-251-7019" class="resource-phone">📞 615-251-7019</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Salvation Army Center of Hope</h5>
+                <div class="resource-meta">
+                  <span class="resource-status open" data-i18n="status_open">Open</span>
+                  <span class="resource-hours">Families, men, women, LGBTQ+</span>
+                  <a href="https://wttin.org/emergency-shelter/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+                <div class="resource-address">Mon-Fri 8am-6pm | Self-sufficiency plan required</div>
               </div>
               <a href="tel:615-242-0411" class="resource-phone">📞 615-242-0411</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Metro Nashville Overflow Shelter</h5>
+                <div class="resource-meta">
+                  <span class="resource-status open" data-i18n="status_open">Open</span>
+                  <span class="resource-hours">Opens when temp ≤32°F</span>
+                  <a href="https://wttin.org/emergency-shelter/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+                <div class="resource-address">7pm-7am | Bus 23B free from downtown WeGo station</div>
+              </div>
+              <a href="tel:615-862-6391" class="resource-phone">📞 615-862-6391</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Launch Pad Winter Shelter</h5>
+                <div class="resource-meta">
+                  <span class="resource-status open" data-i18n="status_open">Open</span>
+                  <span class="resource-hours">Ages 18-24, Nov-Mar</span>
+                  <a href="https://wttin.org/emergency-shelter/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+                <div class="resource-address">LGBTQIA+ affirming | Reserve at NashvilleLaunchPad.com</div>
+              </div>
+              <a href="https://www.nashvillelaunchpad.com" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Reserve</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Oasis Center (Youth 13-17)</h5>
+                <div class="resource-meta">
+                  <span class="resource-status open" data-i18n="status_open">Open</span>
+                  <span class="resource-hours">24/7 crisis hotline</span>
+                  <a href="https://wttin.org/emergency-shelter/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+                <div class="resource-address">Emergency shelter, crisis counseling, learning center</div>
+              </div>
+              <a href="tel:615-327-4455" class="resource-phone">📞 615-327-4455</a>
             </div>
             <div class="resource-item">
               <div class="resource-info">
@@ -3593,16 +3664,6 @@
                 </div>
               </div>
               <a href="tel:615-256-8195" class="resource-phone">📞 615-256-8195</a>
-            </div>
-            <div class="resource-item">
-              <div class="resource-info">
-                <h5>Launch Pad Nashville</h5>
-                <div class="resource-meta">
-                  <span class="resource-status open" data-i18n="status_open">Open</span>
-                  <span class="resource-hours">Ages 18-24</span>
-                </div>
-              </div>
-              <a href="tel:615-938-5500" class="resource-phone">📞 615-938-5500</a>
             </div>
             <a href="https://wttin.org/emergency-shelter/" class="wttin-category-link" target="_blank" rel="noopener noreferrer">
               <span data-i18n="wttin_more_shelter">More shelter resources at WTTIN</span>
@@ -3631,7 +3692,9 @@
                 <div class="resource-meta">
                   <span class="resource-status open" data-i18n="status_open">Open</span>
                   <span class="resource-hours">Food boxes & pantries</span>
+                  <a href="https://wttin.org/food/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
+                <div class="resource-address">Call ahead to confirm times before visiting</div>
               </div>
               <a href="tel:615-329-3491" class="resource-phone">📞 615-329-3491</a>
             </div>
@@ -3711,8 +3774,9 @@
                 <h5>The Help Center</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Mon-Wed 9:30am-3:30pm</span>
+                  <a href="https://wttin.org/food/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
-                <div class="resource-address">Emergency food for working families</div>
+                <div class="resource-address">Photo ID, Davidson County proof, income docs required</div>
               </div>
               <a href="tel:615-750-2145" class="resource-phone">📞 615-750-2145</a>
             </div>
@@ -3721,10 +3785,33 @@
                 <h5>The Store – Free Grocery</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Thu 1-5pm; Fri 9am-5pm; Sat 11am-3pm</span>
+                  <a href="https://wttin.org/food/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
-                <div class="resource-address">Year-round free grocery store</div>
+                <div class="resource-address">Referral or walk-in | Proof of income & IDs for household</div>
               </div>
               <a href="tel:615-460-8331" class="resource-phone">📞 615-460-8331</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Madison Church of Christ</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Mon-Fri 8:30-11:30am</span>
+                  <a href="https://wttin.org/food/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+                <div class="resource-address">Food pantry + clothing closet</div>
+              </div>
+              <a href="tel:615-868-3360" class="resource-phone">📞 615-868-3360</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Adventist Community Services</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Mon-Thu 10am-1pm</span>
+                  <a href="https://wttin.org/food/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+                <div class="resource-address">403 Gallatin Pike S | Photo ID required</div>
+              </div>
+              <a href="tel:615-860-6001" class="resource-phone">📞 615-860-6001</a>
             </div>
 
             <!-- Mobile Food Distribution -->
@@ -3733,8 +3820,9 @@
                 <h5>Dream Streets Mobile Food</h5>
                 <div class="resource-meta">
                   <span class="resource-hours" data-i18n="hours_mobile">West & North Nashville</span>
+                  <a href="https://wttin.org/food/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
-                <div class="resource-address">Mon-Sat various locations</div>
+                <div class="resource-address">Food from Sprouts, Whole Foods, Aldi, Trader Joe's</div>
               </div>
               <a href="https://dreamstreetstn.com/mobilefood" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Schedule</a>
             </div>
@@ -3743,6 +3831,7 @@
                 <h5>One Generation Away</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Mobile distribution ~9am</span>
+                  <a href="https://wttin.org/food/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
                 <div class="resource-address">15,000-25,000 lbs food, first come first served</div>
               </div>
@@ -3752,7 +3841,8 @@
               <div class="resource-info">
                 <h5>The Bridge Ministry</h5>
                 <div class="resource-meta">
-                  <span class="resource-hours">Tue-Thu various locations</span>
+                  <span class="resource-hours">5 weekly outreaches</span>
+                  <a href="https://wttin.org/food/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
                 <div class="resource-address">Hot meals, groceries, toiletries, camping supplies</div>
               </div>
@@ -3763,6 +3853,7 @@
                 <h5>People Loving Nashville</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Mon 7-8:30pm</span>
+                  <a href="https://wttin.org/food/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
                 <div class="resource-address">Food, clothing, haircuts, showers</div>
               </div>
@@ -3775,8 +3866,9 @@
                 <h5>SNAP Benefits (Food Stamps)</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Mon-Fri 8am-4:30pm</span>
+                  <a href="https://wttin.org/food/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
-                <div class="resource-address">Davidson County DHS | Apply online or in person</div>
+                <div class="resource-address">Davidson County DHS | Apps in English, Spanish, Arabic, Somali</div>
               </div>
               <a href="tel:615-532-4000" class="resource-phone">📞 615-532-4000</a>
             </div>
@@ -3785,8 +3877,9 @@
                 <h5>Second Harvest SNAP Outreach</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Application assistance</span>
+                  <a href="https://wttin.org/food/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
-                <div class="resource-address">Help applying for SNAP benefits</div>
+                <div class="resource-address">Pre-screening, help filling out application | Call or text</div>
               </div>
               <a href="tel:615-310-0752" class="resource-phone">📞 615-310-0752</a>
             </div>
@@ -3795,8 +3888,9 @@
                 <h5>WIC Program</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Women, Infants, Children</span>
+                  <a href="https://wttin.org/food/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
-                <div class="resource-address">Free healthy foods, nutrition counseling</div>
+                <div class="resource-address">Free foods, breastfeeding support, immunization referrals</div>
               </div>
               <a href="tel:800-342-5942" class="resource-phone">📞 800-342-5942</a>
             </div>
@@ -3835,6 +3929,59 @@
               </div>
               <a href="https://nespower.com/outages" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> View map</a>
             </div>
+            <div class="resource-subheader">Rent & Utility Assistance</div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>NeedLink Nashville</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Mon-Tue 8am-2pm</span>
+                  <a href="https://wttin.org/rent-utilities-assistance/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+                <div class="resource-address">Emergency utility and rent assistance</div>
+              </div>
+              <a href="tel:615-269-6835" class="resource-phone">📞 615-269-6835</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Rooftop</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Mon-Fri 8am-5pm (calls only)</span>
+                  <a href="https://wttin.org/rent-utilities-assistance/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+                <div class="resource-address">Davidson Co residents with lease, unexpected hardship</div>
+              </div>
+              <a href="tel:615-485-5920" class="resource-phone">📞 615-485-5920</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Metro Action Commission</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Utility & housing assistance</span>
+                  <a href="https://wttin.org/rent-utilities-assistance/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+              </div>
+              <a href="tel:615-862-8860" class="resource-phone">📞 615-862-8860</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Catholic Charities</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Financial assistance</span>
+                  <a href="https://wttin.org/rent-utilities-assistance/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+              </div>
+              <a href="tel:615-352-3087" class="resource-phone">📞 615-352-3087</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Salvation Army</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Mon-Fri 9am-6pm</span>
+                  <a href="https://wttin.org/rent-utilities-assistance/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+              </div>
+              <a href="tel:615-242-0411" class="resource-phone">📞 615-242-0411</a>
+            </div>
             <a href="https://wttin.org/rent-utilities-assistance/" class="wttin-category-link" target="_blank" rel="noopener noreferrer">
               <span data-i18n="wttin_more_utilities">Utility assistance at WTTIN</span>
               <i class="ph ph-arrow-square-out"></i>
@@ -3866,9 +4013,14 @@
             </div>
             <div class="resource-item">
               <div class="resource-info">
-                <h5>People Loving Nashville</h5>
+                <h5>SAFPAW (People & Animal Welfare)</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Pet care for homeless</span>
+                  <a href="https://wttin.org/emergency-shelter/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+                <div class="resource-address">Free vet care, pet food, supplies, shelter for pets</div>
               </div>
-              <a href="https://www.peoplelovingnashville.com/" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
+              <a href="tel:615-474-8390" class="resource-phone">📞 615-474-8390</a>
             </div>
             <div class="resource-item">
               <div class="resource-info">
@@ -3879,11 +4031,59 @@
               </div>
               <a href="https://www.opentablenashville.org/" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
             </div>
+            <div class="resource-subheader">Showers & Laundry</div>
             <div class="resource-item">
               <div class="resource-info">
-                <h5 data-i18n="npt">NPT Unhoused Resources</h5>
+                <h5>Room In The Inn</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Mon-Fri 6-8am showers, 7am laundry</span>
+                  <a href="https://wttin.org/personal-care/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
               </div>
-              <a href="https://www.wnpt.org/agingmatters/unhoused/" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
+              <a href="tel:615-251-9791" class="resource-phone">📞 615-251-9791</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Community Care Fellowship (Ken & Carol's)</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Mon-Fri 9am-1pm showers, 9-11am laundry</span>
+                  <a href="https://wttin.org/personal-care/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+              </div>
+              <a href="tel:615-227-1953" class="resource-phone">📞 615-227-1953</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Showers of Blessing</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Mon & Wed 9am-1pm</span>
+                  <a href="https://wttin.org/personal-care/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+                <div class="resource-address">City Road Chapel | Laundry & showers</div>
+              </div>
+              <a href="tel:615-868-1673" class="resource-phone">📞 615-868-1673</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Shower UP</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Mobile showers - check schedule</span>
+                  <a href="https://wttin.org/personal-care/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+                <div class="resource-address">Free towels, toiletries provided</div>
+              </div>
+              <a href="tel:888-210-0777" class="resource-phone">📞 888-210-0777</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>People Loving Nashville</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Mon 7-8:30pm</span>
+                  <a href="https://wttin.org/personal-care/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+                <div class="resource-address">Food, clothing, haircuts, showers</div>
+              </div>
+              <a href="https://www.peoplelovingnashville.com/" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
             </div>
             <a href="https://wttin.org/" class="wttin-category-link" target="_blank" rel="noopener noreferrer">
               <span data-i18n="wttin_browse_all">Browse all WTTIN categories</span>
@@ -3911,6 +4111,7 @@
                 <h5>Conexión Américas</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Legal, financial, youth programs</span>
+                  <a href="https://wttin.org/immigrants-refugees/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
                 <div class="resource-address">Mon/Wed 9a-7p, Tue/Thu 9a-5:30p, Fri 9a-2p</div>
               </div>
@@ -3922,11 +4123,11 @@
                 <h5>Casa Azafrán</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Health, legal, financial services hub</span>
+                  <a href="https://wttin.org/immigrants-refugees/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
                 <div class="resource-address">Mon/Wed 9a-7p, Tue/Thu 9a-5:30p, Fri 9a-2p</div>
               </div>
-              <a href="tel:615-320-5152" class="resource-phone">📞 English: 615-320-5152</a>
-              <a href="tel:615-269-6900" class="resource-phone">📞 Español: 615-269-6900</a>
+              <a href="tel:615-269-6900" class="resource-phone">📞 615-269-6900</a>
               <a href="https://casaazafran.org" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
             </div>
             <div class="resource-item">
@@ -3934,6 +4135,7 @@
                 <h5>Tennessee Immigrant & Refugee Rights Coalition (TIRRC)</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Education, integration, advocacy</span>
+                  <a href="https://wttin.org/immigrants-refugees/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
                 <div class="resource-address">By appointment only</div>
               </div>
@@ -3945,6 +4147,7 @@
                 <h5>Catholic Charities of Tennessee</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Refugee resettlement, immigration services</span>
+                  <a href="https://wttin.org/immigrants-refugees/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
                 <div class="resource-address">Mon-Fri 8a-4p (appointment only)</div>
               </div>
@@ -3956,8 +4159,9 @@
                 <h5>Nashville International Center for Empowerment</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Education, health, employment, childcare</span>
+                  <a href="https://wttin.org/immigrants-refugees/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
-                <div class="resource-address">Mon-Fri 9a-5p</div>
+                <div class="resource-address">Mon-Fri 9a-5p | Free childcare during ESL classes</div>
               </div>
               <a href="tel:615-315-9681" class="resource-phone">📞 615-315-9681</a>
               <a href="https://www.empowernashville.org" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
@@ -3967,8 +4171,9 @@
                 <h5>Tennessee Justice for Our Neighbors</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Free/low-cost immigration legal services</span>
+                  <a href="https://wttin.org/immigrants-refugees/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
-                <div class="resource-address">By appointment only</div>
+                <div class="resource-address">Asylum, citizenship, family reunification | By appointment</div>
               </div>
               <a href="tel:615-538-7481" class="resource-phone">📞 615-538-7481 (English/Spanish)</a>
               <a href="https://tnjfon.org" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
@@ -3978,6 +4183,7 @@
                 <h5>Hispanic Family Foundation</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Economic mobility, education, advocacy</span>
+                  <a href="https://wttin.org/immigrants-refugees/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
                 <div class="resource-address">Mon-Fri 8a-5p</div>
               </div>
@@ -3989,6 +4195,7 @@
                 <h5>Legacy Mission Village</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">ESL, citizenship, after-school programs</span>
+                  <a href="https://wttin.org/immigrants-refugees/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
                 <div class="resource-address">Mon-Thu 9a-5p</div>
               </div>
@@ -4000,8 +4207,9 @@
                 <h5>Nations Ministry Center</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Citizenship, youth literacy, elder programs</span>
+                  <a href="https://wttin.org/immigrants-refugees/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
-                <div class="resource-address">Mon-Fri 9a-5p</div>
+                <div class="resource-address">Mon-Fri 9a-5p | Nepali elder support</div>
               </div>
               <a href="tel:615-828-9664" class="resource-phone">📞 615-828-9664</a>
               <a href="https://nationsministrycenter.org" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
@@ -4011,6 +4219,7 @@
                 <h5>AMAC (American Muslim Advisory Council)</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Civic engagement, community building</span>
+                  <a href="https://wttin.org/immigrants-refugees/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
               </div>
               <a href="tel:615-988-6460" class="resource-phone">📞 615-988-6460</a>
@@ -4021,8 +4230,9 @@
                 <h5>Elmahaba Center</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Arabic community, mutual aid, diaper bank</span>
+                  <a href="https://wttin.org/immigrants-refugees/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
-                <div class="resource-address">Resource navigation: Tue/Thu evenings</div>
+                <div class="resource-address">Resource navigation: Tue/Thu evenings 615-200-6171</div>
               </div>
               <a href="tel:615-567-3215" class="resource-phone">📞 615-567-3215</a>
               <a href="https://www.elmahabacenter.com/services" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
@@ -4181,10 +4391,22 @@
             </div>
             <div class="resource-item">
               <div class="resource-info">
+                <h5>Family & Children's Crisis Line</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours" data-i18n="hours_24hr">24/7 crisis support</span>
+                  <a href="https://wttin.org/mental-health/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+              </div>
+              <a href="tel:615-244-7444" class="resource-phone">📞 615-244-7444</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
                 <h5>Matthew Walker Comprehensive Health</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Sliding scale fees</span>
+                  <a href="https://wttin.org/medical-care/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
+                <div class="resource-address">Medical, dental, pharmacy | All insurance accepted</div>
               </div>
               <a href="tel:615-327-9400" class="resource-phone">📞 615-327-9400</a>
             </div>
@@ -4192,10 +4414,54 @@
               <div class="resource-info">
                 <h5>Neighborhood Health</h5>
                 <div class="resource-meta">
-                  <span class="resource-hours">Community health centers</span>
+                  <span class="resource-hours">Mon-Fri 8am-5pm</span>
+                  <a href="https://wttin.org/medical-care/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
                 </div>
+                <div class="resource-address">Sliding scale | Medical, dental, mental health, MAT</div>
               </div>
               <a href="tel:615-227-3000" class="resource-phone">📞 615-227-3000</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Siloam Health</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Melrose & Antioch locations</span>
+                  <a href="https://wttin.org/medical-care/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+                <div class="resource-address">Refugees, immigrants, uninsured welcome</div>
+              </div>
+              <a href="tel:615-298-5406" class="resource-phone">📞 615-298-5406</a>
+            </div>
+            <div class="resource-subheader">Addiction & Recovery</div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Tennessee Redline</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">24/7 addiction helpline</span>
+                  <a href="https://wttin.org/addiction-services/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+              </div>
+              <a href="tel:800-889-9789" class="resource-phone">📞 800-889-9789</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Mental Health Cooperative</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Mon-Fri 8am-4:30pm</span>
+                  <a href="https://wttin.org/mental-health/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+              </div>
+              <a href="tel:615-726-0125" class="resource-phone">📞 615-726-0125</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Centerstone</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Mental health & addiction services</span>
+                  <a href="https://wttin.org/mental-health/" class="wttin-verified" target="_blank" rel="noopener noreferrer">via wttin.org</a>
+                </div>
+              </div>
+              <a href="tel:615-460-4357" class="resource-phone">📞 615-460-4357</a>
             </div>
             <a href="https://wttin.org/medical-care/" class="wttin-category-link" target="_blank" rel="noopener noreferrer">
               <span data-i18n="wttin_more_health">More health resources at WTTIN</span>
@@ -4988,9 +5254,9 @@
         emergency_911: "911 Location",
         start: "Start Here",
         wttin: "Where to Turn in Nashville",
-        wttin_title: "Where to Turn in Nashville",
-        wttin_desc: "Complete directory of 200+ local resources",
-        wttin_visit: "Visit wttin.org",
+        wttin_title: "Verified by Where to Turn in Nashville",
+        wttin_desc: "273 resources verified • Look for \"via wttin.org\" badges",
+        wttin_visit: "Browse all categories",
         official: "Official Resource Hubs",
         nashville_weather: "Nashville.gov Winter Weather Updates",
         ohs_extreme: "Metro OHS – Extreme Weather",
@@ -5181,9 +5447,9 @@
         emergency_911: "Ubicación 911",
         start: "Empiece Aquí",
         wttin: "Dónde Acudir en Nashville",
-        wttin_title: "Dónde Acudir en Nashville",
-        wttin_desc: "Directorio completo de más de 200 recursos locales",
-        wttin_visit: "Visitar wttin.org",
+        wttin_title: "Verificado por Dónde Acudir en Nashville",
+        wttin_desc: "273 recursos verificados • Busque insignias \"via wttin.org\"",
+        wttin_visit: "Ver todas las categorías",
         official: "Centros de Recursos Oficiales",
         nashville_weather: "Actualizaciones del Clima Invernal",
         ohs_extreme: "OHS – Clima Extremo",
@@ -5374,9 +5640,9 @@
         emergency_911: "موقع 911",
         start: "ابدأ هنا",
         wttin: "أين تتوجه في ناشفيل",
-        wttin_title: "أين تتوجه في ناشفيل",
-        wttin_desc: "دليل شامل لأكثر من 200 مورد محلي",
-        wttin_visit: "زيارة wttin.org",
+        wttin_title: "تم التحقق بواسطة أين تتوجه في ناشفيل",
+        wttin_desc: "273 مورد تم التحقق منه • ابحث عن شارات \"via wttin.org\"",
+        wttin_visit: "تصفح جميع الفئات",
         official: "مراكز الموارد الرسمية",
         nashville_weather: "تحديثات طقس الشتاء",
         ohs_extreme: "خدمات الطقس القاسي",
@@ -5567,9 +5833,9 @@
         emergency_911: "شوێنی 911",
         start: "لێرەوە دەست پێبکە",
         wttin: "لە ناشڤیل بۆ کوێ بڕۆیت",
-        wttin_title: "لە ناشڤیل بۆ کوێ بڕۆیت",
-        wttin_desc: "ڕێنیشاندەری تەواوی زیاتر لە 200 سەرچاوەی ناوخۆیی",
-        wttin_visit: "سەردانی wttin.org بکە",
+        wttin_title: "پشتڕاستکراوە لەلایەن لە ناشڤیل بۆ کوێ بڕۆیت",
+        wttin_desc: "273 سەرچاوە پشتڕاستکراوە • بگەڕێ بۆ نیشانەکانی \"via wttin.org\"",
+        wttin_visit: "گەڕان لە هەموو پۆلەکان",
         official: "ناوەندە فەرمییەکانی سەرچاوە",
         nashville_weather: "نوێکردنەوەکانی کەشوهەوای زستان",
         ohs_extreme: "خزمەتگوزارییەکانی کەشوهەوای سەخت",
@@ -5760,9 +6026,9 @@
         emergency_911: "Vị Trí 911",
         start: "Bắt Đầu Tại Đây",
         wttin: "Nơi Hướng Dẫn Tại Nashville",
-        wttin_title: "Nơi Hướng Dẫn Tại Nashville",
-        wttin_desc: "Danh bạ đầy đủ hơn 200 nguồn tài nguyên địa phương",
-        wttin_visit: "Truy cập wttin.org",
+        wttin_title: "Được Xác Nhận bởi Nơi Hướng Dẫn Tại Nashville",
+        wttin_desc: "273 tài nguyên đã xác nhận • Tìm huy hiệu \"via wttin.org\"",
+        wttin_visit: "Xem tất cả danh mục",
         official: "Trung Tâm Tài Nguyên Chính Thức",
         nashville_weather: "Cập Nhật Thời Tiết Mùa Đông",
         ohs_extreme: "OHS – Thời Tiết Khắc Nghiệt",
