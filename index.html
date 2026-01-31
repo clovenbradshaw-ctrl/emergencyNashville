@@ -4595,9 +4595,127 @@
       overflow-x: hidden;
       max-width: 100vw;
     }
+
+    /* Weather Alert Ticker - NashSevereWx */
+    .weather-ticker {
+      width: 100%;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1e3a5f 0%, #2d4a6f 100%);
+      padding: 10px 0;
+      border-bottom: 2px solid #f97316;
+      position: relative;
+      display: none;
+    }
+
+    .weather-ticker.active {
+      display: block;
+    }
+
+    .weather-ticker-label {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      background: #f97316;
+      color: white;
+      font-weight: 600;
+      font-size: 12px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 2;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .weather-ticker-label i {
+      font-size: 14px;
+    }
+
+    .weather-ticker-content {
+      display: inline-block;
+      white-space: nowrap;
+      animation: tickerScroll 80s linear infinite;
+      padding-left: 140px;
+    }
+
+    @keyframes tickerScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .weather-ticker-content a {
+      color: #e0e7ef;
+      font-size: 14px;
+      text-decoration: none;
+      padding: 0 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s ease;
+    }
+
+    .weather-ticker-content a:hover {
+      color: #ffffff;
+    }
+
+    .weather-ticker-content .ticker-avatar {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .weather-ticker-content .ticker-post-image {
+      height: 16px;
+      width: auto;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .weather-ticker-content .ticker-date {
+      color: #9bb8d4;
+      font-size: 12px;
+    }
+
+    .weather-ticker-loading {
+      color: #9bb8d4;
+      padding: 0 20px 0 150px;
+      font-size: 14px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .weather-ticker-label {
+        font-size: 10px;
+        padding: 0 8px;
+      }
+      .weather-ticker-content {
+        padding-left: 100px;
+      }
+      .weather-ticker-content a {
+        font-size: 13px;
+        padding: 0 30px;
+      }
+      .weather-ticker-loading {
+        padding-left: 110px;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Weather Alert Ticker - Outside notranslate so Google Translate can translate it -->
+  <div class="weather-ticker" id="weatherTicker">
+    <div class="weather-ticker-label">
+      <i class="ph ph-warning"></i>
+      <span>Weather Alert</span>
+    </div>
+    <div class="weather-ticker-content" id="weatherTickerContent">
+      <span class="weather-ticker-loading">Checking for weather alerts...</span>
+    </div>
+  </div>
+
   <div class="container notranslate" translate="no">
     <div class="top-bar">
       <div class="lang-select">
@@ -10423,6 +10541,120 @@
     // Expose functions globally
     window.setAlertsLanguage = setAlertsLanguage;
     window.toggleAlertsLangMenu = toggleAlertsLangMenu;
+  </script>
+
+  <!-- Weather Alert Ticker Script - NashSevereWx -->
+  <script>
+    (function() {
+      const NASHVILLE_COORDS = { lat: 36.1627, lon: -86.7816 };
+      const BLUESKY_HANDLE = 'nashseverewx.com';
+      const TICKER_CHECK_INTERVAL = 5 * 60 * 1000; // Check every 5 minutes
+
+      function formatTickerDate(dateStr) {
+        const date = new Date(dateStr);
+        const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+        const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+        return `${days[date.getDay()]} ${months[date.getMonth()]} ${date.getDate()}`;
+      }
+
+      async function checkNashvilleAlerts() {
+        try {
+          const response = await fetch(
+            `https://api.weather.gov/alerts/active?point=${NASHVILLE_COORDS.lat.toFixed(4)},${NASHVILLE_COORDS.lon.toFixed(4)}`,
+            {
+              headers: {
+                'User-Agent': '(NashvilleEmergencyResources, contact@example.com)',
+                'Accept': 'application/geo+json'
+              }
+            }
+          );
+          if (!response.ok) throw new Error('NWS API error');
+          const data = await response.json();
+          return data.features && data.features.length > 0;
+        } catch (err) {
+          console.error('Failed to check Nashville alerts:', err);
+          return false;
+        }
+      }
+
+      async function fetchBlueskyPosts() {
+        try {
+          const res = await fetch(`https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${BLUESKY_HANDLE}&limit=5`);
+          const data = await res.json();
+
+          return data.feed.map(item => {
+            const post = item.post;
+            const record = post.record;
+
+            let imageUrl = null;
+            if (post.embed?.images?.[0]?.thumb) {
+              imageUrl = post.embed.images[0].thumb;
+            } else if (post.embed?.media?.images?.[0]?.thumb) {
+              imageUrl = post.embed.media.images[0].thumb;
+            }
+
+            return {
+              text: record.text,
+              link: `https://bsky.app/profile/${BLUESKY_HANDLE}/post/${post.uri.split('/').pop()}`,
+              date: formatTickerDate(record.createdAt),
+              avatar: post.author.avatar || '',
+              image: imageUrl
+            };
+          });
+        } catch (err) {
+          console.error('Failed to fetch Bluesky posts:', err);
+          return [];
+        }
+      }
+
+      function renderTicker(posts) {
+        const tickerContent = document.getElementById('weatherTickerContent');
+        if (!tickerContent || posts.length === 0) return;
+
+        let html = '';
+        // Duplicate posts for seamless infinite scroll
+        for (let i = 0; i < 2; i++) {
+          posts.forEach(post => {
+            const avatar = post.avatar ? `<img class="ticker-avatar" src="${post.avatar}" alt="">` : '';
+            const postImg = post.image ? `<img class="ticker-post-image" src="${post.image}" alt="">` : '';
+            const text = post.text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            html += `<a href="${post.link}" target="_blank" rel="noopener noreferrer">${avatar}<span class="ticker-date">${post.date}</span> ${text}${postImg}</a>`;
+          });
+        }
+        tickerContent.innerHTML = html;
+      }
+
+      async function initWeatherTicker() {
+        const ticker = document.getElementById('weatherTicker');
+        const tickerContent = document.getElementById('weatherTickerContent');
+
+        if (!ticker || !tickerContent) return;
+
+        const hasAlerts = await checkNashvilleAlerts();
+
+        if (hasAlerts) {
+          ticker.classList.add('active');
+          const posts = await fetchBlueskyPosts();
+          if (posts.length > 0) {
+            renderTicker(posts);
+          } else {
+            tickerContent.innerHTML = '<span class="weather-ticker-loading">Weather alert active for Nashville - Follow @nashseverewx.com for updates</span>';
+          }
+        } else {
+          ticker.classList.remove('active');
+        }
+      }
+
+      // Initialize on page load
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initWeatherTicker);
+      } else {
+        initWeatherTicker();
+      }
+
+      // Periodically check for alerts
+      setInterval(initWeatherTicker, TICKER_CHECK_INTERVAL);
+    })();
   </script>
 
   <!-- Google Translate Widget (kept as fallback for unsupported languages) -->
