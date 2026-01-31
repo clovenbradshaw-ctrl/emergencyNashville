@@ -7971,6 +7971,11 @@
         const isUnread = !this.LocalState.isRead(a.id);
         const unreadClass = isUnread ? ' unread' : '';
 
+        // Use translated content if available, otherwise fall back to original
+        const displayTitle = a._translatedTitle || a.title;
+        const displayDesc = a._translatedDescription || a.description || '';
+        const shortDesc = displayDesc.substring(0, 200);
+
         return `
           <article class="alerts-card ${sev}${unreadClass}"
                    data-alert-id="${a.id}"
@@ -7984,11 +7989,11 @@
                 </div>
                 <span class="alerts-time-ago">${this.formatTimeAgo(a.timestamp)}</span>
               </div>
-              <h2 class="alerts-card-title">${a.title}</h2>
+              <h2 class="alerts-card-title">${displayTitle}</h2>
               ${a.location ? `<p class="alerts-card-meta"><strong>${a.location}</strong>${a.expires ? ` · Exp ${new Date(a.expires).toLocaleDateString()}` : ''}</p>` : ''}
-              <p class="alerts-card-description">${(a.description || '').substring(0, 200)}</p>
+              <p class="alerts-card-description">${shortDesc}</p>
               <div class="alerts-expand-content">
-                <p style="font-size:0.9rem;color:var(--alerts-text-secondary);line-height:1.6;margin-bottom:1rem;">${a.description || ''}</p>
+                <p style="font-size:0.9rem;color:var(--alerts-text-secondary);line-height:1.6;margin-bottom:1rem;">${displayDesc}</p>
                 ${a.url ? `<div class="alerts-expand-actions"><a href="${a.url}" target="_blank" class="alerts-expand-btn" onclick="event.stopPropagation()">View Source ↗</a></div>` : ''}
               </div>
               <div class="alerts-card-footer">
@@ -8008,7 +8013,7 @@
         }
       },
 
-      renderAlerts() {
+      async renderAlerts() {
         const container = document.getElementById('alertsFeedContainer');
         const prioritySection = document.getElementById('alertsPrioritySection');
         const priorityContent = document.getElementById('alertsPriorityContent');
@@ -8019,6 +8024,20 @@
         let displayAlerts = this.allAlerts;
         if (this.activeFilter && this.SOURCES[this.activeFilter]) {
           displayAlerts = this.SOURCES[this.activeFilter].alerts;
+        }
+
+        // Translate all alert titles and descriptions in parallel
+        const lang = getCurrentLang();
+        if (lang !== 'en' && displayAlerts.length > 0) {
+          const translationPromises = displayAlerts.map(async (alert) => {
+            const [translatedTitle, translatedDesc] = await Promise.all([
+              translateText(alert.title || '', lang),
+              translateText((alert.description || '').substring(0, 450), lang)
+            ]);
+            alert._translatedTitle = translatedTitle;
+            alert._translatedDescription = translatedDesc;
+          });
+          await Promise.all(translationPromises);
         }
 
         let priorityAlerts = [];
@@ -8149,6 +8168,22 @@
 
       // Update URL parameter
       updateURLWithLanguage(lang);
+
+      // Re-render alerts with new language translations
+      if (AlertsFeed && AlertsFeed.initialized) {
+        // Clear cached translations so they get re-translated
+        AlertsFeed.allAlerts.forEach(a => {
+          delete a._translatedTitle;
+          delete a._translatedDescription;
+        });
+        Object.values(AlertsFeed.SOURCES).forEach(source => {
+          source.alerts.forEach(a => {
+            delete a._translatedTitle;
+            delete a._translatedDescription;
+          });
+        });
+        AlertsFeed.renderAlerts();
+      }
     }
 
     function toggleAlertsLangMenu() {
