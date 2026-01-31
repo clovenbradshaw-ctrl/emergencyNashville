@@ -2335,12 +2335,14 @@
       font-weight: 600;
       color: #fff;
       margin-bottom: 0.25rem;
+      line-height: 1.4;
     }
 
     .wttin-banner-text p {
       font-size: 0.8125rem;
       color: #94a3b8;
       margin: 0;
+      line-height: 1.5;
     }
 
     .wttin-banner-link {
@@ -2369,15 +2371,27 @@
       font-size: 1rem;
     }
 
-    @media (max-width: 400px) {
+    @media (max-width: 520px) {
       .wttin-banner {
         flex-direction: column;
         align-items: stretch;
+        gap: 1rem;
+        padding: 1.25rem;
       }
 
       .wttin-banner-content {
         flex-direction: row;
         align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .wttin-banner-text h4 {
+        font-size: 1.0625rem;
+      }
+
+      .wttin-banner-text p {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
       }
 
       .wttin-banner-link {
@@ -2390,6 +2404,24 @@
     html.text-xlarge .wttin-banner {
       flex-direction: column;
       align-items: stretch;
+      gap: 1rem;
+      padding: 1.25rem;
+    }
+
+    html.text-large .wttin-banner-content,
+    html.text-xlarge .wttin-banner-content {
+      gap: 1rem;
+    }
+
+    html.text-large .wttin-banner-text h4,
+    html.text-xlarge .wttin-banner-text h4 {
+      font-size: 1.125rem;
+    }
+
+    html.text-large .wttin-banner-text p,
+    html.text-xlarge .wttin-banner-text p {
+      font-size: 0.9375rem;
+      margin-top: 0.25rem;
     }
 
     html.text-large .wttin-banner-link,
