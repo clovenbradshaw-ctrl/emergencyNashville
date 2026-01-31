@@ -2138,13 +2138,12 @@
     }
 
     .resource-item {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr auto;
       align-items: center;
       padding: 0.75rem 0;
       border-bottom: 1px solid #1f1f2a;
       gap: 0.75rem;
-      flex-wrap: wrap;
     }
 
     .resource-item:last-child {
@@ -2153,8 +2152,7 @@
     }
 
     .resource-info {
-      flex: 1 1 60%;
-      min-width: 250px;
+      min-width: 0;
     }
 
     .resource-info h5 {
@@ -2327,6 +2325,11 @@
       border-radius: 8px;
     }
 
+    .wttin-banner-text {
+      min-width: 0;
+      flex: 1;
+    }
+
     .wttin-banner-text h4 {
       font-size: 1rem;
       font-weight: 600;
@@ -2370,16 +2373,28 @@
       .wttin-banner {
         flex-direction: column;
         align-items: stretch;
-        text-align: center;
       }
 
       .wttin-banner-content {
-        flex-direction: column;
+        flex-direction: row;
+        align-items: flex-start;
       }
 
       .wttin-banner-link {
         justify-content: center;
       }
+    }
+
+    /* Stack WTTIN banner when text is large */
+    html.text-large .wttin-banner,
+    html.text-xlarge .wttin-banner {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    html.text-large .wttin-banner-link,
+    html.text-xlarge .wttin-banner-link {
+      justify-content: center;
     }
 
     /* Warming Locations Section - Time-bound emergency content */
@@ -2735,7 +2750,7 @@
     }
 
     [dir="rtl"] .resource-item {
-      flex-direction: row-reverse;
+      direction: rtl;
     }
 
     [dir="rtl"] .contact-row {
@@ -3961,24 +3976,9 @@
     }
 
     @media (max-width: 420px) {
-      .resource-item {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .resource-info {
-        width: 100%;
-      }
-
       .resource-info h5 {
         font-size: 0.8125rem;
         word-break: break-word;
-      }
-
-      .resource-phone {
-        width: 100%;
-        justify-content: center;
-        min-height: 48px;
       }
 
       .resource-meta {
@@ -4249,7 +4249,12 @@
           <span>News & Alerts</span>
           <span class="alert-count-badge" id="mainAlertCountBadge" style="display: none;">--</span>
         </button>
-        <button class="a11y-toggle" id="textSizeToggle" aria-label="Change text size" title="Change text size">Aa</button>
+        <button class="a11y-toggle" id="textSizeToggle" aria-label="Change text size" title="Change text size">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 18L9 6L15 18M5 14h8"/>
+            <path d="M19 7v10M16 10l3-3 3 3M16 14l3 3 3-3"/>
+          </svg>
+        </button>
       </div>
     </div>
 
