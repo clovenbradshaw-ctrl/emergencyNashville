@@ -44,20 +44,21 @@
       "context": {
         "table": "warming_centers",
         "data": {
+          "event_name": "Winter Storm Fern",
           "locations": [
-            { "name": "Southeast Regional Community Center", "address": "5260 Hickory Hollow Pkwy, Suite 202, Antioch, TN 37013", "lat": 36.0679, "lng": -86.6675, "hasFood": true },
-            { "name": "Madison Community Center", "address": "550 N Dupont Ave, Madison, TN 37115", "lat": 36.2573, "lng": -86.7093, "hasFood": true },
-            { "name": "Nashville Fairgrounds", "address": "401 Wingrove St, Nashville, TN 37203", "lat": 36.1409, "lng": -86.7634, "hasFood": true },
-            { "name": "Bellevue Community Center", "address": "7638A Highway 70 S, Nashville, TN 37221", "lat": 36.0771, "lng": -86.9208, "hasFood": true }
+            { "name": "Southeast Regional Community Center", "address": "5260 Hickory Hollow Pkwy, Suite 202, Antioch, TN 37013", "lat": 36.0679, "lng": -86.6675, "hours": "24/7 until further notice", "type": "24hr", "hasFood": true, "services": "Overnight stays, food, warming" },
+            { "name": "Madison Community Center", "address": "550 N Dupont Ave, Madison, TN 37115", "lat": 36.2573, "lng": -86.7093, "hours": "24/7 until further notice", "type": "24hr", "hasFood": true, "services": "Overnight stays, food, warming" },
+            { "name": "Nashville Fairgrounds", "address": "401 Wingrove St, Nashville, TN 37203", "lat": 36.1409, "lng": -86.7634, "hours": "24/7 until further notice", "type": "24hr", "hasFood": true, "services": "Overnight stays, food, warming" },
+            { "name": "Bellevue Community Center", "address": "7638A Highway 70 S, Nashville, TN 37221", "lat": 36.0771, "lng": -86.9208, "hours": "24/7 until further notice", "type": "24hr", "hasFood": true, "services": "Overnight stays, food, warming" }
           ]
         },
         "source_url": "https://www.nashville.gov/departments/emergency-management/news/new-warming-location-opens-at-bellevue-community-center"
       },
       "frame": {
         "verified_date": "2026-01-29",
-        "expiry_days": 3,
+        "expires_at": "2026-02-03T23:59:59-06:00",
         "actor": "admin",
-        "reason": "Winter storm warming center locations"
+        "reason": "Winter storm warming center locations - 24/7 Metro shelters"
       }
     },
     {
@@ -122,10 +123,12 @@
       "context": {
         "table": "warming_centers",
         "data": {
-          "name": "Bridgestone Arena (11:30am-4:30pm)",
+          "name": "Bridgestone Arena",
           "address": "501 Broadway, Nashville, TN 37203",
           "lat": 36.1592,
           "lng": -86.7785,
+          "hours": "11:30am-4:30pm (Fri Jan 31)",
+          "type": "limited",
           "hasFood": true,
           "services": "Device charging, water refills, hot meals"
         },
@@ -133,7 +136,7 @@
       },
       "frame": {
         "verified_date": "2026-01-30",
-        "expiry_days": 1,
+        "expires_at": "2026-02-01T00:00:00-06:00",
         "actor": "admin",
         "reason": "Nashville Predators opening Bridgestone Arena as community resource center during winter storm"
       }
@@ -143,26 +146,28 @@
       "ts": "2026-01-30T16:00:00-06:00",
       "op": "INS",
       "target": {
-        "id": "warming_center_covenant_cross",
+        "id": "warming_center_allsorts_lobby",
         "type": "warming_center"
       },
       "context": {
         "table": "warming_centers",
         "data": {
-          "name": "Covenant of the Cross / Madison Co-op",
+          "name": "The Allsorts Lobby (Madison Co-op)",
           "address": "752 Madison Square, Madison, TN 37115",
           "lat": 36.2557,
           "lng": -86.7062,
+          "hours": "5:30pm-8:30pm (when below 40°)",
+          "type": "community",
           "hasFood": true,
-          "services": "Daily lunch (1pm), dinner (5:30-8pm), Metro shuttle pickup stop"
+          "services": "Dinner ~6pm, shuttle to overnight shelter ~7pm"
         },
-        "source_url": "Nashville Scene, Metro Nashville pilot shuttle program"
+        "source_url": "theallsortslobby.com, Nashville Scene"
       },
       "frame": {
-        "verified_date": "2026-01-30",
-        "expiry_days": 3,
+        "verified_date": "2026-01-31",
+        "expires_at": "2026-02-03T23:59:59-06:00",
         "actor": "admin",
-        "reason": "LGBTQ+-affirming church with Covenant Cupboard food pantry providing expanded meal service during winter emergency"
+        "reason": "LGBTQ+-affirming warming shelter at Madison Community Co-Op - potluck dinner service with shuttle connection to overnight shelters"
       }
     },
     {
@@ -176,18 +181,20 @@
       "context": {
         "table": "warming_centers",
         "data": {
-          "name": "Riverside Commons (12pm-7pm Sat 1/31)",
+          "name": "Riverside Commons",
           "address": "1211 Riverside Drive, Nashville, TN 37206",
           "lat": 36.1875,
           "lng": -86.7450,
+          "hours": "12pm-7pm (Sat Feb 1)",
+          "type": "limited",
           "hasFood": true,
-          "services": "Heat, power stations, food, WiFi, free parking, WeGo #4 to Porter/Greenwood, Music City Jazz Jam 2-4pm"
+          "services": "Heat, power stations, food, WiFi, free parking, WeGo #4 to Porter/Greenwood, Jazz Jam 2-4pm"
         },
         "source_url": "RCommons.org"
       },
       "frame": {
-        "verified_date": "2026-01-30",
-        "expiry_days": 2,
+        "verified_date": "2026-01-31",
+        "expires_at": "2026-02-02T00:00:00-06:00",
         "actor": "admin",
         "reason": "Community warming station in East Nashville - accepting donations (shelf-stable food, prepared food, warm clothing/blankets)"
       }
