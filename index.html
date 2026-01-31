@@ -3469,7 +3469,7 @@
       <div class="status-card">
         <h4 data-i18n="forecast">Forecast</h4>
         <div class="status-value" id="statusForecastTemp">--</div>
-        <div class="status-sub" id="statusForecastDesc">Loading...</div>
+        <div class="status-sub" id="statusForecastDesc">Enter ZIP below</div>
         <a href="#forecastSection" class="expand-link" data-i18n="status_5day">5-day details →</a>
       </div>
     </div>
@@ -4302,16 +4302,21 @@
       }
     }
 
+    let saveTranslationCacheTimeout = null;
     function saveTranslationCache() {
-      try {
-        const data = Object.fromEntries(translationCache);
-        localStorage.setItem(CACHE_KEY, JSON.stringify({
-          data,
-          timestamp: Date.now()
-        }));
-      } catch (e) {
-        console.warn('Failed to save translation cache:', e);
-      }
+      // Debounce saves to avoid excessive localStorage writes
+      if (saveTranslationCacheTimeout) clearTimeout(saveTranslationCacheTimeout);
+      saveTranslationCacheTimeout = setTimeout(() => {
+        try {
+          const data = Object.fromEntries(translationCache);
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            data,
+            timestamp: Date.now()
+          }));
+        } catch (e) {
+          console.warn('Failed to save translation cache:', e);
+        }
+      }, 1000);
     }
 
     // Load cache on startup
@@ -5531,15 +5536,27 @@
       return t('weather_' + code) || t('weather_unknown');
     }
 
+    // Cache ZIP code lookups to avoid redundant geocoding API calls
+    const zipCoordinateCache = new Map();
+
     async function getCoordinates(zip) {
+      // Return cached result if available
+      if (zipCoordinateCache.has(zip)) {
+        return zipCoordinateCache.get(zip);
+      }
+
       const response = await fetch(`https://nominatim.openstreetmap.org/search?postalcode=${zip}&country=US&format=json&limit=1`);
       const data = await response.json();
       if (data.length === 0) throw new Error('Location not found');
-      return {
+      const coords = {
         lat: parseFloat(data[0].lat),
         lon: parseFloat(data[0].lon),
         name: data[0].display_name.split(',').slice(0, 2).join(',').trim()
       };
+
+      // Cache the result
+      zipCoordinateCache.set(zip, coords);
+      return coords;
     }
 
     async function getWeather(lat, lon) {
@@ -5686,19 +5703,26 @@
         return (severityOrder[sA] ?? 4) - (severityOrder[sB] ?? 4);
       });
 
-      for (let index = 0; index < alerts.length; index++) {
-        const alert = alerts[index];
+      // Translate all events and headlines in parallel for faster loading
+      const translationPromises = alerts.map(alert => {
         const props = alert.properties;
-        const severity = props.severity || 'Unknown';
         const event = props.event || 'Weather Alert';
         const headline = props.headline || event;
+        return Promise.all([
+          translateText(event, lang),
+          translateText(headline, lang)
+        ]);
+      });
+      const translations = await Promise.all(translationPromises);
+
+      alerts.forEach((alert, index) => {
+        const props = alert.properties;
+        const severity = props.severity || 'Unknown';
         const description = props.description || '';
         const effective = props.effective;
         const expires = props.expires;
 
-        // Translate event name and headline
-        const displayEvent = await translateText(event, lang);
-        const displayHeadline = await translateText(headline, lang);
+        const [displayEvent, displayHeadline] = translations[index];
 
         const banner = document.createElement('div');
         banner.className = `alert-banner ${getSeverityClass(severity)}`;
@@ -5729,7 +5753,7 @@
         banner.dataset.originalDescription = description;
 
         container.appendChild(banner);
-      }
+      });
     }
 
     function formatOutageTime(timestamp) {
@@ -6600,6 +6624,11 @@
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
 
+        // Fetch road closures on first map view (lazy load)
+        if (typeof fetchRoadClosuresIfNeeded === 'function') {
+          fetchRoadClosuresIfNeeded();
+        }
+
         // Initialize or resize the full map
         setTimeout(() => {
           initFullMap();
@@ -6624,22 +6653,31 @@
       }
     });
 
-    // Initialize preview map when page loads - fetch outages immediately for status row
+    // Track if road closures have been fetched (deferred until map is viewed)
+    let roadClosuresFetched = false;
+
+    async function fetchRoadClosuresIfNeeded() {
+      if (!roadClosuresFetched) {
+        roadClosuresFetched = true;
+        await fetchRoadClosures();
+      }
+    }
+
+    // Initialize preview map when page loads - only fetch outages (for status row)
+    // Road closures are deferred until user views the map
     (async () => {
       initPreviewMap();
-      // Fetch outages first (priority for status row), then road closures
       await fetchMapOutages();
-      await fetchRoadClosures();
     })();
 
-    // Refresh map data every 2 minutes (both outages and road closures)
-    setInterval(async () => {
-      await fetchRoadClosures();
-      await fetchMapOutages();
+    // Refresh outage data every 2 minutes (road closures only if already fetched)
+    setInterval(() => {
+      fetchMapOutages();
+      if (roadClosuresFetched) fetchRoadClosures();
     }, 120000);
 
-    // Load forecast on page load
-    fetchForecast();
+    // Weather forecast loads only when user enters ZIP and clicks fetch button
+    // (No automatic fetch - requires user interaction)
 
     // ===========================================
     // UX REVAMP - Tab Switching
@@ -6662,8 +6700,12 @@
         trackActivity('tab_switch', { tab: tabId });
 
         // Reinitialize map if switching to map tab
-        if (tabId === 'resource-map' && typeof previewMap !== 'undefined' && previewMap) {
-          setTimeout(() => previewMap.invalidateSize(), 100);
+        if (tabId === 'resource-map') {
+          // Fetch road closures on first map view (lazy load)
+          fetchRoadClosuresIfNeeded();
+          if (typeof previewMap !== 'undefined' && previewMap) {
+            setTimeout(() => previewMap.invalidateSize(), 100);
+          }
         }
       });
     });
