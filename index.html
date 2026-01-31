@@ -4310,6 +4310,25 @@
       <span id="weatherAlertExpiry"></span>
     </div>
 
+    <!-- Forecast Section -->
+    <section class="forecast-section" id="forecastSection">
+      <div class="forecast-header">
+        <div class="section-title" data-i18n="forecast">5-Day Forecast</div>
+        <div class="zip-input-wrapper">
+          <i class="ph ph-map-pin"></i>
+          <input type="text" id="zipInput" placeholder="37206" maxlength="5" value="37206" inputmode="numeric" pattern="[0-9]*">
+          <button id="fetchBtn" data-i18n="update_btn">Go</button>
+        </div>
+      </div>
+      <p class="location-display" id="locationDisplay"></p>
+      <div class="forecast-grid" id="forecastGrid">
+        <div class="forecast-loading">
+          <i class="ph ph-cloud"></i>
+          <p data-i18n="loading_forecast">Loading forecast...</p>
+        </div>
+      </div>
+    </section>
+
     <!-- Tab Bar -->
     <div class="tab-bar">
       <button class="tab-btn active" data-tab="find-help" data-i18n="tab_find_help">Find Help</button>
@@ -5370,25 +5389,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Forecast Section (collapsible) -->
-    <section class="forecast-section" id="forecastSection" style="margin-top: 1.5rem;">
-      <div class="forecast-header">
-        <div class="section-title" data-i18n="forecast">5-Day Forecast</div>
-        <div class="zip-input-wrapper">
-          <i class="ph ph-map-pin"></i>
-          <input type="text" id="zipInput" placeholder="37206" maxlength="5" value="37206" inputmode="numeric" pattern="[0-9]*">
-          <button id="fetchBtn" data-i18n="update_btn">Go</button>
-        </div>
-      </div>
-      <p class="location-display" id="locationDisplay"></p>
-      <div class="forecast-grid" id="forecastGrid">
-        <div class="forecast-loading">
-          <i class="ph ph-cloud"></i>
-          <p data-i18n="loading_forecast">Loading forecast...</p>
-        </div>
-      </div>
-    </section>
 
     <!-- Weather Alerts Section (kept for detailed alerts) -->
     <section class="section" style="margin-top: 1rem;">
