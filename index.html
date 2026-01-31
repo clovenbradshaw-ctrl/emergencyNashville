@@ -2227,6 +2227,34 @@
       text-decoration: underline;
     }
 
+    /* WTTIN Category Link (bottom of intent cards) */
+    .wttin-category-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      margin-top: 0.75rem;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 8px;
+      color: #60a5fa;
+      text-decoration: none;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .wttin-category-link:hover {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+      border-color: rgba(59, 130, 246, 0.5);
+      text-decoration: none;
+    }
+
+    .wttin-category-link i {
+      font-size: 0.875rem;
+    }
+
     /* Featured WTTIN Resource Banner */
     .wttin-banner {
       background: linear-gradient(135deg, #1e3a5f 0%, #0f2744 100%);
@@ -3495,12 +3523,12 @@
         <div class="wttin-banner-content">
           <div class="wttin-banner-icon">📖</div>
           <div class="wttin-banner-text">
-            <h4 data-i18n="wttin_title">Where to Turn in Nashville</h4>
-            <p data-i18n="wttin_desc">Complete directory of 200+ local resources</p>
+            <h4 data-i18n="wttin_title">Powered by Where to Turn in Nashville</h4>
+            <p data-i18n="wttin_desc">Resources below link to WTTIN's comprehensive directory</p>
           </div>
         </div>
         <a href="https://wttin.org/" class="wttin-banner-link" target="_blank" rel="noopener noreferrer">
-          <span data-i18n="wttin_visit">Visit wttin.org</span>
+          <span data-i18n="wttin_visit">Browse all categories</span>
           <i class="ph ph-arrow-square-out"></i>
         </a>
       </div>
@@ -3559,6 +3587,10 @@
               </div>
               <a href="tel:615-938-5500" class="resource-phone">📞 615-938-5500</a>
             </div>
+            <a href="https://wttin.org/emergency-shelter/" class="wttin-category-link" target="_blank" rel="noopener noreferrer">
+              <span data-i18n="wttin_more_shelter">More shelter resources at WTTIN</span>
+              <i class="ph ph-arrow-square-out"></i>
+            </a>
           </div>
         </div>
 
@@ -3593,6 +3625,10 @@
               </div>
               <a href="https://dreamstreetstn.com/mobilefood" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
             </div>
+            <a href="https://wttin.org/food/" class="wttin-category-link" target="_blank" rel="noopener noreferrer">
+              <span data-i18n="wttin_more_food">More food resources at WTTIN</span>
+              <i class="ph ph-arrow-square-out"></i>
+            </a>
           </div>
         </div>
 
@@ -3624,6 +3660,10 @@
               </div>
               <a href="https://nespower.com/outages" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> View map</a>
             </div>
+            <a href="https://wttin.org/rent-utilities-assistance/" class="wttin-category-link" target="_blank" rel="noopener noreferrer">
+              <span data-i18n="wttin_more_utilities">Utility assistance at WTTIN</span>
+              <i class="ph ph-arrow-square-out"></i>
+            </a>
           </div>
         </div>
 
@@ -3657,15 +3697,6 @@
             </div>
             <div class="resource-item">
               <div class="resource-info">
-                <h5>Where to Turn in Nashville</h5>
-                <div class="resource-meta">
-                  <span class="resource-hours" data-i18n="resource_directory">Full resource directory</span>
-                </div>
-              </div>
-              <a href="https://wttin.org/" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> wttin.org</a>
-            </div>
-            <div class="resource-item">
-              <div class="resource-info">
                 <h5>Open Table Nashville</h5>
                 <div class="resource-meta">
                   <span class="resource-hours">Street outreach, housing navigation</span>
@@ -3679,6 +3710,10 @@
               </div>
               <a href="https://www.wnpt.org/agingmatters/unhoused/" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Website</a>
             </div>
+            <a href="https://wttin.org/" class="wttin-category-link" target="_blank" rel="noopener noreferrer">
+              <span data-i18n="wttin_browse_all">Browse all WTTIN categories</span>
+              <i class="ph ph-arrow-square-out"></i>
+            </a>
           </div>
         </div>
 
@@ -3704,6 +3739,10 @@
               </div>
               <a href="tel:615-270-9252" class="resource-phone">📞 615-270-9252</a>
             </div>
+            <a href="https://wttin.org/immigrants-refugees/" class="wttin-category-link" target="_blank" rel="noopener noreferrer">
+              <span data-i18n="wttin_more_immigrant">More immigrant resources at WTTIN</span>
+              <i class="ph ph-arrow-square-out"></i>
+            </a>
           </div>
         </div>
 
@@ -3735,6 +3774,57 @@
               </div>
               <a href="https://las.org/find-help/ertc/" class="resource-link" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> Apply</a>
             </div>
+            <a href="https://wttin.org/legal-aid/" class="wttin-category-link" target="_blank" rel="noopener noreferrer">
+              <span data-i18n="wttin_more_legal">More legal resources at WTTIN</span>
+              <i class="ph ph-arrow-square-out"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Health & Wellness Card -->
+        <div class="intent-card" data-intent="health">
+          <div class="intent-header">
+            <div class="intent-left">
+              <div class="intent-icon">🏥</div>
+              <div>
+                <div class="intent-title" data-i18n="intent_health">Health & wellness</div>
+                <div class="intent-count" data-i18n="intent_health_count">Medical, mental health, crisis lines</div>
+              </div>
+            </div>
+            <span class="intent-arrow">›</span>
+          </div>
+          <div class="resource-list">
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5 data-i18n="crisis_line">Tennessee Crisis Line</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours" data-i18n="hours_24hr">24/7 mental health support</span>
+                </div>
+              </div>
+              <a href="tel:988" class="resource-phone">📞 988</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Matthew Walker Comprehensive Health</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Sliding scale fees</span>
+                </div>
+              </div>
+              <a href="tel:615-327-9400" class="resource-phone">📞 615-327-9400</a>
+            </div>
+            <div class="resource-item">
+              <div class="resource-info">
+                <h5>Neighborhood Health</h5>
+                <div class="resource-meta">
+                  <span class="resource-hours">Community health centers</span>
+                </div>
+              </div>
+              <a href="tel:615-227-3000" class="resource-phone">📞 615-227-3000</a>
+            </div>
+            <a href="https://wttin.org/medical-care/" class="wttin-category-link" target="_blank" rel="noopener noreferrer">
+              <span data-i18n="wttin_more_health">More health resources at WTTIN</span>
+              <i class="ph ph-arrow-square-out"></i>
+            </a>
           </div>
         </div>
 
