@@ -5438,6 +5438,62 @@
     }
 
     // Weather Forecast Functionality
+    // Pre-cached Nashville area ZIP codes to skip geocoding API call
+    const nashvilleZipCoords = {
+      '37201': { lat: 36.1627, lon: -86.7816, name: 'Nashville, TN' },
+      '37203': { lat: 36.1509, lon: -86.7951, name: 'Nashville, TN' },
+      '37204': { lat: 36.1048, lon: -86.7905, name: 'Nashville, TN' },
+      '37205': { lat: 36.1193, lon: -86.8578, name: 'Nashville, TN' },
+      '37206': { lat: 36.1848, lon: -86.7340, name: 'Nashville, TN' },
+      '37207': { lat: 36.2219, lon: -86.7545, name: 'Nashville, TN' },
+      '37208': { lat: 36.1832, lon: -86.8062, name: 'Nashville, TN' },
+      '37209': { lat: 36.1533, lon: -86.8666, name: 'Nashville, TN' },
+      '37210': { lat: 36.1330, lon: -86.7386, name: 'Nashville, TN' },
+      '37211': { lat: 36.0644, lon: -86.7358, name: 'Nashville, TN' },
+      '37212': { lat: 36.1319, lon: -86.8025, name: 'Nashville, TN' },
+      '37213': { lat: 36.1676, lon: -86.7677, name: 'Nashville, TN' },
+      '37214': { lat: 36.1770, lon: -86.6644, name: 'Nashville, TN' },
+      '37215': { lat: 36.0850, lon: -86.8290, name: 'Nashville, TN' },
+      '37216': { lat: 36.2117, lon: -86.7232, name: 'Nashville, TN' },
+      '37217': { lat: 36.1067, lon: -86.6615, name: 'Nashville, TN' },
+      '37218': { lat: 36.2079, lon: -86.8470, name: 'Nashville, TN' },
+      '37219': { lat: 36.1661, lon: -86.7832, name: 'Nashville, TN' },
+      '37220': { lat: 36.0658, lon: -86.7878, name: 'Nashville, TN' },
+      '37221': { lat: 36.0549, lon: -86.9679, name: 'Nashville, TN' },
+      '37013': { lat: 36.0397, lon: -86.6536, name: 'Antioch, TN' },
+      '37027': { lat: 35.9990, lon: -86.7889, name: 'Brentwood, TN' },
+      '37064': { lat: 35.9245, lon: -86.8689, name: 'Franklin, TN' },
+      '37072': { lat: 36.3101, lon: -86.7019, name: 'Goodlettsville, TN' },
+      '37076': { lat: 36.1769, lon: -86.5939, name: 'Hermitage, TN' },
+      '37115': { lat: 36.2584, lon: -86.7087, name: 'Madison, TN' },
+      '37138': { lat: 36.2429, lon: -86.6188, name: 'Old Hickory, TN' },
+      '37189': { lat: 36.3446, lon: -86.7897, name: 'Whites Creek, TN' },
+      '37228': { lat: 36.1904, lon: -86.8044, name: 'Nashville, TN' }
+    };
+
+    // localStorage cache keys and TTL (15 minutes)
+    const FORECAST_CACHE_KEY = 'nashville-forecast-cache';
+    const FORECAST_CACHE_TTL = 15 * 60 * 1000;
+
+    function getCachedForecast(zip) {
+      try {
+        const cached = localStorage.getItem(FORECAST_CACHE_KEY);
+        if (!cached) return null;
+        const { data, zip: cachedZip, timestamp } = JSON.parse(cached);
+        if (cachedZip !== zip) return null;
+        if (Date.now() - timestamp > FORECAST_CACHE_TTL) return null;
+        return data;
+      } catch { return null; }
+    }
+
+    function setCachedForecast(zip, data) {
+      try {
+        localStorage.setItem(FORECAST_CACHE_KEY, JSON.stringify({
+          data, zip, timestamp: Date.now()
+        }));
+      } catch { /* localStorage full or unavailable */ }
+    }
+
     const weatherIcons = {
       0: 'ph-sun', 1: 'ph-sun', 2: 'ph-cloud-sun', 3: 'ph-cloud',
       45: 'ph-cloud-fog', 48: 'ph-cloud-fog',
@@ -5975,6 +6031,19 @@
         return;
       }
 
+      // Check localStorage cache first for instant display
+      const cached = getCachedForecast(zip);
+      if (cached) {
+        // Show cached data immediately
+        cachedWeatherData = cached.weather;
+        cachedUserCoords = cached.coords;
+        document.getElementById('locationDisplay').textContent = cached.coords.name;
+        renderForecast(cached.weather);
+        // Refresh in background (don't await)
+        fetchForecastFresh(zip, true);
+        return;
+      }
+
       document.getElementById('forecastGrid').innerHTML = `
         <div class="forecast-loading">
           <i class="ph ph-cloud"></i>
@@ -5982,6 +6051,10 @@
         </div>
       `;
 
+      await fetchForecastFresh(zip, false);
+    }
+
+    async function fetchForecastFresh(zip, isBackground) {
       // Defer alerts - only show if user clicks to expand
       const alertsContainer = document.getElementById('alertsContainer');
       if (alertsContainer && !cachedAlertsData) {
@@ -6016,21 +6089,32 @@
       }
 
       try {
-        const coords = await getCoordinates(zip);
+        // Use pre-cached Nashville coords if available (skips geocoding API)
+        let coords;
+        if (nashvilleZipCoords[zip]) {
+          coords = nashvilleZipCoords[zip];
+        } else {
+          coords = await getCoordinates(zip);
+        }
         document.getElementById('locationDisplay').textContent = coords.name;
 
-        // Fetch only weather initially - alerts deferred until user clicks
+        // Fetch weather data
         const weather = await getWeather(coords.lat, coords.lon);
 
         // Cache data for re-rendering on language change
         cachedWeatherData = weather;
         cachedUserCoords = coords;
 
+        // Save to localStorage for faster future loads
+        setCachedForecast(zip, { weather, coords });
+
         renderForecast(weather);
       } catch (err) {
-        cachedWeatherData = null;
-        cachedUserCoords = null;
-        showForecastError(t('forecast_error'));
+        if (!isBackground) {
+          cachedWeatherData = null;
+          cachedUserCoords = null;
+          showForecastError(t('forecast_error'));
+        }
         console.error(err);
       }
     }
