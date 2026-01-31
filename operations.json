@@ -56,7 +56,7 @@
       },
       "frame": {
         "verified_date": "2026-01-29",
-        "expires_at": "2026-02-03T23:59:59-06:00",
+        "expires_at": "2026-02-01T23:59:59-06:00",
         "actor": "admin",
         "reason": "Winter storm warming center locations - 24/7 Metro shelters"
       }
@@ -165,7 +165,7 @@
       },
       "frame": {
         "verified_date": "2026-01-31",
-        "expires_at": "2026-02-03T23:59:59-06:00",
+        "expires_at": "2026-02-01T23:59:59-06:00",
         "actor": "admin",
         "reason": "LGBTQ+-affirming warming shelter at Madison Community Co-Op - potluck dinner service with shuttle connection to overnight shelters"
       }
