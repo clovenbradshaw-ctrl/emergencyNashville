@@ -9190,6 +9190,44 @@
     }, 900000); // 15 minutes
 
     // ===========================================
+    // MAP RESIZE & VISIBILITY HANDLERS
+    // ===========================================
+    // Handle window resize to prevent map rendering issues
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (typeof previewMap !== 'undefined' && previewMap) {
+          previewMap.invalidateSize();
+        }
+        if (typeof sideBySideMap !== 'undefined' && sideBySideMap) {
+          sideBySideMap.invalidateSize();
+        }
+        if (typeof fullMap !== 'undefined' && fullMap) {
+          fullMap.invalidateSize();
+        }
+      }, 150);
+    });
+
+    // Handle page visibility changes to prevent background rendering issues
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        // Page became visible - invalidate map sizes
+        setTimeout(() => {
+          if (typeof previewMap !== 'undefined' && previewMap) {
+            previewMap.invalidateSize();
+          }
+          if (typeof sideBySideMap !== 'undefined' && sideBySideMap) {
+            sideBySideMap.invalidateSize();
+          }
+          if (typeof fullMap !== 'undefined' && fullMap) {
+            fullMap.invalidateSize();
+          }
+        }, 100);
+      }
+    });
+
+    // ===========================================
     // UX REVAMP - Tab Switching
     // ===========================================
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -9215,6 +9253,9 @@
           fetchRoadClosuresIfNeeded();
           if (typeof previewMap !== 'undefined' && previewMap) {
             setTimeout(() => previewMap.invalidateSize(), 100);
+          }
+          if (typeof sideBySideMap !== 'undefined' && sideBySideMap) {
+            setTimeout(() => sideBySideMap.invalidateSize(), 100);
           }
         }
       });
