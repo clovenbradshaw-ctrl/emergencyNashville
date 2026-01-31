@@ -2582,6 +2582,44 @@
       color: #fff;
     }
 
+    .warming-locations-disclaimer {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 0.875rem;
+      margin-top: 0.75rem;
+      background: rgba(251, 191, 36, 0.15);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      border-radius: 0.5rem;
+      font-size: 0.8rem;
+      color: #fbbf24;
+      flex-wrap: wrap;
+    }
+
+    .warming-locations-disclaimer .ph-warning {
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .warming-locations-disclaimer .warming-verify-link {
+      margin-left: auto;
+      font-weight: 500;
+    }
+
+    .warming-locations-section.collapsed .warming-locations-disclaimer {
+      display: none;
+    }
+
+    .critical-disclaimer {
+      margin-top: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      background: rgba(251, 191, 36, 0.15);
+      border-radius: 0.375rem;
+      font-size: 0.75rem;
+      color: #fbbf24;
+      text-align: center;
+    }
+
     @media (max-width: 400px) {
       .warming-locations-header {
         flex-direction: column;
@@ -3753,8 +3791,9 @@
       </div>
       <div class="critical-actions">
         <a href="tel:615-862-6391" class="action-btn primary">📞 615-862-6391</a>
-        <a href="https://www.nashville.gov/departments/office-homeless-services/get-connected/extreme-weather" class="action-btn secondary" target="_blank" rel="noopener noreferrer">ℹ️ <span data-i18n="details">Details</span></a>
+        <a href="https://www.nashville.gov/departments/government/winter-storm-fern-resources" class="action-btn secondary" target="_blank" rel="noopener noreferrer">ℹ️ <span data-i18n="details">Details</span></a>
       </div>
+      <div class="critical-disclaimer" data-i18n="shelter_disclaimer">⚠️ Info may change – always double-check on Metro Nashville's official site</div>
     </div>
 
     <!-- Compact Status Row -->
@@ -3829,9 +3868,17 @@
           <!-- Populated by JavaScript -->
         </div>
 
+        <div class="warming-locations-disclaimer">
+          <i class="ph ph-warning"></i>
+          <span data-i18n="warming_disclaimer">Info may change. Always check Metro Nashville's site for up-to-date shelter info.</span>
+          <a href="https://www.nashville.gov/departments/government/winter-storm-fern-resources" class="warming-verify-link" target="_blank" rel="noopener noreferrer">
+            <span data-i18n="warming_verify_metro">Check Metro site</span>
+            <i class="ph ph-arrow-square-out"></i>
+          </a>
+        </div>
         <div class="warming-locations-footer">
           <span class="warming-pets-note" data-i18n="warming_pets">Pets allowed at Metro shelters</span>
-          <a href="https://www.nashville.gov/departments/emergency-management" class="warming-verify-link" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.nashville.gov/departments/government/winter-storm-fern-resources" class="warming-verify-link" target="_blank" rel="noopener noreferrer">
             <span data-i18n="warming_verify">Verify on Nashville.gov</span>
             <i class="ph ph-arrow-square-out"></i>
           </a>
@@ -5627,6 +5674,9 @@
         map_warming_unconfirmed: "Unconfirmed - verify status",
         map_warming_food: "Food available 24/7",
         map_warming_verify_link: "Verify on Nashville.gov",
+        warming_disclaimer: "Info may change. Always check Metro Nashville's site for up-to-date shelter info.",
+        warming_verify_metro: "Check Metro site",
+        shelter_disclaimer: "⚠️ Info may change – always double-check on Metro Nashville's official site",
         shelter_alert_date: "January 30, 2026 Update",
         shelter_alert_title: "Metro Emergency Overflow Shelter",
         shelter_alert_status: "Open 24 Hours",
@@ -5820,6 +5870,9 @@
         map_warming_unconfirmed: "Sin confirmar - verificar estado",
         map_warming_food: "Comida disponible 24/7",
         map_warming_verify_link: "Verificar en Nashville.gov",
+        warming_disclaimer: "La información puede cambiar. Siempre consulte el sitio de Metro Nashville para información actualizada sobre refugios.",
+        warming_verify_metro: "Ver sitio de Metro",
+        shelter_disclaimer: "⚠️ La información puede cambiar – siempre verifique en el sitio oficial de Metro Nashville",
         shelter_alert_date: "Actualización 30 de enero de 2026",
         shelter_alert_title: "Refugio de Desbordamiento de Emergencia de Metro",
         shelter_alert_status: "Abierto 24 Horas",
@@ -6013,6 +6066,9 @@
         map_warming_unconfirmed: "غير مؤكد - تحقق من الحالة",
         map_warming_food: "طعام متاح 24/7",
         map_warming_verify_link: "تحقق على Nashville.gov",
+        warming_disclaimer: "قد تتغير المعلومات. تحقق دائماً من موقع مترو ناشفيل للحصول على أحدث معلومات المأوى.",
+        warming_verify_metro: "تحقق من موقع مترو",
+        shelter_disclaimer: "⚠️ قد تتغير المعلومات – تحقق دائماً من موقع مترو ناشفيل الرسمي",
         shelter_alert_date: "تحديث 30 يناير 2026",
         shelter_alert_title: "مأوى الطوارئ الفائض في مترو",
         shelter_alert_status: "مفتوح 24 ساعة",
@@ -6206,6 +6262,9 @@
         map_warming_unconfirmed: "نەدڵنیا - دۆخەکە پشتڕاست بکەرەوە",
         map_warming_food: "خواردن بەردەستە 24/7",
         map_warming_verify_link: "پشتڕاستکردنەوە لە Nashville.gov",
+        warming_disclaimer: "زانیاری دەکرێت بگۆڕێت. هەمیشە ماڵپەڕی مترۆ ناشڤیل بپشکنە بۆ زانیاری نوێی پەناگا.",
+        warming_verify_metro: "ماڵپەڕی مترۆ ببینە",
+        shelter_disclaimer: "⚠️ زانیاری دەکرێت بگۆڕێت – هەمیشە لە ماڵپەڕی فەرمی مترۆ ناشڤیل پشتڕاست بکەرەوە",
         shelter_alert_date: "نوێکردنەوەی 30ی کانوونی دووەم 2026",
         shelter_alert_title: "پەناگای کاتی فریاکەوتنی میترۆ",
         shelter_alert_status: "24 کاتژمێر کراوەیە",
@@ -6399,6 +6458,9 @@
         map_warming_unconfirmed: "Chưa xác nhận - kiểm tra trạng thái",
         map_warming_food: "Có thức ăn 24/7",
         map_warming_verify_link: "Xác minh tại Nashville.gov",
+        warming_disclaimer: "Thông tin có thể thay đổi. Luôn kiểm tra trang web Metro Nashville để có thông tin nơi trú ẩn mới nhất.",
+        warming_verify_metro: "Xem trang Metro",
+        shelter_disclaimer: "⚠️ Thông tin có thể thay đổi – luôn kiểm tra lại trên trang chính thức của Metro Nashville",
         shelter_alert_date: "Cập nhật ngày 30 tháng 1, 2026",
         shelter_alert_title: "Nơi Trú Ẩn Khẩn Cấp Tràn Lan Metro",
         shelter_alert_status: "Mở 24 Giờ",
