@@ -7014,21 +7014,33 @@
       }
     }
 
-    // Initialize preview map when page loads - only fetch outages (for status row)
+    // Initialize page - weather forecast loads FIRST, then outages
     // Road closures are deferred until user views the map
     (async () => {
+      // Load weather forecast first with default Nashville ZIP
+      const defaultZip = '37203';
+      const zipInput = document.getElementById('zipInput');
+      if (zipInput && !zipInput.value) {
+        zipInput.value = defaultZip;
+      }
+      // Fetch forecast immediately (priority load)
+      await fetchForecast();
+
+      // Then initialize map and fetch outages
       initPreviewMap();
       await fetchMapOutages();
     })();
 
     // Refresh outage data every 2 minutes (road closures only if already fetched)
+    // Also refresh weather forecast every 15 minutes
     setInterval(() => {
       fetchMapOutages();
       if (roadClosuresFetched) fetchRoadClosures();
     }, 120000);
 
-    // Weather forecast loads only when user enters ZIP and clicks fetch button
-    // (No automatic fetch - requires user interaction)
+    setInterval(() => {
+      fetchForecast();
+    }, 900000); // 15 minutes
 
     // ===========================================
     // UX REVAMP - Tab Switching
