@@ -67,8 +67,8 @@
       background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 50%, var(--color-bg-tertiary) 100%);
       min-height: 100vh;
       min-height: 100dvh;
-      padding: 1.5rem 1rem;
-      padding-top: max(1.5rem, env(safe-area-inset-top));
+      padding: 0.75rem 1rem;
+      padding-top: max(0.75rem, env(safe-area-inset-top));
       padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
       padding-left: max(1rem, env(safe-area-inset-left));
       padding-right: max(1rem, env(safe-area-inset-right));
@@ -96,8 +96,8 @@
 
     @media (max-width: 360px) {
       body {
-        padding: 1rem 0.75rem;
-        padding-top: max(1rem, env(safe-area-inset-top));
+        padding: 0.5rem 0.75rem;
+        padding-top: max(0.5rem, env(safe-area-inset-top));
         padding-bottom: max(1rem, env(safe-area-inset-bottom));
       }
     }
@@ -107,7 +107,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.75rem;
       gap: 1rem;
     }
 
@@ -245,7 +245,7 @@
     
     header {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
     }
 
     .branding {
@@ -253,7 +253,7 @@
       align-items: center;
       justify-content: center;
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.75rem;
     }
 
     .app-logo {
@@ -922,7 +922,7 @@
       border: 2px solid #60a5fa;
       border-radius: 12px;
       padding: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       animation: slideDown 0.4s ease-out, pulseGlow 3s ease-in-out infinite;
       position: relative;
       overflow: hidden;
@@ -4231,6 +4231,74 @@
       line-height: 1.3;
       min-height: 48px;
       padding: 0.75rem 1rem;
+    }
+
+    /* Mobile Sticky Bottom Bar - Always accessible 911 button */
+    .mobile-sticky-bottom {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(26, 26, 46, 0.98);
+      border-top: 1px solid #333;
+      padding: 0.75rem 1rem;
+      padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    @media (max-width: 767px) {
+      .mobile-sticky-bottom {
+        display: block;
+      }
+
+      /* Hide the header 911 button on mobile - we have the sticky one */
+      header .location-btn.green-style {
+        display: none;
+      }
+
+      /* Add bottom padding to body so content doesn't get hidden behind sticky bar */
+      body {
+        padding-bottom: max(5rem, calc(4rem + env(safe-area-inset-bottom)));
+      }
+
+      /* Reduce header margin since button is gone */
+      header {
+        margin-bottom: 0.75rem;
+      }
+    }
+
+    .mobile-sticky-bottom .sticky-911-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: white;
+      border: none;
+      padding: 0.875rem 1.5rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
+      transition: all 0.15s ease;
+    }
+
+    .mobile-sticky-bottom .sticky-911-btn:hover {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
+    }
+
+    .mobile-sticky-bottom .sticky-911-btn:active {
+      transform: scale(0.98);
+    }
+
+    .mobile-sticky-bottom .sticky-911-btn i {
+      font-size: 1.1rem;
     }
 
     /* Critical Card - Improved mobile layout */
@@ -10669,5 +10737,13 @@
     }
   </script>
   <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <!-- Mobile Sticky Bottom Bar - 911 always accessible -->
+  <div class="mobile-sticky-bottom">
+    <a href="emergency.html" class="sticky-911-btn">
+      <i class="ph ph-map-pin"></i>
+      <span data-i18n="get_location_911">Get My Location for 911</span>
+    </a>
+  </div>
 </body>
 </html>
