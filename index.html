@@ -2399,6 +2399,33 @@
       gap: 1rem;
       margin-bottom: 1rem;
       flex-wrap: wrap;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .warming-header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .warming-toggle-icon {
+      font-size: 1.25rem;
+      color: #fdba74;
+      transition: transform 0.2s ease;
+    }
+
+    .warming-locations-section.collapsed .warming-toggle-icon {
+      transform: rotate(-90deg);
+    }
+
+    .warming-locations-section.collapsed .warming-locations-grid,
+    .warming-locations-section.collapsed .warming-locations-footer {
+      display: none;
+    }
+
+    .warming-locations-section.collapsed .warming-locations-header {
+      margin-bottom: 0;
     }
 
     .warming-locations-title {
@@ -2559,6 +2586,11 @@
       .warming-locations-header {
         flex-direction: column;
         gap: 0.75rem;
+      }
+
+      .warming-header-right {
+        width: 100%;
+        justify-content: space-between;
       }
 
       .warming-location-card {
@@ -3776,7 +3808,7 @@
 
       <!-- Warming Locations - Time-bound emergency section -->
       <div id="warmingLocationsSection" class="warming-locations-section" style="display: none;">
-        <div class="warming-locations-header">
+        <div class="warming-locations-header" onclick="toggleWarmingSection(event)">
           <div class="warming-locations-title">
             <span class="warming-icon">🔥</span>
             <div>
@@ -3784,9 +3816,12 @@
               <div class="warming-subtitle" id="warmingExpiryText">Winter Storm Fern • Updated Jan 31</div>
             </div>
           </div>
-          <div class="warming-transport-note">
-            <span data-i18n="warming_transport">Need a ride?</span>
-            <a href="tel:615-401-1712" class="warming-transport-phone">📞 615-401-1712</a>
+          <div class="warming-header-right">
+            <div class="warming-transport-note">
+              <span data-i18n="warming_transport">Need a ride?</span>
+              <a href="tel:615-401-1712" class="warming-transport-phone">📞 615-401-1712</a>
+            </div>
+            <i class="ph ph-caret-down warming-toggle-icon"></i>
           </div>
         </div>
 
@@ -7620,6 +7655,23 @@
           </div>
         `;
       }).join('');
+
+      // Default to collapsed state
+      section.classList.add('collapsed');
+    }
+
+    // Toggle warming section expand/collapse
+    function toggleWarmingSection(event) {
+      // Don't toggle if clicking on the phone link
+      if (event.target.closest('a')) {
+        return;
+      }
+
+      const section = document.getElementById('warmingLocationsSection');
+      if (section) {
+        section.classList.toggle('collapsed');
+        trackActivity('warming_section_toggle', { expanded: !section.classList.contains('collapsed') });
+      }
     }
 
     function getMapStatusColor(status) {
