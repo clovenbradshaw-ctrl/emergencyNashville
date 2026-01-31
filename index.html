@@ -4336,11 +4336,16 @@
       </div>
     </div>
 
-    <!-- Weather Alert Inline -->
-    <div class="weather-alert-inline" id="weatherAlertInline" style="display: none;">
-      <strong>⚠️ <span id="weatherAlertTitle">Cold Weather Advisory</span></strong>
-      <span id="weatherAlertExpiry"></span>
-    </div>
+    <!-- Weather Alerts Section -->
+    <section class="section" id="weatherAlertsSection" style="margin-top: 1rem;">
+      <div class="section-title" data-i18n="weather_alerts">Weather Alerts</div>
+      <div class="alerts-container" id="alertsContainer">
+        <div class="alerts-loading">
+          <i class="ph ph-cloud"></i>
+          <span data-i18n="loading_alerts">Checking for alerts...</span>
+        </div>
+      </div>
+    </section>
 
     <!-- Forecast Section -->
     <section class="forecast-section" id="forecastSection">
@@ -5421,17 +5426,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Weather Alerts Section (kept for detailed alerts) -->
-    <section class="section" style="margin-top: 1rem;">
-      <div class="section-title" data-i18n="weather_alerts">Weather Alerts</div>
-      <div class="alerts-container" id="alertsContainer">
-        <div class="alerts-loading">
-          <i class="ph ph-cloud"></i>
-          <span data-i18n="loading_alerts">Checking for alerts...</span>
-        </div>
-      </div>
-    </section>
 
     <footer>
       <span data-i18n="footer">Share widely · Updated Jan 2026</span>
@@ -7854,16 +7848,7 @@
     }
 
     async function fetchForecastFresh(zip, isBackground) {
-      // Defer alerts - only show if user clicks to expand
-      const alertsContainer = document.getElementById('alertsContainer');
-      if (alertsContainer && !cachedAlertsData) {
-        alertsContainer.innerHTML = `
-          <div class="alerts-click-to-load" onclick="loadNWSAlerts()" style="padding: 1rem; text-align: center; cursor: pointer; color: var(--text-secondary);">
-            <i class="ph ph-cloud-warning" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block;"></i>
-            <span data-i18n="click_load_alerts">Tap to load weather alerts</span>
-          </div>
-        `;
-      }
+      // Weather alerts will be loaded after coords are fetched
 
       // Use cached outage data from fetchMapOutages if available
       const outagesContainer = document.getElementById('outagesContainer');
@@ -7908,6 +7893,9 @@
         setCachedForecast(zip, { weather, coords });
 
         renderForecast(weather);
+
+        // Auto-load weather alerts after getting coordinates
+        loadNWSAlerts();
       } catch (err) {
         if (!isBackground) {
           cachedWeatherData = null;
@@ -7918,7 +7906,7 @@
       }
     }
 
-    // Lazy load NWS alerts when user clicks
+    // Load NWS alerts
     async function loadNWSAlerts() {
       const alertsContainer = document.getElementById('alertsContainer');
       if (!alertsContainer) return;
