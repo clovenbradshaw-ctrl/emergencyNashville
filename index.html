@@ -2844,26 +2844,11 @@
       position: relative;
     }
 
-    /* Resource Guide Panel - scrollable content */
+    /* Resource Guide Panel */
     .resource-guide-panel .panel-body {
-      max-height: 350px;
-      overflow-y: auto;
       padding: 0.75rem;
     }
 
-    .resource-guide-panel .panel-body::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .resource-guide-panel .panel-body::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 3px;
-    }
-
-    .resource-guide-panel .panel-body::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 3px;
-    }
 
     /* Map Panel */
     .map-panel .panel-body {
@@ -2928,10 +2913,6 @@
 
     .side-by-side-container .intent-icon {
       font-size: 1.1rem;
-    }
-
-    .side-by-side-container .resource-list {
-      max-height: none;
     }
 
     /* Resource Guide Modal */
@@ -3046,10 +3027,6 @@
         min-width: 0;
       }
 
-      .resource-guide-panel .panel-body {
-        max-height: 450px;
-      }
-
       .map-panel .panel-body {
         height: 450px;
       }
@@ -3067,10 +3044,6 @@
         margin: 0 auto;
       }
 
-      .resource-guide-panel .panel-body {
-        max-height: 550px;
-      }
-
       .map-panel .panel-body {
         height: 550px;
       }
@@ -3080,10 +3053,6 @@
     @media (max-width: 767px) {
       .side-by-side-container {
         flex-direction: column;
-      }
-
-      .resource-guide-panel .panel-body {
-        max-height: 300px;
       }
 
       .map-panel .panel-body {
@@ -4583,12 +4552,6 @@
       }
     }
 
-    /* Scrollable content areas - better mobile handling */
-    .resource-list {
-      max-height: 70vh;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
 
     /* Prevent horizontal scroll on the whole page */
     html, body {
