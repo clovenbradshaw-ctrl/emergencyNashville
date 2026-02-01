@@ -11750,13 +11750,11 @@
   <!-- City Cast Nashville Podcast Module Script -->
   <script>
     (function() {
-      const PODCAST_FEED_URL = 'https://feeds.megaphone.fm/CC2002452330';
+      // n8n webhook returns the RSS feed (may be JSON-wrapped)
+      const PODCAST_FEED_URL = 'https://n8n.intelechia.com/webhook/citycastnashville';
       const CORS_PROXIES = [
-        'https://corsproxy.io/?',
-        'https://api.allorigins.win/raw?url=',
-        'https://api.codetabs.com/v1/proxy?quest=',
-        'https://cors-anywhere.herokuapp.com/',
-        'https://thingproxy.freeboard.io/fetch/'
+        url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+        url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
       ];
 
       let podcastAudio = null;
@@ -11796,7 +11794,7 @@
         const episodes = [];
 
         items.forEach((item, index) => {
-          if (index >= 6) return; // Get latest 6 episodes for navigation
+          if (index >= 15) return; // Get latest 15 episodes for navigation
 
           const title = item.querySelector('title')?.textContent || '';
           const pubDate = item.querySelector('pubDate')?.textContent || '';
@@ -11820,60 +11818,92 @@
             }
           }
 
-          episodes.push({
-            title,
-            pubDate,
-            audioUrl,
-            duration: durationSecs,
-            description: description.replace(/<[^>]*>/g, '').substring(0, 200)
-          });
+          // Only include episodes with audio URLs
+          if (audioUrl) {
+            episodes.push({
+              title,
+              pubDate,
+              audioUrl,
+              duration: durationSecs,
+              description: description.replace(/<[^>]*>/g, '').substring(0, 200)
+            });
+          }
         });
 
         return episodes;
       }
 
-      // Fetch podcast RSS feed with fallback proxies
-      async function fetchPodcastFeed() {
-        for (const proxy of CORS_PROXIES) {
+      // Unwrap JSON-wrapped RSS responses (from n8n webhook or CORS proxies)
+      function unwrapRSSResponse(text) {
+        const trimmed = text.trim();
+        if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
           try {
-            const res = await fetch(proxy + encodeURIComponent(PODCAST_FEED_URL), {
-              signal: AbortSignal.timeout(8000)
-            });
-            if (!res.ok) continue;
-            let xmlText = await res.text();
-
-            // Handle JSON-wrapped responses from some CORS proxies
-            // Some proxies return: [{"data": "<?xml..."}] or {"data": "<?xml..."}
-            const trimmed = xmlText.trim();
-            if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
-              try {
-                const json = JSON.parse(trimmed);
-                // Handle array format: [{"data": "..."}]
-                if (Array.isArray(json) && json[0]?.data) {
-                  xmlText = json[0].data;
-                }
-                // Handle object format: {"data": "..."}
-                else if (json.data) {
-                  xmlText = json.data;
-                }
-                // Handle object format: {"contents": "..."} (allorigins non-raw)
-                else if (json.contents) {
-                  xmlText = json.contents;
-                }
-              } catch (jsonErr) {
-                // Not valid JSON, use as-is (might be XML starting with whitespace)
-              }
+            const json = JSON.parse(trimmed);
+            // Handle array format: [{"data": "..."}]
+            if (Array.isArray(json) && json[0]?.data) {
+              return json[0].data;
             }
-
-            const episodes = parseRSS(xmlText);
-            if (episodes && episodes.length > 0) {
-              return episodes;
+            // Handle object format: {"data": "..."}
+            if (json.data) {
+              return json.data;
             }
-          } catch (err) {
-            console.warn('Proxy failed:', proxy, err.message);
+            // Handle object format: {"contents": "..."} (allorigins non-raw)
+            if (json.contents) {
+              return json.contents;
+            }
+          } catch (jsonErr) {
+            // Not valid JSON, use as-is
           }
         }
-        console.error('All CORS proxies failed for podcast feed');
+        return text;
+      }
+
+      // Fetch podcast RSS feed - try direct first, then proxies
+      async function fetchPodcastFeed() {
+        let xmlText = null;
+
+        // Try direct fetch first (n8n webhook should work directly)
+        try {
+          const res = await fetch(PODCAST_FEED_URL, {
+            signal: AbortSignal.timeout(8000)
+          });
+          if (res.ok) {
+            xmlText = await res.text();
+          }
+        } catch (err) {
+          console.warn('Direct fetch failed:', err.message);
+        }
+
+        // Try proxies if direct failed
+        if (!xmlText) {
+          for (const proxy of CORS_PROXIES) {
+            try {
+              const res = await fetch(proxy(PODCAST_FEED_URL), {
+                signal: AbortSignal.timeout(8000)
+              });
+              if (!res.ok) continue;
+              xmlText = await res.text();
+              break;
+            } catch (err) {
+              console.warn('Proxy failed:', err.message);
+            }
+          }
+        }
+
+        if (!xmlText) {
+          console.error('All fetch methods failed for podcast feed');
+          return null;
+        }
+
+        // Unwrap JSON-wrapped responses
+        xmlText = unwrapRSSResponse(xmlText);
+
+        const episodes = parseRSS(xmlText);
+        if (episodes && episodes.length > 0) {
+          return episodes;
+        }
+
+        console.error('Failed to parse podcast feed');
         return null;
       }
 
