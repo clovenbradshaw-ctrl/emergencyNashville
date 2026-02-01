@@ -2802,7 +2802,12 @@
     }
 
 
-    /* Map Panel */
+    /* Map Panel - don't stretch with resource panel */
+    .map-panel {
+      flex: none;
+      align-self: flex-start;
+    }
+
     .map-panel .panel-body {
       height: 350px;
     }
@@ -2979,6 +2984,12 @@
         min-width: 0;
       }
 
+      /* Map panel: fixed width, don't stretch */
+      .map-panel {
+        flex: 0 0 45%;
+        max-width: 500px;
+      }
+
       .map-panel .panel-body {
         height: 450px;
       }
@@ -2996,6 +3007,11 @@
         margin: 0 auto;
       }
 
+      /* Map panel: larger max-width on big screens */
+      .map-panel {
+        max-width: 550px;
+      }
+
       .map-panel .panel-body {
         height: 550px;
       }
@@ -3005,6 +3021,13 @@
     @media (max-width: 767px) {
       .side-by-side-container {
         flex-direction: column;
+      }
+
+      /* Map panel: full width on mobile */
+      .map-panel {
+        flex: none;
+        max-width: none;
+        width: 100%;
       }
 
       .map-panel .panel-body {
