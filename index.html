@@ -8,6 +8,7 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
   <!-- Fonts for Alerts Feed -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1654,6 +1655,56 @@
     .map-modal-legend-dot.green { background: #4ade80; }
     .map-modal-legend-dot.blue { background: #60a5fa; }
     .map-modal-legend-dot.orange { background: #f97316; }
+
+    .map-modal-legend-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.15);
+      margin: 8px 0;
+    }
+
+    .map-modal-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      color: #e2e8f0;
+      font-size: 13px;
+      user-select: none;
+    }
+
+    .map-modal-toggle input {
+      display: none;
+    }
+
+    .map-modal-toggle-slider {
+      position: relative;
+      width: 36px;
+      height: 20px;
+      background: #475569;
+      border-radius: 10px;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .map-modal-toggle-slider::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+
+    .map-modal-toggle input:checked + .map-modal-toggle-slider {
+      background: #f87171;
+    }
+
+    .map-modal-toggle input:checked + .map-modal-toggle-slider::after {
+      transform: translateX(16px);
+    }
 
     .map-modal-footer {
       display: grid;
@@ -7114,6 +7165,12 @@
           <div class="map-modal-legend-dot orange"></div>
           <span data-i18n="map_legend_road_closed">Road closed</span>
         </div>
+        <div class="map-modal-legend-divider"></div>
+        <label class="map-modal-toggle">
+          <input type="checkbox" id="toggleHeatmap" onchange="toggleMapLayer('heatmap')">
+          <span class="map-modal-toggle-slider"></span>
+          <span data-i18n="map_legend_heatmap">Heatmap View</span>
+        </label>
       </div>
     </div>
     <div class="map-modal-footer">
@@ -9511,6 +9568,8 @@
     let sideBySideMap = null;
     let previewOutageLayer = null;
     let fullOutageLayer = null;
+    let previewHeatLayer = null;
+    let fullHeatLayer = null;
     let sideBySideOutageLayer = null;
     let sideBySideWarmingLayer = null;
     let sideBySideRoadClosureLayer = null;
@@ -9521,7 +9580,8 @@
     let mapToggles = {
       outages: true,
       warmingCenters: true,
-      roadClosures: true
+      roadClosures: true,
+      heatmap: false
     };
 
     // Side-by-side map layer toggle state
@@ -9874,8 +9934,8 @@
     function addOutageMarkers(map, layer) {
       layer.clearLayers();
 
-      // Add outage markers (if toggle enabled)
-      if (mapToggles.outages) {
+      // Add outage markers (if toggle enabled and heatmap disabled)
+      if (mapToggles.outages && !mapToggles.heatmap) {
         cachedMapOutages.forEach(event => {
           const lat = event.lat || event.latitude;
           const lng = event.lng || event.longitude;
@@ -9931,15 +9991,68 @@
       }
     }
 
+    function updateHeatmapLayer(map, isPreview) {
+      // Remove existing heatmap layer
+      if (isPreview && previewHeatLayer) {
+        map.removeLayer(previewHeatLayer);
+        previewHeatLayer = null;
+      } else if (!isPreview && fullHeatLayer) {
+        map.removeLayer(fullHeatLayer);
+        fullHeatLayer = null;
+      }
+
+      // Add heatmap if enabled
+      if (mapToggles.heatmap && cachedMapOutages.length > 0) {
+        const heatData = cachedMapOutages
+          .filter(event => {
+            const lat = event.lat || event.latitude;
+            const lng = event.lng || event.longitude;
+            return lat && lng;
+          })
+          .map(event => {
+            const lat = event.lat || event.latitude;
+            const lng = event.lng || event.longitude;
+            const customers = event.customersAffected || event.customers_affected || event.numPeople || 1;
+            // Intensity based on customers affected (normalized)
+            const intensity = Math.min(customers / 100, 1);
+            return [lat, lng, intensity];
+          });
+
+        if (heatData.length > 0) {
+          const heatLayer = L.heatLayer(heatData, {
+            radius: 35,
+            blur: 25,
+            maxZoom: 15,
+            max: 1.0,
+            gradient: {
+              0.2: '#3b82f6',
+              0.4: '#22d3ee',
+              0.6: '#fbbf24',
+              0.8: '#f97316',
+              1.0: '#ef4444'
+            }
+          }).addTo(map);
+
+          if (isPreview) {
+            previewHeatLayer = heatLayer;
+          } else {
+            fullHeatLayer = heatLayer;
+          }
+        }
+      }
+    }
+
     function toggleMapLayer(layerType) {
       mapToggles[layerType] = !mapToggles[layerType];
 
       // Refresh both maps
       if (previewMap && previewOutageLayer) {
         addOutageMarkers(previewMap, previewOutageLayer);
+        updateHeatmapLayer(previewMap, true);
       }
       if (fullMap && fullOutageLayer) {
         addOutageMarkers(fullMap, fullOutageLayer);
+        updateHeatmapLayer(fullMap, false);
       }
     }
 
@@ -10006,9 +10119,11 @@
 
         if (previewOutageLayer) {
           addOutageMarkers(previewMap, previewOutageLayer);
+          updateHeatmapLayer(previewMap, true);
         }
         if (fullOutageLayer) {
           addOutageMarkers(fullMap, fullOutageLayer);
+          updateHeatmapLayer(fullMap, false);
         }
 
         console.log(`Map: Loaded ${events.length} outage events, ${totalCustomers} customers affected`);
@@ -10042,6 +10157,7 @@
       // If we already have data, add markers
       if (cachedMapOutages.length > 0) {
         addOutageMarkers(previewMap, previewOutageLayer);
+        updateHeatmapLayer(previewMap, true);
       }
     }
 
@@ -10069,6 +10185,7 @@
       // If we already have data, add markers
       if (cachedMapOutages.length > 0) {
         addOutageMarkers(fullMap, fullOutageLayer);
+        updateHeatmapLayer(fullMap, false);
       }
     }
 
