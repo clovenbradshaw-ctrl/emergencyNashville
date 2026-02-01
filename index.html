@@ -4910,6 +4910,329 @@
         .nswx-post-excerpt { font-size: 0.75rem; }
       }
     }
+
+    /* City Cast Nashville Podcast Card */
+    .podcast-section {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #2a2a40;
+      margin-bottom: 1.25rem;
+    }
+
+    .podcast-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #2a2a40;
+    }
+
+    .podcast-artwork {
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
+      flex-shrink: 0;
+      object-fit: cover;
+      background: #252540;
+    }
+
+    .podcast-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .podcast-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .podcast-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .podcast-badge {
+      background: #7c3aed;
+      color: #fff;
+      font-size: 0.625rem;
+      font-weight: 600;
+      padding: 0.125rem 0.375rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .podcast-subtitle {
+      font-size: 0.8125rem;
+      color: #9ca3af;
+    }
+
+    .podcast-nav {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .podcast-nav a {
+      background: #252540;
+      color: #9ca3af;
+      padding: 0.375rem 0.625rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+
+    .podcast-nav a:hover {
+      background: #3a3a5c;
+      color: #fff;
+    }
+
+    .podcast-episode {
+      padding: 1rem 1.25rem;
+    }
+
+    .podcast-episode-label {
+      font-size: 0.6875rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    .podcast-episode-title {
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: #fff;
+      line-height: 1.4;
+      margin-bottom: 0.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .podcast-episode-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-bottom: 1rem;
+    }
+
+    .podcast-episode-duration {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .podcast-player-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .podcast-play-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    }
+
+    .podcast-play-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+    }
+
+    .podcast-play-btn:active {
+      transform: scale(0.98);
+    }
+
+    .podcast-play-btn.playing {
+      background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
+    }
+
+    .podcast-progress-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .podcast-progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #2a2a40;
+      border-radius: 3px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .podcast-progress-bar:hover .podcast-progress-fill {
+      background: #8b5cf6;
+    }
+
+    .podcast-progress-fill {
+      height: 100%;
+      background: #7c3aed;
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.1s linear, background 0.15s ease;
+    }
+
+    .podcast-time {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.6875rem;
+      color: #6b7280;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .podcast-speed-btn {
+      background: #252540;
+      border: 1px solid #3a3a5c;
+      color: #9ca3af;
+      padding: 0.375rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      min-width: 44px;
+    }
+
+    .podcast-speed-btn:hover {
+      background: #3a3a5c;
+      color: #fff;
+    }
+
+    .podcast-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+      background: #12121e;
+      border-top: 1px solid #2a2a40;
+    }
+
+    .podcast-footer-links {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .podcast-footer-links a {
+      color: #6b7280;
+      font-size: 0.75rem;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .podcast-footer-links a:hover {
+      color: #8b5cf6;
+    }
+
+    .podcast-subscribe-link {
+      color: #8b5cf6;
+      text-decoration: none;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: color 0.15s;
+    }
+
+    .podcast-subscribe-link:hover {
+      color: #a78bfa;
+    }
+
+    .podcast-loading {
+      padding: 2rem;
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.8125rem;
+    }
+
+    .podcast-loading i {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      display: block;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* Podcast Mobile Responsive */
+    @media (max-width: 600px) {
+      .podcast-header {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .podcast-nav {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .podcast-artwork {
+        width: 56px;
+        height: 56px;
+      }
+
+      .podcast-title {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .podcast-header {
+        padding: 0.75rem 1rem;
+      }
+
+      .podcast-episode {
+        padding: 0.75rem 1rem;
+      }
+
+      .podcast-artwork {
+        width: 48px;
+        height: 48px;
+      }
+
+      .podcast-title {
+        font-size: 0.9375rem;
+      }
+
+      .podcast-episode-title {
+        font-size: 0.875rem;
+      }
+
+      .podcast-footer {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+        padding: 0.625rem 1rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -5065,6 +5388,78 @@
           <a href="https://nashvillesevereweather.com/shop/" target="_blank" rel="noopener noreferrer">Merch</a>
         </div>
         <a class="nswx-archive-link" href="https://nashvillesevereweather.com/2026/01/" target="_blank" rel="noopener noreferrer">View all January posts →</a>
+      </div>
+    </div>
+
+    <!-- City Cast Nashville Podcast -->
+    <div class="podcast-section" id="podcastSection">
+      <!-- Header -->
+      <div class="podcast-header">
+        <img class="podcast-artwork" id="podcastArtwork" src="https://megaphone.imgix.net/podcasts/021aca2a-eab9-11ee-9ff2-ebf466277b88/image/ab8c2c0a84bda721b66244cd3f736b0a.png?ixlib=rails-4.3.1&max-w=128&max-h=128&fit=crop&auto=format,compress" alt="City Cast Nashville">
+        <div class="podcast-info">
+          <div class="podcast-brand">
+            <div class="podcast-title">City Cast Nashville</div>
+            <span class="podcast-badge">Podcast</span>
+          </div>
+          <div class="podcast-subtitle">Daily local news for Music City</div>
+        </div>
+        <div class="podcast-nav">
+          <a href="https://nashville.citycast.fm/" target="_blank" rel="noopener noreferrer">
+            <i class="ph ph-globe"></i>
+            Website
+          </a>
+          <a href="https://nashville.citycast.fm/subscribe-hey-nashville-newsletter-tennessee" target="_blank" rel="noopener noreferrer">
+            <i class="ph ph-envelope"></i>
+            Newsletter
+          </a>
+        </div>
+      </div>
+
+      <!-- Episode Player -->
+      <div class="podcast-episode" id="podcastEpisode">
+        <div class="podcast-loading" id="podcastLoading">
+          <i class="ph ph-podcast"></i>
+          <span>Loading latest episode...</span>
+        </div>
+        <div id="podcastPlayer" style="display: none;">
+          <div class="podcast-episode-label">Latest Episode</div>
+          <div class="podcast-episode-title" id="podcastEpisodeTitle">Loading...</div>
+          <div class="podcast-episode-meta">
+            <span id="podcastEpisodeDate">--</span>
+            <span class="podcast-episode-duration">
+              <i class="ph ph-clock"></i>
+              <span id="podcastEpisodeDuration">--</span>
+            </span>
+          </div>
+          <div class="podcast-player-controls">
+            <button class="podcast-play-btn" id="podcastPlayBtn" onclick="togglePodcastPlayback()">
+              <i class="ph ph-play" id="podcastPlayIcon"></i>
+            </button>
+            <div class="podcast-progress-container">
+              <div class="podcast-progress-bar" id="podcastProgressBar" onclick="seekPodcast(event)">
+                <div class="podcast-progress-fill" id="podcastProgressFill"></div>
+              </div>
+              <div class="podcast-time">
+                <span id="podcastCurrentTime">0:00</span>
+                <span id="podcastTotalTime">--:--</span>
+              </div>
+            </div>
+            <button class="podcast-speed-btn" id="podcastSpeedBtn" onclick="cyclePodcastSpeed()">1x</button>
+          </div>
+        </div>
+        <audio id="podcastAudio" preload="metadata"></audio>
+      </div>
+
+      <!-- Footer -->
+      <div class="podcast-footer">
+        <div class="podcast-footer-links">
+          <a href="https://open.spotify.com/show/78dK8WgtAKBXflxYoAf3yb" target="_blank" rel="noopener noreferrer">Spotify</a>
+          <a href="https://podcasts.apple.com/us/podcast/city-cast-nashville/id1706803583" target="_blank" rel="noopener noreferrer">Apple Podcasts</a>
+          <a href="https://feeds.megaphone.fm/CC2002452330" target="_blank" rel="noopener noreferrer">RSS</a>
+        </div>
+        <a class="podcast-subscribe-link" href="https://membership.citycast.fm/nashville" target="_blank" rel="noopener noreferrer">
+          Become a Neighbor <i class="ph ph-arrow-right"></i>
+        </a>
       </div>
     </div>
 
@@ -11034,6 +11429,226 @@
 
       // Update radar timestamp every 10 seconds
       setInterval(updateRadarTimestamp, 10 * 1000);
+    })();
+  </script>
+
+  <!-- City Cast Nashville Podcast Module Script -->
+  <script>
+    (function() {
+      const PODCAST_FEED_URL = 'https://feeds.megaphone.fm/CC2002452330';
+      const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+
+      let podcastAudio = null;
+      let currentEpisode = null;
+      let playbackSpeeds = [1, 1.25, 1.5, 1.75, 2];
+      let currentSpeedIndex = 0;
+
+      // Format duration from seconds to mm:ss or h:mm:ss
+      function formatDuration(seconds) {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = Math.floor(seconds % 60);
+        if (h > 0) {
+          return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+        return `${m}:${s.toString().padStart(2, '0')}`;
+      }
+
+      // Format date for display
+      function formatPodcastDate(dateStr) {
+        const date = new Date(dateStr);
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+      }
+
+      // Parse RSS XML and extract episodes
+      function parseRSS(xmlText) {
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(xmlText, 'application/xml');
+
+        const channel = xml.querySelector('channel');
+        if (!channel) return null;
+
+        const items = channel.querySelectorAll('item');
+        const episodes = [];
+
+        items.forEach((item, index) => {
+          if (index >= 3) return; // Only get latest 3 episodes
+
+          const title = item.querySelector('title')?.textContent || '';
+          const pubDate = item.querySelector('pubDate')?.textContent || '';
+          const enclosure = item.querySelector('enclosure');
+          const audioUrl = enclosure?.getAttribute('url') || '';
+          const duration = item.getElementsByTagName('itunes:duration')[0]?.textContent || '';
+          const description = item.querySelector('description')?.textContent || '';
+
+          // Parse duration (could be seconds or hh:mm:ss format)
+          let durationSecs = 0;
+          if (duration) {
+            if (duration.includes(':')) {
+              const parts = duration.split(':').map(Number);
+              if (parts.length === 3) {
+                durationSecs = parts[0] * 3600 + parts[1] * 60 + parts[2];
+              } else if (parts.length === 2) {
+                durationSecs = parts[0] * 60 + parts[1];
+              }
+            } else {
+              durationSecs = parseInt(duration) || 0;
+            }
+          }
+
+          episodes.push({
+            title,
+            pubDate,
+            audioUrl,
+            duration: durationSecs,
+            description: description.replace(/<[^>]*>/g, '').substring(0, 200)
+          });
+        });
+
+        return episodes;
+      }
+
+      // Fetch podcast RSS feed
+      async function fetchPodcastFeed() {
+        try {
+          const res = await fetch(CORS_PROXY + encodeURIComponent(PODCAST_FEED_URL));
+          if (!res.ok) throw new Error('Failed to fetch feed');
+          const xmlText = await res.text();
+          return parseRSS(xmlText);
+        } catch (err) {
+          console.error('Failed to fetch podcast feed:', err);
+          return null;
+        }
+      }
+
+      // Render the podcast player with episode data
+      function renderPodcastPlayer(episodes) {
+        const loadingEl = document.getElementById('podcastLoading');
+        const playerEl = document.getElementById('podcastPlayer');
+        const titleEl = document.getElementById('podcastEpisodeTitle');
+        const dateEl = document.getElementById('podcastEpisodeDate');
+        const durationEl = document.getElementById('podcastEpisodeDuration');
+        const totalTimeEl = document.getElementById('podcastTotalTime');
+
+        if (!episodes || episodes.length === 0) {
+          if (loadingEl) {
+            loadingEl.innerHTML = '<i class="ph ph-warning"></i><span>Could not load episodes</span>';
+          }
+          return;
+        }
+
+        currentEpisode = episodes[0];
+
+        if (titleEl) titleEl.textContent = currentEpisode.title;
+        if (dateEl) dateEl.textContent = formatPodcastDate(currentEpisode.pubDate);
+        if (durationEl) durationEl.textContent = formatDuration(currentEpisode.duration);
+        if (totalTimeEl) totalTimeEl.textContent = formatDuration(currentEpisode.duration);
+
+        // Set up audio element
+        podcastAudio = document.getElementById('podcastAudio');
+        if (podcastAudio && currentEpisode.audioUrl) {
+          podcastAudio.src = currentEpisode.audioUrl;
+
+          // Update progress as audio plays
+          podcastAudio.addEventListener('timeupdate', updateProgress);
+          podcastAudio.addEventListener('loadedmetadata', () => {
+            if (totalTimeEl && podcastAudio.duration) {
+              totalTimeEl.textContent = formatDuration(podcastAudio.duration);
+            }
+          });
+          podcastAudio.addEventListener('ended', () => {
+            const playBtn = document.getElementById('podcastPlayBtn');
+            const playIcon = document.getElementById('podcastPlayIcon');
+            if (playBtn) playBtn.classList.remove('playing');
+            if (playIcon) {
+              playIcon.classList.remove('ph-pause');
+              playIcon.classList.add('ph-play');
+            }
+          });
+        }
+
+        // Show player, hide loading
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (playerEl) playerEl.style.display = 'block';
+      }
+
+      // Update progress bar
+      function updateProgress() {
+        if (!podcastAudio) return;
+
+        const progressFill = document.getElementById('podcastProgressFill');
+        const currentTimeEl = document.getElementById('podcastCurrentTime');
+
+        const progress = (podcastAudio.currentTime / podcastAudio.duration) * 100;
+        if (progressFill) progressFill.style.width = progress + '%';
+        if (currentTimeEl) currentTimeEl.textContent = formatDuration(podcastAudio.currentTime);
+      }
+
+      // Toggle playback
+      window.togglePodcastPlayback = function() {
+        if (!podcastAudio) return;
+
+        const playBtn = document.getElementById('podcastPlayBtn');
+        const playIcon = document.getElementById('podcastPlayIcon');
+
+        if (podcastAudio.paused) {
+          podcastAudio.play();
+          if (playBtn) playBtn.classList.add('playing');
+          if (playIcon) {
+            playIcon.classList.remove('ph-play');
+            playIcon.classList.add('ph-pause');
+          }
+        } else {
+          podcastAudio.pause();
+          if (playBtn) playBtn.classList.remove('playing');
+          if (playIcon) {
+            playIcon.classList.remove('ph-pause');
+            playIcon.classList.add('ph-play');
+          }
+        }
+      };
+
+      // Seek in podcast
+      window.seekPodcast = function(event) {
+        if (!podcastAudio) return;
+
+        const progressBar = document.getElementById('podcastProgressBar');
+        if (!progressBar) return;
+
+        const rect = progressBar.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const percentage = x / rect.width;
+        podcastAudio.currentTime = percentage * podcastAudio.duration;
+      };
+
+      // Cycle playback speed
+      window.cyclePodcastSpeed = function() {
+        if (!podcastAudio) return;
+
+        currentSpeedIndex = (currentSpeedIndex + 1) % playbackSpeeds.length;
+        const speed = playbackSpeeds[currentSpeedIndex];
+        podcastAudio.playbackRate = speed;
+
+        const speedBtn = document.getElementById('podcastSpeedBtn');
+        if (speedBtn) speedBtn.textContent = speed + 'x';
+      };
+
+      // Initialize podcast section
+      async function initPodcastSection() {
+        const episodes = await fetchPodcastFeed();
+        renderPodcastPlayer(episodes);
+      }
+
+      // Initialize on page load
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initPodcastSection);
+      } else {
+        initPodcastSection();
+      }
+
+      // Refresh every 30 minutes
+      setInterval(initPodcastSection, 30 * 60 * 1000);
     })();
   </script>
 
