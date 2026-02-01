@@ -7045,6 +7045,7 @@
     let cachedAlertsData = null;
     let cachedOutagesData = null;
     let cachedNswxBlogPosts = null;
+    let cachedNswxBlueskyPosts = null;
     let cachedUserCoords = null;
 
     // ===========================================
@@ -8573,6 +8574,10 @@
       // Re-render NSWX blog posts with new language
       if (cachedNswxBlogPosts && typeof renderNswxPosts === 'function') {
         renderNswxPosts(cachedNswxBlogPosts);
+      }
+      // Re-render NSWX Bluesky ticker with new language
+      if (cachedNswxBlueskyPosts && typeof renderNswxTicker === 'function') {
+        renderNswxTicker(cachedNswxBlueskyPosts);
       }
     }
 
@@ -11592,7 +11597,7 @@
       }
 
       // Render ticker
-      function renderNswxTicker(posts) {
+      async function renderNswxTicker(posts) {
         const ticker = document.getElementById('nswxTicker');
         if (!ticker) return;
 
@@ -11601,13 +11606,24 @@
           return;
         }
 
+        const lang = getCurrentLang();
+
+        // Translate post texts in parallel
+        const translatedPosts = await Promise.all(posts.map(async post => {
+          const translatedText = await translateText(post.text || '', lang);
+          return {
+            ...post,
+            translatedText
+          };
+        }));
+
         let html = '';
         // Duplicate posts for seamless infinite scroll
         for (let i = 0; i < 2; i++) {
-          posts.forEach(post => {
+          translatedPosts.forEach(post => {
             const avatar = post.avatar ? `<img class="nswx-avatar" src="${post.avatar}" alt="">` : '';
             const postImg = post.image ? `<img class="nswx-post-image" src="${post.image}" alt="">` : '';
-            const text = (post.text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const text = (post.translatedText || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             html += `<a href="${post.link}" target="_blank" rel="noopener noreferrer">${avatar}@${NSWX_HANDLE} ${post.date}: ${text}${postImg}</a>`;
           });
         }
@@ -11710,10 +11726,11 @@
             fetchNswxBlogPosts()
           ]);
 
-          // Cache blog posts for re-rendering on language change
+          // Cache posts for re-rendering on language change
           cachedNswxBlogPosts = blogPosts;
+          cachedNswxBlueskyPosts = blueskyPosts;
 
-          renderNswxTicker(blueskyPosts);
+          await renderNswxTicker(blueskyPosts);
           await renderNswxPosts(blogPosts);
         } catch (e) {
           console.error('NSWX section init error:', e);
@@ -11744,6 +11761,7 @@
       window.updateArchiveLink = updateArchiveLink;
       window.updateRadarTimestamp = updateRadarTimestamp;
       window.renderNswxPosts = renderNswxPosts;
+      window.renderNswxTicker = renderNswxTicker;
     })();
   </script>
 
