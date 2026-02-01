@@ -4760,6 +4760,76 @@
       font-size: 0.8125rem;
     }
 
+    /* NSWX Radar */
+    .nswx-radar {
+      padding: 16px 20px;
+      border-bottom: 1px solid #2a2a40;
+      background: linear-gradient(135deg, #1e2a38 0%, #1a1a2e 100%);
+    }
+
+    .nswx-radar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .nswx-radar-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #4ecdc4;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nswx-radar-title::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #4ecdc4;
+      border-radius: 50%;
+      animation: radarPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes radarPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .nswx-radar-refresh {
+      font-size: 0.6875rem;
+      color: #666;
+    }
+
+    .nswx-radar-images {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .nswx-radar-item {
+      background: #0a0a15;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #2a2a40;
+    }
+
+    .nswx-radar-label {
+      padding: 8px 12px;
+      font-size: 0.6875rem;
+      color: #888;
+      background: #151525;
+      text-align: center;
+      border-bottom: 1px solid #2a2a40;
+    }
+
+    .nswx-radar-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
     /* NSWX Mobile Responsive */
     @media (max-width: 600px) {
       .nswx-header {
@@ -4781,6 +4851,10 @@
       .nswx-footer {
         flex-direction: column;
         align-items: flex-start;
+      }
+
+      .nswx-radar-images {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -4957,8 +5031,25 @@
           </div>
         </div>
         <div class="nswx-nav">
-          <a href="https://nashvillesevereweather.com/radar/" target="_blank" rel="noopener noreferrer">Radar</a>
           <a href="https://bsky.app/profile/nashseverewx.com" target="_blank" rel="noopener noreferrer">Bluesky</a>
+        </div>
+      </div>
+
+      <!-- Radar Display -->
+      <div class="nswx-radar" id="nswxRadar">
+        <div class="nswx-radar-header">
+          <span class="nswx-radar-title">Live Radar</span>
+          <span class="nswx-radar-refresh" id="nswxRadarRefresh">Updated just now</span>
+        </div>
+        <div class="nswx-radar-images">
+          <div class="nswx-radar-item">
+            <div class="nswx-radar-label">25-Mile View</div>
+            <img id="nswxRadar25" src="https://www.myownradar.com/nashsvrwx/mosaic/nashville25_anim.gif" alt="Nashville 25-mile radar">
+          </div>
+          <div class="nswx-radar-item">
+            <div class="nswx-radar-label">75-Mile View</div>
+            <img id="nswxRadar75" src="https://www.myownradar.com/nashsvrwx/mosaic/nashville75_anim.gif" alt="Nashville 75-mile radar">
+          </div>
         </div>
       </div>
 
@@ -10849,7 +10940,6 @@
 
         container.innerHTML = posts.map(post => `
           <a class="nswx-post" href="${post.link}" target="_blank" rel="noopener noreferrer">
-            ${post.thumb ? `<img class="nswx-post-thumb" src="${post.thumb}" alt="">` : '<div class="nswx-post-thumb"></div>'}
             <div class="nswx-post-content">
               <div class="nswx-post-title">${post.title}</div>
               <div class="nswx-post-meta">${post.date} • ${post.author}</div>
@@ -10871,6 +10961,41 @@
 
         archiveLink.href = `${NSWX_BLOG_URL}/${year}/${month}/`;
         archiveLink.textContent = `View all ${monthNames[now.getMonth()]} posts →`;
+      }
+
+      // Refresh radar images every minute
+      let radarLastUpdate = Date.now();
+      function refreshRadarImages() {
+        const timestamp = Date.now();
+        const radar25 = document.getElementById('nswxRadar25');
+        const radar75 = document.getElementById('nswxRadar75');
+        const refreshEl = document.getElementById('nswxRadarRefresh');
+
+        if (radar25) {
+          radar25.src = `https://www.myownradar.com/nashsvrwx/mosaic/nashville25_anim.gif?t=${timestamp}`;
+        }
+        if (radar75) {
+          radar75.src = `https://www.myownradar.com/nashsvrwx/mosaic/nashville75_anim.gif?t=${timestamp}`;
+        }
+
+        radarLastUpdate = timestamp;
+        if (refreshEl) {
+          refreshEl.textContent = 'Updated just now';
+        }
+      }
+
+      // Update "updated X ago" text
+      function updateRadarTimestamp() {
+        const refreshEl = document.getElementById('nswxRadarRefresh');
+        if (!refreshEl) return;
+
+        const seconds = Math.floor((Date.now() - radarLastUpdate) / 1000);
+        if (seconds < 60) {
+          refreshEl.textContent = 'Updated just now';
+        } else {
+          const mins = Math.floor(seconds / 60);
+          refreshEl.textContent = `Updated ${mins}m ago`;
+        }
       }
 
       // Initialize NSWX section
@@ -10903,6 +11028,12 @@
 
       // Refresh every 5 minutes
       setInterval(initNswxSection, 5 * 60 * 1000);
+
+      // Refresh radar images every minute
+      setInterval(refreshRadarImages, 60 * 1000);
+
+      // Update radar timestamp every 10 seconds
+      setInterval(updateRadarTimestamp, 10 * 1000);
     })();
   </script>
 
