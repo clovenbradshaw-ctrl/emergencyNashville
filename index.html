@@ -3012,6 +3012,59 @@
       }
     }
 
+    /* ===========================================
+       ALERTS ROW - Metro Overflow & Weather Alerts Side-by-Side
+       =========================================== */
+    .alerts-row {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .alerts-row .critical-card {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    .alerts-row .weather-alerts-panel {
+      flex: 1;
+      background: #12121a;
+      border: 1px solid #2a2a3c;
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .alerts-row .weather-alerts-panel .section-title {
+      padding: 0.75rem 1rem;
+      background: rgba(30, 41, 59, 0.5);
+      border-bottom: 1px solid #2a2a3c;
+      margin-bottom: 0;
+    }
+
+    .alerts-row .weather-alerts-panel .alerts-container {
+      padding: 1rem;
+      flex: 1;
+      overflow-y: auto;
+      max-height: 300px;
+    }
+
+    /* Desktop/Tablet: Side-by-side alerts row */
+    @media (min-width: 768px) {
+      .alerts-row {
+        flex-direction: row;
+        align-items: stretch;
+      }
+
+      .alerts-row .critical-card,
+      .alerts-row .weather-alerts-panel {
+        flex: 1;
+        min-width: 0;
+      }
+    }
+
     /* Hide old sections when in new mode */
     .legacy-sections {
       display: none;
@@ -5285,24 +5338,38 @@
       <p class="subtitle" data-i18n="subtitle" style="text-align: center; margin-bottom: 0.75rem;">Shelter, food & support during extreme weather</p>
     </header>
 
-    <!-- Critical Alert Card - Emergency Shelter -->
-    <div id="shelterAlertBanner" class="critical-card" role="alert" aria-live="polite">
-      <div class="critical-header">
-        <span class="critical-label" data-i18n="critical_overflow_open">Emergency Overflow Open</span>
-        <span class="status-badge">● <span data-i18n="shelter_alert_status">24 Hours</span></span>
+    <!-- Alerts Row - Metro Overflow & Weather Alerts Side-by-Side -->
+    <div class="alerts-row">
+      <!-- Critical Alert Card - Emergency Shelter -->
+      <div id="shelterAlertBanner" class="critical-card" role="alert" aria-live="polite">
+        <div class="critical-header">
+          <span class="critical-label" data-i18n="critical_overflow_open">Emergency Overflow Open</span>
+          <span class="status-badge">● <span data-i18n="shelter_alert_status">24 Hours</span></span>
+        </div>
+        <h3 class="critical-title" data-i18n="shelter_alert_title">Metro Emergency Shelter</h3>
+        <p class="critical-address" data-i18n="shelter_alert_location">3230 Brick Church Pike, Nashville</p>
+        <div class="critical-details">
+          <span class="detail-chip" data-i18n="critical_who_short">🧑‍🤝‍🧑 18+, couples, dogs OK</span>
+          <span class="detail-chip" data-i18n="critical_meals">🍽️ Hot meals</span>
+          <span class="detail-chip" data-i18n="critical_transport">🚌 WeGo #23B after 7pm</span>
+        </div>
+        <div class="critical-actions">
+          <a href="tel:615-862-6391" class="action-btn primary">📞 615-862-6391</a>
+          <a href="https://www.nashville.gov/departments/government/winter-storm-fern-resources" class="action-btn secondary" target="_blank" rel="noopener noreferrer">ℹ️ <span data-i18n="details">Details</span></a>
+        </div>
+        <div class="critical-disclaimer" data-i18n="shelter_disclaimer">⚠️ Info may change – always double-check on Metro Nashville's official site</div>
       </div>
-      <h3 class="critical-title" data-i18n="shelter_alert_title">Metro Emergency Shelter</h3>
-      <p class="critical-address" data-i18n="shelter_alert_location">3230 Brick Church Pike, Nashville</p>
-      <div class="critical-details">
-        <span class="detail-chip" data-i18n="critical_who_short">🧑‍🤝‍🧑 18+, couples, dogs OK</span>
-        <span class="detail-chip" data-i18n="critical_meals">🍽️ Hot meals</span>
-        <span class="detail-chip" data-i18n="critical_transport">🚌 WeGo #23B after 7pm</span>
-      </div>
-      <div class="critical-actions">
-        <a href="tel:615-862-6391" class="action-btn primary">📞 615-862-6391</a>
-        <a href="https://www.nashville.gov/departments/government/winter-storm-fern-resources" class="action-btn secondary" target="_blank" rel="noopener noreferrer">ℹ️ <span data-i18n="details">Details</span></a>
-      </div>
-      <div class="critical-disclaimer" data-i18n="shelter_disclaimer">⚠️ Info may change – always double-check on Metro Nashville's official site</div>
+
+      <!-- Weather Alerts Section -->
+      <section class="weather-alerts-panel" id="weatherAlertsSection">
+        <div class="section-title" data-i18n="weather_alerts">Weather Alerts</div>
+        <div class="alerts-container" id="alertsContainer">
+          <div class="alerts-loading">
+            <i class="ph ph-cloud"></i>
+            <span data-i18n="loading_alerts">Checking for alerts...</span>
+          </div>
+        </div>
+      </section>
     </div>
 
     <!-- Compact Status Row -->
@@ -5320,17 +5387,6 @@
         <a href="#forecastSection" class="expand-link" data-i18n="status_5day">5-day details →</a>
       </div>
     </div>
-
-    <!-- Weather Alerts Section -->
-    <section class="section" id="weatherAlertsSection" style="margin-top: 1rem;">
-      <div class="section-title" data-i18n="weather_alerts">Weather Alerts</div>
-      <div class="alerts-container" id="alertsContainer">
-        <div class="alerts-loading">
-          <i class="ph ph-cloud"></i>
-          <span data-i18n="loading_alerts">Checking for alerts...</span>
-        </div>
-      </div>
-    </section>
 
     <!-- Forecast Section -->
     <section class="forecast-section" id="forecastSection">
