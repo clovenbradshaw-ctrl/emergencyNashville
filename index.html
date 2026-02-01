@@ -291,44 +291,6 @@
       line-height: 1.4;
     }
 
-    /* Location button - prominent CTA */
-    .location-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: linear-gradient(135deg, #dc2626, #b91c1c);
-      color: white;
-      border: none;
-      padding: 0.75rem 1.25rem;
-      border-radius: 25px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
-      text-decoration: none;
-      transition: all 0.15s ease;
-      touch-action: manipulation;
-    }
-
-    .location-btn:hover {
-      background: linear-gradient(135deg, #ef4444, #dc2626);
-      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
-    }
-
-    .location-btn:active {
-      transform: scale(0.98);
-    }
-
-    .location-btn:focus-visible {
-      outline: 2px solid #f87171;
-      outline-offset: 2px;
-    }
-
-    .location-btn svg {
-      width: 18px;
-      height: 18px;
-    }
-
     /* Outreach section */
     .outreach {
       text-align: center;
@@ -1837,21 +1799,6 @@
        UX REVAMP - Intent-Based Navigation
        ========================================== */
 
-    /* Emergency Button - Green Gradient */
-    .location-btn.green-style {
-      background: linear-gradient(135deg, #16a34a, #15803d);
-      box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
-      width: 100%;
-      justify-content: center;
-      padding: 0.875rem 1.5rem;
-      border-radius: 24px;
-    }
-
-    .location-btn.green-style:hover {
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
-    }
-
     /* Critical Alert Card */
     .critical-card {
       background: linear-gradient(135deg, #1e1e2e, #252538);
@@ -3174,6 +3121,38 @@
       50% { opacity: 0.5; transform: scale(0.85); }
     }
 
+    /* 911 Location link in top nav */
+    .nav-911-link {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      border: none;
+      color: white;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-decoration: none;
+      min-height: 36px;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+
+    .nav-911-link:hover {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+    }
+
+    .nav-911-link:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 2px;
+    }
+
+    .nav-911-link i {
+      font-size: 1rem;
+    }
+
     /* ===========================================
        ALERTS FEED SCREEN STYLES
        =========================================== */
@@ -4198,83 +4177,6 @@
       }
     }
 
-    /* Location button - full width and wrap text on mobile */
-    .location-btn.green-style {
-      word-break: break-word;
-      text-align: center;
-      line-height: 1.3;
-      min-height: 48px;
-      padding: 0.75rem 1rem;
-    }
-
-    /* Mobile Sticky Bottom Bar - Always accessible 911 button */
-    .mobile-sticky-bottom {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: rgba(26, 26, 46, 0.98);
-      border-top: 1px solid #333;
-      padding: 0.75rem 1rem;
-      padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    @media (max-width: 767px) {
-      .mobile-sticky-bottom {
-        display: block;
-      }
-
-      /* Hide the header 911 button on mobile - we have the sticky one */
-      header .location-btn.green-style {
-        display: none;
-      }
-
-      /* Add bottom padding to body so content doesn't get hidden behind sticky bar */
-      body {
-        padding-bottom: max(5rem, calc(4rem + env(safe-area-inset-bottom)));
-      }
-
-      /* Reduce header margin since button is gone */
-      header {
-        margin-bottom: 0.75rem;
-      }
-    }
-
-    .mobile-sticky-bottom .sticky-911-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      width: 100%;
-      background: linear-gradient(135deg, #16a34a, #15803d);
-      color: white;
-      border: none;
-      padding: 0.875rem 1.5rem;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
-      transition: all 0.15s ease;
-    }
-
-    .mobile-sticky-bottom .sticky-911-btn:hover {
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
-    }
-
-    .mobile-sticky-bottom .sticky-911-btn:active {
-      transform: scale(0.98);
-    }
-
-    .mobile-sticky-bottom .sticky-911-btn i {
-      font-size: 1.1rem;
-    }
-
     /* Critical Card - Improved mobile layout */
     @media (max-width: 400px) {
       .critical-card {
@@ -5041,6 +4943,10 @@
         <button class="lang-btn" data-lang="vi">VI</button>
       </div>
       <div class="top-bar-controls">
+        <a href="emergency.html" class="nav-911-link" title="Get My Location for 911">
+          <i class="ph ph-map-pin"></i>
+          <span data-i18n="emergency_911">911 Location</span>
+        </a>
         <button class="alerts-toggle-btn" id="alertsToggleBtn" onclick="openAlertsScreen()" aria-label="View live news and alerts feed" title="Live News & Alerts Feed">
           <span class="pulse-indicator"></span>
           <span>News & Alerts</span>
@@ -5057,12 +4963,7 @@
 
     <header>
       <h1 data-i18n="title" style="text-align: center; margin-bottom: 0.25rem;">Nashville Winter Resources</h1>
-      <p class="subtitle" data-i18n="subtitle" style="text-align: center; margin-bottom: 1.25rem;">Shelter, food & support during extreme weather</p>
-
-      <a href="emergency.html" class="location-btn green-style">
-        <i class="ph ph-map-pin"></i>
-        <span data-i18n="get_location_911">Get My Location for 911</span>
-      </a>
+      <p class="subtitle" data-i18n="subtitle" style="text-align: center; margin-bottom: 0.75rem;">Shelter, food & support during extreme weather</p>
     </header>
 
     <!-- Critical Alert Card - Emergency Shelter -->
@@ -7926,7 +7827,7 @@
 
     // Update internal navigation links to preserve language
     function updateInternalLinks(lang) {
-      document.querySelectorAll('.location-btn, .back-link').forEach(link => {
+      document.querySelectorAll('.nav-911-link, .back-link').forEach(link => {
         const baseUrl = link.getAttribute('href').split('?')[0];
         link.href = (lang === 'en') ? baseUrl : `${baseUrl}?${lang}`;
       });
@@ -8802,9 +8703,9 @@
       });
     });
 
-    // Track location button click
-    document.querySelector('.location-btn')?.addEventListener('click', () => {
-      trackActivity('location_btn_click', { destination: 'emergency.html' });
+    // Track 911 location link click
+    document.querySelector('.nav-911-link')?.addEventListener('click', () => {
+      trackActivity('nav_911_link_click', { destination: 'emergency.html' });
     });
 
     // ===========================================
@@ -11281,12 +11182,5 @@
   </script>
   <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-  <!-- Mobile Sticky Bottom Bar - 911 always accessible -->
-  <div class="mobile-sticky-bottom">
-    <a href="emergency.html" class="sticky-911-btn">
-      <i class="ph ph-map-pin"></i>
-      <span data-i18n="get_location_911">Get My Location for 911</span>
-    </a>
-  </div>
 </body>
 </html>
