@@ -4760,9 +4760,9 @@
       font-size: 0.8125rem;
     }
 
-    /* NSWX Radar */
+    /* NSWX Radar - Minimized View */
     .nswx-radar {
-      padding: 16px 20px;
+      padding: 12px 16px;
       border-bottom: 1px solid #2a2a40;
       background: linear-gradient(135deg, #1e2a38 0%, #1a1a2e 100%);
     }
@@ -4771,7 +4771,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .nswx-radar-title {
@@ -4802,32 +4802,195 @@
       color: #666;
     }
 
-    .nswx-radar-images {
+    .nswx-radar-thumbs {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 8px;
     }
 
-    .nswx-radar-item {
+    .nswx-radar-thumb {
       background: #0a0a15;
-      border-radius: 8px;
+      border-radius: 6px;
       overflow: hidden;
       border: 1px solid #2a2a40;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
     }
 
-    .nswx-radar-label {
-      padding: 8px 12px;
-      font-size: 0.6875rem;
+    .nswx-radar-thumb:hover {
+      border-color: #4ecdc4;
+      transform: scale(1.02);
+    }
+
+    .nswx-radar-thumb-label {
+      padding: 4px 8px;
+      font-size: 0.625rem;
       color: #888;
       background: #151525;
       text-align: center;
       border-bottom: 1px solid #2a2a40;
     }
 
-    .nswx-radar-item img {
+    .nswx-radar-thumb img {
       width: 100%;
       height: auto;
       display: block;
+      max-height: 100px;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .nswx-radar-tap-hint {
+      text-align: center;
+      font-size: 0.625rem;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    /* Radar Modal */
+    .radar-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 10000;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .radar-modal-overlay.active {
+      display: flex;
+    }
+
+    .radar-modal-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+      z-index: 10;
+    }
+
+    .radar-modal-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #4ecdc4;
+    }
+
+    .radar-modal-close {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1.25rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .radar-modal-close:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .radar-modal-swiper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      overflow: hidden;
+      touch-action: pan-y pinch-zoom;
+    }
+
+    .radar-modal-slides {
+      display: flex;
+      transition: transform 0.3s ease-out;
+      width: 200%;
+      height: 100%;
+    }
+
+    .radar-modal-slide {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px 80px;
+      box-sizing: border-box;
+    }
+
+    .radar-modal-slide-label {
+      font-size: 0.875rem;
+      color: #888;
+      margin-bottom: 12px;
+    }
+
+    .radar-modal-slide img {
+      max-width: 100%;
+      max-height: calc(100% - 40px);
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .radar-modal-nav {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .radar-modal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .radar-modal-dot.active {
+      background: #4ecdc4;
+      transform: scale(1.2);
+    }
+
+    .radar-modal-dot:hover {
+      background: rgba(255,255,255,0.5);
+    }
+
+    .radar-modal-dot.active:hover {
+      background: #4ecdc4;
+    }
+
+    .radar-modal-swipe-hint {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      color: #666;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .radar-modal-swipe-hint svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
     }
 
     /* NSWX Mobile Responsive */
@@ -4853,8 +5016,12 @@
         align-items: flex-start;
       }
 
-      .nswx-radar-images {
-        grid-template-columns: 1fr;
+      .nswx-radar-thumbs {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .nswx-radar-thumb img {
+        max-height: 80px;
       }
     }
 
@@ -5035,22 +5202,23 @@
         </div>
       </div>
 
-      <!-- Radar Display -->
+      <!-- Radar Display - Minimized Thumbnails -->
       <div class="nswx-radar" id="nswxRadar">
         <div class="nswx-radar-header">
           <span class="nswx-radar-title">Live Radar</span>
           <span class="nswx-radar-refresh" id="nswxRadarRefresh">Updated just now</span>
         </div>
-        <div class="nswx-radar-images">
-          <div class="nswx-radar-item">
-            <div class="nswx-radar-label">25-Mile View</div>
+        <div class="nswx-radar-thumbs">
+          <div class="nswx-radar-thumb" onclick="openRadarModal(0)">
+            <div class="nswx-radar-thumb-label">25-Mile</div>
             <img id="nswxRadar25" src="https://www.myownradar.com/nashsvrwx/mosaic/nashville25_anim.gif" alt="Nashville 25-mile radar">
           </div>
-          <div class="nswx-radar-item">
-            <div class="nswx-radar-label">75-Mile View</div>
+          <div class="nswx-radar-thumb" onclick="openRadarModal(1)">
+            <div class="nswx-radar-thumb-label">75-Mile</div>
             <img id="nswxRadar75" src="https://www.myownradar.com/nashsvrwx/mosaic/nashville75_anim.gif" alt="Nashville 75-mile radar">
           </div>
         </div>
+        <div class="nswx-radar-tap-hint">Tap to expand</div>
       </div>
 
       <!-- Blog Posts -->
@@ -11034,6 +11202,192 @@
 
       // Update radar timestamp every 10 seconds
       setInterval(updateRadarTimestamp, 10 * 1000);
+    })();
+  </script>
+
+  <!-- Radar Modal -->
+  <div class="radar-modal-overlay" id="radarModal">
+    <div class="radar-modal-header">
+      <span class="radar-modal-title">Live Radar</span>
+      <button class="radar-modal-close" onclick="closeRadarModal()" aria-label="Close">&times;</button>
+    </div>
+    <div class="radar-modal-swiper" id="radarSwiper">
+      <div class="radar-modal-slides" id="radarSlides">
+        <div class="radar-modal-slide">
+          <div class="radar-modal-slide-label">25-Mile View</div>
+          <img id="radarModal25" src="https://www.myownradar.com/nashsvrwx/mosaic/nashville25_anim.gif" alt="Nashville 25-mile radar">
+        </div>
+        <div class="radar-modal-slide">
+          <div class="radar-modal-slide-label">75-Mile View</div>
+          <img id="radarModal75" src="https://www.myownradar.com/nashsvrwx/mosaic/nashville75_anim.gif" alt="Nashville 75-mile radar">
+        </div>
+      </div>
+    </div>
+    <div class="radar-modal-swipe-hint">
+      <svg viewBox="0 0 24 24"><path d="M6.5 8.5l-4 4 4 4M17.5 8.5l4 4-4 4"/></svg>
+      Swipe to switch views
+    </div>
+    <div class="radar-modal-nav">
+      <div class="radar-modal-dot active" onclick="goToRadarSlide(0)"></div>
+      <div class="radar-modal-dot" onclick="goToRadarSlide(1)"></div>
+    </div>
+  </div>
+
+  <script>
+    // Radar Modal Swipe Functionality
+    (function() {
+      let currentSlide = 0;
+      let startX = 0;
+      let currentX = 0;
+      let isDragging = false;
+
+      function openRadarModal(slideIndex = 0) {
+        const modal = document.getElementById('radarModal');
+        const timestamp = Date.now();
+
+        // Update modal images with fresh timestamps
+        document.getElementById('radarModal25').src =
+          `https://www.myownradar.com/nashsvrwx/mosaic/nashville25_anim.gif?t=${timestamp}`;
+        document.getElementById('radarModal75').src =
+          `https://www.myownradar.com/nashsvrwx/mosaic/nashville75_anim.gif?t=${timestamp}`;
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        goToRadarSlide(slideIndex);
+      }
+
+      function closeRadarModal() {
+        const modal = document.getElementById('radarModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      function goToRadarSlide(index) {
+        currentSlide = index;
+        const slides = document.getElementById('radarSlides');
+        slides.style.transform = `translateX(-${index * 50}%)`;
+
+        // Update dots
+        const dots = document.querySelectorAll('.radar-modal-dot');
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === index);
+        });
+      }
+
+      // Touch events for swipe
+      const swiper = document.getElementById('radarSwiper');
+
+      swiper.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+        document.getElementById('radarSlides').style.transition = 'none';
+      }, { passive: true });
+
+      swiper.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        currentX = e.touches[0].clientX;
+        const diff = currentX - startX;
+        const baseOffset = currentSlide * 50;
+        const dragOffset = (diff / window.innerWidth) * 50;
+        document.getElementById('radarSlides').style.transform =
+          `translateX(-${baseOffset - dragOffset}%)`;
+      }, { passive: true });
+
+      swiper.addEventListener('touchend', () => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        const diff = currentX - startX;
+        const threshold = window.innerWidth * 0.2;
+
+        document.getElementById('radarSlides').style.transition = 'transform 0.3s ease-out';
+
+        if (diff > threshold && currentSlide > 0) {
+          goToRadarSlide(currentSlide - 1);
+        } else if (diff < -threshold && currentSlide < 1) {
+          goToRadarSlide(currentSlide + 1);
+        } else {
+          goToRadarSlide(currentSlide);
+        }
+
+        startX = 0;
+        currentX = 0;
+      });
+
+      // Mouse events for desktop swipe
+      swiper.addEventListener('mousedown', (e) => {
+        startX = e.clientX;
+        isDragging = true;
+        document.getElementById('radarSlides').style.transition = 'none';
+        e.preventDefault();
+      });
+
+      swiper.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        currentX = e.clientX;
+        const diff = currentX - startX;
+        const baseOffset = currentSlide * 50;
+        const dragOffset = (diff / window.innerWidth) * 50;
+        document.getElementById('radarSlides').style.transform =
+          `translateX(-${baseOffset - dragOffset}%)`;
+      });
+
+      swiper.addEventListener('mouseup', () => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        const diff = currentX - startX;
+        const threshold = window.innerWidth * 0.15;
+
+        document.getElementById('radarSlides').style.transition = 'transform 0.3s ease-out';
+
+        if (diff > threshold && currentSlide > 0) {
+          goToRadarSlide(currentSlide - 1);
+        } else if (diff < -threshold && currentSlide < 1) {
+          goToRadarSlide(currentSlide + 1);
+        } else {
+          goToRadarSlide(currentSlide);
+        }
+
+        startX = 0;
+        currentX = 0;
+      });
+
+      swiper.addEventListener('mouseleave', () => {
+        if (isDragging) {
+          isDragging = false;
+          document.getElementById('radarSlides').style.transition = 'transform 0.3s ease-out';
+          goToRadarSlide(currentSlide);
+          startX = 0;
+          currentX = 0;
+        }
+      });
+
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        const modal = document.getElementById('radarModal');
+        if (!modal.classList.contains('active')) return;
+
+        if (e.key === 'Escape') {
+          closeRadarModal();
+        } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
+          goToRadarSlide(currentSlide - 1);
+        } else if (e.key === 'ArrowRight' && currentSlide < 1) {
+          goToRadarSlide(currentSlide + 1);
+        }
+      });
+
+      // Close on overlay click (not on content)
+      document.getElementById('radarModal').addEventListener('click', (e) => {
+        if (e.target.id === 'radarModal') {
+          closeRadarModal();
+        }
+      });
+
+      // Expose functions globally
+      window.openRadarModal = openRadarModal;
+      window.closeRadarModal = closeRadarModal;
+      window.goToRadarSlide = goToRadarSlide;
     })();
   </script>
 
