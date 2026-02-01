@@ -11922,7 +11922,16 @@
       window.prevPodcastEpisode = function() {
         if (currentEpisodeIndex > 0) {
           if (podcastAudio) podcastAudio.pause();
-          loadEpisode(currentEpisodeIndex - 1);
+          const newIndex = currentEpisodeIndex - 1;
+          loadEpisode(newIndex);
+          // Track episode navigation
+          if (typeof trackActivity === 'function' && allEpisodes[newIndex]) {
+            trackActivity('podcast_episode_prev', {
+              fromEpisode: currentEpisodeIndex + 1,
+              toEpisode: newIndex + 1,
+              episodeTitle: allEpisodes[newIndex].title
+            });
+          }
         }
       };
 
@@ -11930,7 +11939,16 @@
       window.nextPodcastEpisode = function() {
         if (currentEpisodeIndex < allEpisodes.length - 1) {
           if (podcastAudio) podcastAudio.pause();
-          loadEpisode(currentEpisodeIndex + 1);
+          const newIndex = currentEpisodeIndex + 1;
+          loadEpisode(newIndex);
+          // Track episode navigation
+          if (typeof trackActivity === 'function' && allEpisodes[newIndex]) {
+            trackActivity('podcast_episode_next', {
+              fromEpisode: currentEpisodeIndex,
+              toEpisode: newIndex + 1,
+              episodeTitle: allEpisodes[newIndex].title
+            });
+          }
         }
       };
 
@@ -11960,12 +11978,28 @@
             playIcon.classList.remove('ph-play');
             playIcon.classList.add('ph-pause');
           }
+          // Track podcast play
+          if (typeof trackActivity === 'function' && currentEpisode) {
+            trackActivity('podcast_play', {
+              episodeTitle: currentEpisode.title,
+              episodeIndex: currentEpisodeIndex + 1,
+              currentTime: podcastAudio.currentTime
+            });
+          }
         } else {
           podcastAudio.pause();
           if (playBtn) playBtn.classList.remove('playing');
           if (playIcon) {
             playIcon.classList.remove('ph-pause');
             playIcon.classList.add('ph-play');
+          }
+          // Track podcast pause
+          if (typeof trackActivity === 'function' && currentEpisode) {
+            trackActivity('podcast_pause', {
+              episodeTitle: currentEpisode.title,
+              episodeIndex: currentEpisodeIndex + 1,
+              currentTime: podcastAudio.currentTime
+            });
           }
         }
       };
@@ -11993,6 +12027,14 @@
 
         const speedBtn = document.getElementById('podcastSpeedBtn');
         if (speedBtn) speedBtn.textContent = speed + 'x';
+
+        // Track speed change
+        if (typeof trackActivity === 'function') {
+          trackActivity('podcast_speed_change', {
+            speed: speed,
+            episodeTitle: currentEpisode ? currentEpisode.title : null
+          });
+        }
       };
 
       // Initialize podcast section
