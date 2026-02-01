@@ -11840,7 +11840,31 @@
               signal: AbortSignal.timeout(8000)
             });
             if (!res.ok) continue;
-            const xmlText = await res.text();
+            let xmlText = await res.text();
+
+            // Handle JSON-wrapped responses from some CORS proxies
+            // Some proxies return: [{"data": "<?xml..."}] or {"data": "<?xml..."}
+            const trimmed = xmlText.trim();
+            if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+              try {
+                const json = JSON.parse(trimmed);
+                // Handle array format: [{"data": "..."}]
+                if (Array.isArray(json) && json[0]?.data) {
+                  xmlText = json[0].data;
+                }
+                // Handle object format: {"data": "..."}
+                else if (json.data) {
+                  xmlText = json.data;
+                }
+                // Handle object format: {"contents": "..."} (allorigins non-raw)
+                else if (json.contents) {
+                  xmlText = json.contents;
+                }
+              } catch (jsonErr) {
+                // Not valid JSON, use as-is (might be XML starting with whitespace)
+              }
+            }
+
             const episodes = parseRSS(xmlText);
             if (episodes && episodes.length > 0) {
               return episodes;
