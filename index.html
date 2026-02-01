@@ -4981,6 +4981,7 @@
     .podcast-subtitle {
       font-size: 0.8125rem;
       color: #9ca3af;
+      white-space: nowrap;
     }
 
     .podcast-nav {
@@ -5356,7 +5357,7 @@
       <!-- Bluesky Ticker -->
       <div class="nswx-ticker">
         <div class="nswx-ticker-content" id="nswxTicker">
-          <span class="nswx-ticker-loading">Loading updates...</span>
+          <span class="nswx-ticker-loading" data-i18n="nswx_loading_updates">Loading updates...</span>
         </div>
       </div>
 
@@ -5377,16 +5378,16 @@
       <!-- Radar Display -->
       <div class="nswx-radar" id="nswxRadar">
         <div class="nswx-radar-header">
-          <span class="nswx-radar-title">Live Radar</span>
-          <span class="nswx-radar-refresh" id="nswxRadarRefresh">Updated just now</span>
+          <span class="nswx-radar-title" data-i18n="nswx_live_radar">Live Radar</span>
+          <span class="nswx-radar-refresh" id="nswxRadarRefresh" data-i18n="nswx_updated_just_now">Updated just now</span>
         </div>
         <div class="nswx-radar-images">
           <div class="nswx-radar-item">
-            <div class="nswx-radar-label">25-Mile View</div>
+            <div class="nswx-radar-label" data-i18n="nswx_25_mile">25-Mile View</div>
             <img id="nswxRadar25" src="https://www.myownradar.com/nashsvrwx/mosaic/nashville25_anim.gif" alt="Nashville 25-mile radar">
           </div>
           <div class="nswx-radar-item">
-            <div class="nswx-radar-label">75-Mile View</div>
+            <div class="nswx-radar-label" data-i18n="nswx_75_mile">75-Mile View</div>
             <img id="nswxRadar75" src="https://www.myownradar.com/nashsvrwx/mosaic/nashville75_anim.gif" alt="Nashville 75-mile radar">
           </div>
         </div>
@@ -5394,16 +5395,16 @@
 
       <!-- Blog Posts -->
       <div class="nswx-posts" id="nswxPosts">
-        <div class="nswx-posts-loading">Loading forecasts...</div>
+        <div class="nswx-posts-loading" data-i18n="nswx_loading_forecasts">Loading forecasts...</div>
       </div>
 
       <!-- Footer -->
       <div class="nswx-footer">
         <div class="nswx-footer-links">
-          <a href="https://www.patreon.com/NashSevereWx" target="_blank" rel="noopener noreferrer">Support on Patreon</a>
-          <a href="https://nashvillesevereweather.com/shop/" target="_blank" rel="noopener noreferrer">Merch</a>
+          <a href="https://www.patreon.com/NashSevereWx" target="_blank" rel="noopener noreferrer" data-i18n="nswx_support_patreon">Support on Patreon</a>
+          <a href="https://nashvillesevereweather.com/shop/" target="_blank" rel="noopener noreferrer" data-i18n="nswx_merch">Merch</a>
         </div>
-        <a class="nswx-archive-link" href="https://nashvillesevereweather.com/2026/01/" target="_blank" rel="noopener noreferrer">View all January posts →</a>
+        <a class="nswx-archive-link" id="nswxArchiveLink" href="https://nashvillesevereweather.com/2026/01/" target="_blank" rel="noopener noreferrer">View all January posts →</a>
       </div>
     </div>
 
@@ -5416,19 +5417,19 @@
           <div class="podcast-info">
             <div class="podcast-brand">
               <div class="podcast-title">City Cast Nashville</div>
-              <span class="podcast-badge">Podcast</span>
+              <span class="podcast-badge" data-i18n="podcast_badge">Podcast</span>
             </div>
-            <div class="podcast-subtitle">Daily local news for Music City</div>
+            <div class="podcast-subtitle" data-i18n="podcast_subtitle">Daily local news for Music City</div>
           </div>
         </div>
         <div class="podcast-nav">
           <a href="https://nashville.citycast.fm/" target="_blank" rel="noopener noreferrer">
             <i class="ph ph-globe"></i>
-            Website
+            <span data-i18n="podcast_website">Website</span>
           </a>
           <a href="https://nashville.citycast.fm/subscribe-hey-nashville-newsletter-tennessee" target="_blank" rel="noopener noreferrer">
             <i class="ph ph-envelope"></i>
-            Newsletter
+            <span data-i18n="podcast_newsletter">Newsletter</span>
           </a>
         </div>
       </div>
@@ -5437,11 +5438,11 @@
       <div class="podcast-episode" id="podcastEpisode">
         <div class="podcast-loading" id="podcastLoading">
           <i class="ph ph-podcast"></i>
-          <span>Loading latest episode...</span>
+          <span data-i18n="podcast_loading">Loading latest episode...</span>
         </div>
         <div id="podcastPlayer" style="display: none;">
-          <div class="podcast-episode-label">Latest Episode</div>
-          <div class="podcast-episode-title" id="podcastEpisodeTitle">Loading...</div>
+          <div class="podcast-episode-label" data-i18n="podcast_latest_episode">Latest Episode</div>
+          <div class="podcast-episode-title" id="podcastEpisodeTitle" data-i18n="podcast_loading_title">Loading...</div>
           <div class="podcast-episode-meta">
             <span id="podcastEpisodeDate">--</span>
             <span class="podcast-episode-duration">
@@ -5471,12 +5472,12 @@
       <!-- Footer -->
       <div class="podcast-footer">
         <div class="podcast-footer-links">
-          <a href="https://open.spotify.com/show/78dK8WgtAKBXflxYoAf3yb" target="_blank" rel="noopener noreferrer">Spotify</a>
-          <a href="https://podcasts.apple.com/us/podcast/city-cast-nashville/id1706803583" target="_blank" rel="noopener noreferrer">Apple Podcasts</a>
-          <a href="https://feeds.megaphone.fm/CC2002452330" target="_blank" rel="noopener noreferrer">RSS</a>
+          <a href="https://open.spotify.com/show/78dK8WgtAKBXflxYoAf3yb" target="_blank" rel="noopener noreferrer" data-i18n="podcast_spotify">Spotify</a>
+          <a href="https://podcasts.apple.com/us/podcast/city-cast-nashville/id1706803583" target="_blank" rel="noopener noreferrer" data-i18n="podcast_apple">Apple Podcasts</a>
+          <a href="https://feeds.megaphone.fm/CC2002452330" target="_blank" rel="noopener noreferrer" data-i18n="podcast_rss">RSS</a>
         </div>
         <a class="podcast-subscribe-link" href="https://membership.citycast.fm/nashville" target="_blank" rel="noopener noreferrer">
-          Become a Neighbor <i class="ph ph-arrow-right"></i>
+          <span data-i18n="podcast_become_neighbor">Become a Neighbor</span> <i class="ph ph-arrow-right"></i>
         </a>
       </div>
     </div>
@@ -7408,7 +7409,30 @@
         alerts_src_airnow: "AirNow AQI",
         alerts_src_airnow_desc: "Requires API key registration",
         alerts_src_tema: "TEMA Shelters",
-        alerts_src_tema_desc: "Warming/cooling centers"
+        alerts_src_tema_desc: "Warming/cooling centers",
+        // NSWX Section
+        nswx_live_radar: "Live Radar",
+        nswx_updated_just_now: "Updated just now",
+        nswx_updated_minutes_ago: "Updated {0}m ago",
+        nswx_25_mile: "25-Mile View",
+        nswx_75_mile: "75-Mile View",
+        nswx_loading_updates: "Loading updates...",
+        nswx_loading_forecasts: "Loading forecasts...",
+        nswx_support_patreon: "Support on Patreon",
+        nswx_merch: "Merch",
+        nswx_view_all_posts: "View all {0} posts",
+        // Podcast Section
+        podcast_badge: "Podcast",
+        podcast_subtitle: "Daily local news for Music City",
+        podcast_website: "Website",
+        podcast_newsletter: "Newsletter",
+        podcast_loading: "Loading latest episode...",
+        podcast_latest_episode: "Latest Episode",
+        podcast_loading_title: "Loading...",
+        podcast_spotify: "Spotify",
+        podcast_apple: "Apple Podcasts",
+        podcast_rss: "RSS",
+        podcast_become_neighbor: "Become a Neighbor"
       },
       es: {
         title: "Recursos de Invierno en Nashville",
@@ -7604,7 +7628,30 @@
         alerts_src_airnow: "AirNow AQI",
         alerts_src_airnow_desc: "Requiere registro de clave API",
         alerts_src_tema: "Refugios TEMA",
-        alerts_src_tema_desc: "Centros de calentamiento/enfriamiento"
+        alerts_src_tema_desc: "Centros de calentamiento/enfriamiento",
+        // NSWX Section
+        nswx_live_radar: "Radar en Vivo",
+        nswx_updated_just_now: "Actualizado ahora",
+        nswx_updated_minutes_ago: "Actualizado hace {0}m",
+        nswx_25_mile: "Vista de 25 Millas",
+        nswx_75_mile: "Vista de 75 Millas",
+        nswx_loading_updates: "Cargando actualizaciones...",
+        nswx_loading_forecasts: "Cargando pronósticos...",
+        nswx_support_patreon: "Apoyar en Patreon",
+        nswx_merch: "Tienda",
+        nswx_view_all_posts: "Ver todos los posts de {0}",
+        // Podcast Section
+        podcast_badge: "Podcast",
+        podcast_subtitle: "Noticias locales diarias para Music City",
+        podcast_website: "Sitio Web",
+        podcast_newsletter: "Boletín",
+        podcast_loading: "Cargando último episodio...",
+        podcast_latest_episode: "Último Episodio",
+        podcast_loading_title: "Cargando...",
+        podcast_spotify: "Spotify",
+        podcast_apple: "Apple Podcasts",
+        podcast_rss: "RSS",
+        podcast_become_neighbor: "Hazte Vecino"
       },
       ar: {
         title: "موارد الشتاء في ناشفيل",
@@ -7800,7 +7847,30 @@
         alerts_src_airnow: "AirNow AQI",
         alerts_src_airnow_desc: "يتطلب تسجيل مفتاح API",
         alerts_src_tema: "ملاجئ TEMA",
-        alerts_src_tema_desc: "مراكز التدفئة/التبريد"
+        alerts_src_tema_desc: "مراكز التدفئة/التبريد",
+        // NSWX Section
+        nswx_live_radar: "رادار مباشر",
+        nswx_updated_just_now: "تم التحديث الآن",
+        nswx_updated_minutes_ago: "تم التحديث منذ {0} دقيقة",
+        nswx_25_mile: "عرض 25 ميل",
+        nswx_75_mile: "عرض 75 ميل",
+        nswx_loading_updates: "جاري تحميل التحديثات...",
+        nswx_loading_forecasts: "جاري تحميل التوقعات...",
+        nswx_support_patreon: "ادعم على Patreon",
+        nswx_merch: "المتجر",
+        nswx_view_all_posts: "عرض جميع منشورات {0}",
+        // Podcast Section
+        podcast_badge: "بودكاست",
+        podcast_subtitle: "أخبار محلية يومية لمدينة الموسيقى",
+        podcast_website: "الموقع",
+        podcast_newsletter: "النشرة الإخبارية",
+        podcast_loading: "جاري تحميل آخر حلقة...",
+        podcast_latest_episode: "آخر حلقة",
+        podcast_loading_title: "جاري التحميل...",
+        podcast_spotify: "سبوتيفاي",
+        podcast_apple: "آبل بودكاست",
+        podcast_rss: "RSS",
+        podcast_become_neighbor: "كن جارًا"
       },
       ku: {
         title: "سەرچاوەکانی زستانی ناشڤیل",
@@ -7996,7 +8066,30 @@
         alerts_src_airnow: "AirNow AQI",
         alerts_src_airnow_desc: "پێویستی بە تۆمارکردنی API هەیە",
         alerts_src_tema: "پەناگاکانی TEMA",
-        alerts_src_tema_desc: "ناوەندەکانی گەرمکردنەوە/فێنککردنەوە"
+        alerts_src_tema_desc: "ناوەندەکانی گەرمکردنەوە/فێنککردنەوە",
+        // NSWX Section
+        nswx_live_radar: "ڕادار زیندوو",
+        nswx_updated_just_now: "ئێستا نوێکرایەوە",
+        nswx_updated_minutes_ago: "{0} خولەک پێش ئێستا نوێکرایەوە",
+        nswx_25_mile: "بینینی 25 میل",
+        nswx_75_mile: "بینینی 75 میل",
+        nswx_loading_updates: "بارکردنی نوێکاریەکان...",
+        nswx_loading_forecasts: "بارکردنی پێشبینییەکان...",
+        nswx_support_patreon: "پشتیوانی لە Patreon",
+        nswx_merch: "فرۆشگا",
+        nswx_view_all_posts: "بینینی هەموو بابەتەکانی {0}",
+        // Podcast Section
+        podcast_badge: "پۆدکاست",
+        podcast_subtitle: "هەواڵی ڕۆژانەی ناوخۆیی بۆ شاری میوزیک",
+        podcast_website: "وێبسایت",
+        podcast_newsletter: "نامەی هەواڵ",
+        podcast_loading: "بارکردنی دوایین ئەڵقە...",
+        podcast_latest_episode: "دوایین ئەڵقە",
+        podcast_loading_title: "بارکردن...",
+        podcast_spotify: "سپۆتیفای",
+        podcast_apple: "ئەپڵ پۆدکاست",
+        podcast_rss: "RSS",
+        podcast_become_neighbor: "ببە دراوسێ"
       },
       vi: {
         title: "Tài Nguyên Mùa Đông Nashville",
@@ -8192,7 +8285,30 @@
         alerts_src_airnow: "AirNow AQI",
         alerts_src_airnow_desc: "Cần đăng ký khóa API",
         alerts_src_tema: "Nơi trú ẩn TEMA",
-        alerts_src_tema_desc: "Trung tâm sưởi ấm/làm mát"
+        alerts_src_tema_desc: "Trung tâm sưởi ấm/làm mát",
+        // NSWX Section
+        nswx_live_radar: "Radar Trực Tiếp",
+        nswx_updated_just_now: "Vừa cập nhật",
+        nswx_updated_minutes_ago: "Cập nhật {0} phút trước",
+        nswx_25_mile: "Tầm Nhìn 25 Dặm",
+        nswx_75_mile: "Tầm Nhìn 75 Dặm",
+        nswx_loading_updates: "Đang tải cập nhật...",
+        nswx_loading_forecasts: "Đang tải dự báo...",
+        nswx_support_patreon: "Hỗ Trợ trên Patreon",
+        nswx_merch: "Cửa Hàng",
+        nswx_view_all_posts: "Xem tất cả bài viết {0}",
+        // Podcast Section
+        podcast_badge: "Podcast",
+        podcast_subtitle: "Tin tức địa phương hàng ngày cho Music City",
+        podcast_website: "Trang Web",
+        podcast_newsletter: "Bản Tin",
+        podcast_loading: "Đang tải tập mới nhất...",
+        podcast_latest_episode: "Tập Mới Nhất",
+        podcast_loading_title: "Đang tải...",
+        podcast_spotify: "Spotify",
+        podcast_apple: "Apple Podcasts",
+        podcast_rss: "RSS",
+        podcast_become_neighbor: "Trở Thành Hàng Xóm"
       }
     };
 
@@ -8300,6 +8416,14 @@
       }
       if (cachedOutagesData) {
         renderOutages(cachedOutagesData);
+      }
+
+      // Update NSWX section texts
+      if (typeof updateArchiveLink === 'function') {
+        updateArchiveLink();
+      }
+      if (typeof updateRadarTimestamp === 'function') {
+        updateRadarTimestamp();
       }
     }
 
@@ -11370,10 +11494,11 @@
         const now = new Date();
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, '0');
-        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const monthKeys = ['month_jan', 'month_feb', 'month_mar', 'month_apr', 'month_may', 'month_jun', 'month_jul', 'month_aug', 'month_sep', 'month_oct', 'month_nov', 'month_dec'];
+        const translatedMonth = t(monthKeys[now.getMonth()]);
 
         archiveLink.href = `${NSWX_BLOG_URL}/${year}/${month}/`;
-        archiveLink.textContent = `View all ${monthNames[now.getMonth()]} posts →`;
+        archiveLink.textContent = t('nswx_view_all_posts').replace('{0}', translatedMonth) + ' →';
       }
 
       // Refresh radar images every minute
@@ -11393,7 +11518,7 @@
 
         radarLastUpdate = timestamp;
         if (refreshEl) {
-          refreshEl.textContent = 'Updated just now';
+          refreshEl.textContent = t('nswx_updated_just_now');
         }
       }
 
@@ -11404,10 +11529,10 @@
 
         const seconds = Math.floor((Date.now() - radarLastUpdate) / 1000);
         if (seconds < 60) {
-          refreshEl.textContent = 'Updated just now';
+          refreshEl.textContent = t('nswx_updated_just_now');
         } else {
           const mins = Math.floor(seconds / 60);
-          refreshEl.textContent = `Updated ${mins}m ago`;
+          refreshEl.textContent = t('nswx_updated_minutes_ago').replace('{0}', mins);
         }
       }
 
