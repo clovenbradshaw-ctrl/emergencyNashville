@@ -2802,13 +2802,24 @@
     }
 
 
+    /* Side-by-side panel collapsed state */
+    .side-by-side-panel.collapsed .panel-body {
+      display: none;
+    }
+
+    .side-by-side-panel.collapsed .panel-header {
+      border-bottom: none;
+    }
+
     /* Map Panel - don't stretch with resource panel */
     .map-panel {
       flex: none;
       align-self: flex-start;
     }
 
+    /* Ensure map panel body is always visible (not collapsed by default) */
     .map-panel .panel-body {
+      display: block;
       height: 350px;
     }
 
