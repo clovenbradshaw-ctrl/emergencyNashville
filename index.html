@@ -1706,6 +1706,10 @@
       transform: translateX(16px);
     }
 
+    .map-modal-toggle.toggle-blue input:checked + .map-modal-toggle-slider {
+      background: #60a5fa;
+    }
+
     .map-modal-footer {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -7171,6 +7175,12 @@
           <span class="map-modal-toggle-slider"></span>
           <span data-i18n="map_legend_heatmap">Heatmap View</span>
         </label>
+        <label class="map-modal-toggle toggle-blue">
+          <input type="checkbox" id="toggleWarmingCenters" checked onchange="toggleMapLayer('warmingCenters')">
+          <span class="map-modal-toggle-slider"></span>
+          <i class="ph ph-campfire" style="font-size: 16px;"></i>
+          <span data-i18n="map_legend_warming_toggle">Warming Shelters</span>
+        </label>
       </div>
     </div>
     <div class="map-modal-footer">
@@ -10194,6 +10204,12 @@
       if (modal) {
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
+
+        // Sync toggle checkbox states
+        const warmingToggle = document.getElementById('toggleWarmingCenters');
+        if (warmingToggle) warmingToggle.checked = mapToggles.warmingCenters;
+        const heatmapToggle = document.getElementById('toggleHeatmap');
+        if (heatmapToggle) heatmapToggle.checked = mapToggles.heatmap;
 
         // Fetch road closures on first map view (lazy load)
         if (typeof fetchRoadClosuresIfNeeded === 'function') {
