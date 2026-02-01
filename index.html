@@ -8452,9 +8452,9 @@
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.dataset.i18n;
         if (translations[lang] && translations[lang][key]) {
-          el.textContent = translations[lang][key];
+          el.innerHTML = translations[lang][key];
         } else if (translations['en'][key]) {
-          el.textContent = translations['en'][key];
+          el.innerHTML = translations['en'][key];
         }
       });
 
@@ -11323,9 +11323,9 @@
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.dataset.i18n;
         if (translations[lang] && translations[lang][key]) {
-          el.textContent = translations[lang][key];
+          el.innerHTML = translations[lang][key];
         } else if (translations['en'][key]) {
-          el.textContent = translations['en'][key];
+          el.innerHTML = translations['en'][key];
         }
       });
 
