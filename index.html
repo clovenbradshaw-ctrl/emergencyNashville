@@ -11,37 +11,52 @@
   <!-- Fonts for Alerts Feed -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       /* Text scaling - adjustable via JS */
       --text-scale: 1;
 
-      /* Core colors - improved contrast */
-      --color-bg-primary: #1a1a2e;
-      --color-bg-secondary: #16213e;
-      --color-bg-tertiary: #0f3460;
+      /* Core colors - Sources-First Design System */
+      --color-bg-primary: #0a0e14;
+      --color-bg-secondary: #111820;
+      --color-bg-card: #161d27;
+      --color-bg-elevated: #1c2530;
 
-      /* Text colors - WCAG AA compliant on dark backgrounds */
-      --color-text-primary: #ffffff;
-      --color-text-secondary: #c8d3e0;  /* Improved from #94a3b8 - now 7:1 contrast */
-      --color-text-muted: #9badc4;       /* Improved from #64748b - now 5.5:1 contrast */
+      /* Legacy color mappings for backward compatibility */
+      --color-bg-tertiary: #1c2530;
 
       /* Accent colors */
-      --color-accent-red: #e63946;
-      --color-accent-red-hover: #f1404e;
-      --color-accent-blue: #60a5fa;
+      --color-accent-primary: #4ecdc4;
+      --color-accent-warning: #f59e0b;
+      --color-accent-danger: #ef4444;
+      --color-accent-info: #3b82f6;
+
+      /* Legacy accent mappings */
+      --color-accent-red: #ef4444;
+      --color-accent-red-hover: #f87171;
+      --color-accent-blue: #3b82f6;
       --color-accent-green: #10b981;
-      --color-accent-orange: #fb923c;    /* Improved from #f97316 */
-      --color-accent-cyan: #67e8f9;      /* Improved from #38bdf8 */
+      --color-accent-orange: #f59e0b;
+      --color-accent-cyan: #4ecdc4;
+
+      /* Text colors - WCAG AA compliant */
+      --color-text-primary: #f0f4f8;
+      --color-text-secondary: #8b9cb3;
+      --color-text-muted: #5a6a7e;
 
       /* Interactive surfaces */
+      --color-border-subtle: rgba(255, 255, 255, 0.08);
+      --color-border-accent: rgba(78, 205, 196, 0.3);
       --color-surface: rgba(255, 255, 255, 0.08);
       --color-surface-hover: rgba(255, 255, 255, 0.15);
-      --color-border: rgba(255, 255, 255, 0.15);
+      --color-border: rgba(255, 255, 255, 0.08);
+
+      /* Gradients */
+      --gradient-trust: linear-gradient(135deg, rgba(78, 205, 196, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%);
 
       /* Focus ring */
-      --color-focus: #60a5fa;
+      --color-focus: #4ecdc4;
     }
 
     /* Text size variants */
@@ -63,16 +78,14 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 50%, var(--color-bg-tertiary) 100%);
+      font-family: 'Source Serif 4', Georgia, serif;
+      background: var(--color-bg-primary);
       min-height: 100vh;
       min-height: 100dvh;
-      padding: 0.75rem 1rem;
-      padding-top: max(0.75rem, env(safe-area-inset-top));
-      padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
-      padding-left: max(1rem, env(safe-area-inset-left));
-      padding-right: max(1rem, env(safe-area-inset-right));
+      padding: 0;
+      padding-bottom: 100px; /* Space for footer nav */
       color: var(--color-text-primary);
+      line-height: 1.6;
       -webkit-text-size-adjust: 100%;
     }
 
@@ -242,10 +255,551 @@
       letter-spacing: 0.05em;
       padding: 0 0.35rem;
     }
-    
+
+    /* === SOURCES-FIRST HEADER === */
+    .header {
+      padding: 16px 20px;
+      background: var(--color-bg-secondary);
+      border-bottom: 1px solid var(--color-border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-accent-primary);
+      letter-spacing: -0.5px;
+    }
+
+    .logo span {
+      color: var(--color-text-secondary);
+      font-weight: 400;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .header-btn {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-subtle);
+      color: var(--color-text-secondary);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .header-btn:hover {
+      border-color: var(--color-accent-primary);
+      color: var(--color-accent-primary);
+    }
+
+    .tagline {
+      font-size: 13px;
+      color: var(--color-text-muted);
+    }
+
+    /* === EMERGENCY BANNER === */
+    .emergency-banner {
+      background: linear-gradient(90deg, rgba(239, 68, 68, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%);
+      border-left: 3px solid var(--color-accent-danger);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .emergency-pulse {
+      width: 10px;
+      height: 10px;
+      background: var(--color-accent-danger);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    .emergency-content { flex: 1; }
+
+    .emergency-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--color-accent-danger);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+    }
+
+    .emergency-text {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .emergency-link {
+      color: var(--color-accent-primary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    /* === SECTION HEADERS === */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 24px 20px 12px;
+    }
+
+    .section-header .section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 0;
+      padding-left: 0;
+    }
+
+    .section-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--color-accent-primary);
+      text-decoration: none;
+    }
+
+    /* === QUICK STATS BAR === */
+    .stats-bar {
+      display: flex;
+      padding: 16px 20px;
+      gap: 16px;
+      background: var(--color-bg-secondary);
+    }
+
+    .stat-item {
+      flex: 1;
+      text-align: center;
+      padding: 12px;
+      background: var(--color-bg-card);
+      border-radius: 8px;
+      border: 1px solid var(--color-border-subtle);
+    }
+
+    .stat-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-accent-warning);
+    }
+
+    .stat-value.danger { color: var(--color-accent-danger); }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      margin-top: 4px;
+    }
+
+    /* === TRUSTED SOURCES GRID === */
+    .trusted-sources { padding: 0 20px; }
+
+    .sources-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .source-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .source-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--source-color, var(--color-accent-primary));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .source-card:hover {
+      border-color: var(--color-border-accent);
+      transform: translateY(-2px);
+    }
+
+    .source-card:hover::before { opacity: 1; }
+    .source-card.has-update { border-color: var(--color-border-accent); }
+    .source-card.has-update::before { opacity: 1; }
+
+    .source-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .source-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      background: var(--color-bg-elevated);
+    }
+
+    .source-meta { flex: 1; }
+
+    .source-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: 2px;
+    }
+
+    .source-type {
+      font-size: 10px;
+      color: var(--color-text-muted);
+    }
+
+    .source-update {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .source-timestamp {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--color-text-muted);
+      margin-top: 8px;
+    }
+
+    .source-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 8px;
+      height: 8px;
+      background: var(--color-accent-primary);
+      border-radius: 50%;
+    }
+
+    .source-featured {
+      grid-column: span 2;
+      background: var(--gradient-trust);
+      border-color: var(--color-border-accent);
+    }
+
+    .source-featured .source-header { margin-bottom: 14px; }
+    .source-featured .source-update { -webkit-line-clamp: 3; font-size: 14px; }
+
+    /* === LIVE FEED === */
+    .live-feed { padding: 0 20px; }
+
+    .feed-item {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+
+    .feed-item:hover { border-color: var(--color-border-accent); }
+
+    .feed-source {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .feed-source-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      background: var(--color-bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+
+    .feed-source-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--color-accent-primary);
+    }
+
+    .feed-source-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--color-text-muted);
+      margin-left: auto;
+    }
+
+    .feed-severity {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+    }
+
+    .feed-severity.moderate { background: rgba(245, 158, 11, 0.2); color: var(--color-accent-warning); }
+    .feed-severity.severe { background: rgba(239, 68, 68, 0.2); color: var(--color-accent-danger); }
+
+    .feed-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .feed-excerpt {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    /* === RESOURCE GRID === */
+    .resources { padding: 0 20px; margin-top: 24px; }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .resource-card-new {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: var(--color-text-primary);
+    }
+
+    .resource-card-new:hover {
+      border-color: var(--color-border-accent);
+      background: var(--color-bg-elevated);
+    }
+
+    .resource-card-new.primary {
+      grid-column: span 2;
+      background: var(--gradient-trust);
+      border-color: var(--color-border-accent);
+    }
+
+    .resource-icon-new {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--color-bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .resource-card-new.primary .resource-icon-new { background: rgba(78, 205, 196, 0.2); }
+
+    .resource-text { flex: 1; }
+
+    .resource-title-new {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .resource-desc {
+      font-size: 11px;
+      color: var(--color-text-muted);
+    }
+
+    .resource-badge-new {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      background: rgba(78, 205, 196, 0.15);
+      color: var(--color-accent-primary);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    /* === FOOTER NAV === */
+    .footer-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 480px;
+      width: 100%;
+      background: var(--color-bg-secondary);
+      border-top: 1px solid var(--color-border-subtle);
+      display: flex;
+      padding: 12px 20px;
+      gap: 8px;
+      z-index: 100;
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .nav-item:hover { background: var(--color-bg-card); }
+    .nav-item.active { background: var(--color-bg-card); }
+    .nav-item.active .nav-icon { color: var(--color-accent-primary); }
+
+    .nav-icon {
+      font-size: 20px;
+      color: var(--color-text-muted);
+    }
+
+    .nav-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--color-text-muted);
+    }
+
+    .nav-item.active .nav-label { color: var(--color-accent-primary); }
+
+    /* === SOURCES MODAL === */
+    .sources-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .sources-modal.active { display: flex; }
+
+    .sources-modal-content {
+      background: var(--color-bg-secondary);
+      border-radius: 16px;
+      max-width: 480px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .sources-modal-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--color-border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sources-modal-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-accent-primary);
+    }
+
+    .sources-modal-close {
+      background: none;
+      border: none;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .sources-modal-body { padding: 20px; }
+
+    .source-explainer { margin-bottom: 24px; }
+    .source-explainer:last-child { margin-bottom: 0; }
+
+    .source-explainer-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .source-explainer-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--color-bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .source-explainer-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .source-explainer-text {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+
     header {
       text-align: center;
       margin-bottom: 1rem;
+      display: none;
     }
 
     .branding {
@@ -5485,36 +6039,188 @@
 </head>
 <body>
   <div class="container notranslate" translate="no">
-    <div class="top-bar">
-      <div class="lang-select">
-        <button class="lang-btn active" data-lang="en">EN</button>
-        <button class="lang-btn" data-lang="es">ES</button>
-        <button class="lang-btn" data-lang="ar">العربية</button>
-        <button class="lang-btn" data-lang="ku">کوردی</button>
-        <button class="lang-btn" data-lang="vi">VI</button>
+    <!-- Sources-First Header -->
+    <header class="header">
+      <div class="header-top">
+        <div class="logo">Ground Truth <span>Nashville</span></div>
+        <div class="header-actions">
+          <button class="header-btn" id="zipDisplayBtn" onclick="promptZipCode()">📍 37206</button>
+          <button class="header-btn" id="textSizeToggle" aria-label="Change text size">⚙️</button>
+        </div>
       </div>
-      <div class="top-bar-controls">
-        <a href="emergency.html" class="nav-911-link" title="Get My Location for 911">
-          <i class="ph ph-map-pin"></i>
-          <span data-i18n="emergency_911">911 Location</span>
-        </a>
-        <button class="alerts-toggle-btn" id="alertsToggleBtn" onclick="openAlertsScreen()" aria-label="View live news and alerts feed" title="Live News & Alerts Feed">
-          <span class="pulse-indicator"></span>
-          <span>News & Alerts</span>
-          <span class="alert-count-badge" id="mainAlertCountBadge" style="display: none;">--</span>
-        </button>
-        <button class="a11y-toggle" id="textSizeToggle" aria-label="Change text size" title="Change text size">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 18L9 6L15 18M5 14h8"/>
-            <path d="M19 7v10M16 10l3-3 3 3M16 14l3 3 3-3"/>
-          </svg>
-        </button>
+      <div class="tagline" data-i18n="tagline">Verified local sources during crisis</div>
+    </header>
+
+    <!-- Emergency Banner -->
+    <div class="emergency-banner" id="emergencyBanner">
+      <div class="emergency-pulse"></div>
+      <div class="emergency-content">
+        <div class="emergency-label" data-i18n="emergency_advisory">Cold Weather Advisory</div>
+        <div class="emergency-text" id="emergencyText">Wind chills as low as 11° through Monday</div>
+      </div>
+      <a href="#" class="emergency-link" onclick="openAlertsScreen(); return false;">Details →</a>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-value danger" id="statsOutageCount">--</div>
+        <div class="stat-label" data-i18n="stat_without_power">Without Power</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="statsSheltersOpen">7</div>
+        <div class="stat-label" data-i18n="stat_shelters_open">Shelters Open</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="statsCurrentTemp">--°</div>
+        <div class="stat-label" data-i18n="stat_current_temp">Current Temp</div>
       </div>
     </div>
 
-    <header>
-      <h1 data-i18n="title" style="text-align: center; margin-bottom: 0.25rem;">Ground Truth Nashville</h1>
-      <p class="subtitle" data-i18n="subtitle" style="text-align: center; margin-bottom: 0.75rem;">Nashville Winter Resources<br>Shelter, food & support during extreme weather</p>
+    <!-- Trusted Sources -->
+    <div class="section-header">
+      <span class="section-title" data-i18n="trusted_sources">Trusted Sources</span>
+      <a href="#" class="section-link" onclick="openSourcesModal(); return false;">Why these? →</a>
+    </div>
+
+    <div class="trusted-sources">
+      <div class="sources-grid">
+        <!-- Featured: NSWX -->
+        <div class="source-card source-featured has-update" style="--source-color: #7c3aed;" onclick="window.open('https://nashvillesevereweather.com', '_blank')">
+          <div class="source-badge"></div>
+          <div class="source-header">
+            <div class="source-icon">🌨️</div>
+            <div class="source-meta">
+              <div class="source-name">Nashville Severe Weather</div>
+              <div class="source-type">Meteorologist • Davidson & Williamson</div>
+            </div>
+          </div>
+          <div class="source-update" id="nswxLatestUpdate">Dangerously cold temperatures continue this weekend. Please check on neighbors, especially elderly or those with medical issues.</div>
+          <div class="source-timestamp" id="nswxTimestamp">Updated recently</div>
+        </div>
+
+        <!-- WTTIN -->
+        <div class="source-card has-update" style="--source-color: #4ecdc4;" onclick="window.open('https://wttin.org', '_blank')">
+          <div class="source-badge"></div>
+          <div class="source-header">
+            <div class="source-icon">✓</div>
+            <div class="source-meta">
+              <div class="source-name">WTTIN</div>
+              <div class="source-type">Verified Resources</div>
+            </div>
+          </div>
+          <div class="source-update">273 resources verified for winter storm response</div>
+          <div class="source-timestamp">Jan 30</div>
+        </div>
+
+        <!-- City Cast -->
+        <div class="source-card" style="--source-color: #f59e0b;" onclick="scrollToPodcast()">
+          <div class="source-header">
+            <div class="source-icon">🎙️</div>
+            <div class="source-meta">
+              <div class="source-name">City Cast</div>
+              <div class="source-type">Daily Podcast</div>
+            </div>
+          </div>
+          <div class="source-update" id="cityCastLatestUpdate">Daily local news for Music City</div>
+          <div class="source-timestamp" id="cityCastTimestamp">Latest episode</div>
+        </div>
+
+        <!-- NWS -->
+        <div class="source-card" style="--source-color: #3b82f6;" onclick="window.open('https://www.weather.gov/ohx/', '_blank')">
+          <div class="source-header">
+            <div class="source-icon">🏛️</div>
+            <div class="source-meta">
+              <div class="source-name">NWS Nashville</div>
+              <div class="source-type">Official Forecasts</div>
+            </div>
+          </div>
+          <div class="source-update" id="nwsLatestAlert">Loading alerts...</div>
+          <div class="source-timestamp" id="nwsTimestamp">--</div>
+        </div>
+
+        <!-- Local News -->
+        <div class="source-card" style="--source-color: #ef4444;" onclick="openAlertsScreen()">
+          <div class="source-header">
+            <div class="source-icon">📺</div>
+            <div class="source-meta">
+              <div class="source-name">Local News</div>
+              <div class="source-type">WKRN, WSMV, NC5</div>
+            </div>
+          </div>
+          <div class="source-update" id="localNewsLatest">Latest local news coverage</div>
+          <div class="source-timestamp" id="localNewsTimestamp">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Feed -->
+    <div class="section-header">
+      <span class="section-title" data-i18n="live_feed">Live Feed</span>
+      <a href="#" class="section-link" onclick="openAlertsScreen(); return false;">Filter →</a>
+    </div>
+
+    <div class="live-feed" id="liveFeed">
+      <div class="feed-item" id="liveFeedLoading">
+        <div class="feed-source">
+          <div class="feed-source-icon">📡</div>
+          <span class="feed-source-name">Loading...</span>
+        </div>
+        <div class="feed-title">Loading latest updates from trusted sources</div>
+      </div>
+    </div>
+
+    <!-- Get Help Now -->
+    <div class="section-header">
+      <span class="section-title" data-i18n="get_help_now">Get Help Now</span>
+      <a href="#" class="section-link" onclick="openResourceModal(); return false;">All resources →</a>
+    </div>
+
+    <div class="resources">
+      <div class="resource-grid">
+        <a class="resource-card-new primary" href="tel:615-401-1712">
+          <div class="resource-icon-new">🔥</div>
+          <div class="resource-text">
+            <div class="resource-title-new">Warming Locations</div>
+            <div class="resource-desc">7 shelters open now • Call 615-401-1712</div>
+          </div>
+          <span class="resource-badge-new">WTTIN ✓</span>
+        </a>
+        <a class="resource-card-new" href="#" onclick="scrollToResourceSection('shelter'); return false;">
+          <div class="resource-icon-new">🏠</div>
+          <div class="resource-text">
+            <div class="resource-title-new">Shelter Tonight</div>
+            <div class="resource-desc">7 options open</div>
+          </div>
+        </a>
+        <a class="resource-card-new" href="#" onclick="scrollToResourceSection('food'); return false;">
+          <div class="resource-icon-new">🍽️</div>
+          <div class="resource-text">
+            <div class="resource-title-new">Food & Meals</div>
+            <div class="resource-desc">Pantries & services</div>
+          </div>
+        </a>
+        <a class="resource-card-new" href="#" onclick="openMapModal(); return false;">
+          <div class="resource-icon-new">⚡</div>
+          <div class="resource-text">
+            <div class="resource-title-new">Power Outage</div>
+            <div class="resource-desc">Report & find centers</div>
+          </div>
+        </a>
+        <a class="resource-card-new" href="#" onclick="scrollToResourceSection('helping'); return false;">
+          <div class="resource-icon-new">🤝</div>
+          <div class="resource-text">
+            <div class="resource-title-new">I'm Helping</div>
+            <div class="resource-desc">Volunteer resources</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Hidden old header for translations -->
+    <header style="display: none;">
+      <h1 data-i18n="title">Ground Truth Nashville</h1>
+      <p class="subtitle" data-i18n="subtitle">Nashville Winter Resources</p>
     </header>
 
     <!-- Alerts Row - Metro Overflow & Weather Alerts Side-by-Side -->
@@ -7150,6 +7856,66 @@
     </div>
   </div>
 
+  <!-- Footer Navigation -->
+  <nav class="footer-nav">
+    <a href="#" class="nav-item active" onclick="navigateToSection('home'); return false;">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </a>
+    <a href="#" class="nav-item" onclick="openMapModal(); return false;">
+      <span class="nav-icon">🗺️</span>
+      <span class="nav-label">Map</span>
+    </a>
+    <a href="#" class="nav-item" onclick="openResourceModal(); return false;">
+      <span class="nav-icon">📋</span>
+      <span class="nav-label">Resources</span>
+    </a>
+    <a href="#" class="nav-item" onclick="openAlertsScreen(); return false;">
+      <span class="nav-icon">🔔</span>
+      <span class="nav-label">Alerts</span>
+    </a>
+  </nav>
+
+  <!-- Why These Sources Modal -->
+  <div class="sources-modal" id="sourcesModal">
+    <div class="sources-modal-content">
+      <div class="sources-modal-header">
+        <div class="sources-modal-title">Why These Sources?</div>
+        <button class="sources-modal-close" onclick="closeSourcesModal()">✕</button>
+      </div>
+      <div class="sources-modal-body">
+        <div class="source-explainer">
+          <div class="source-explainer-header">
+            <div class="source-explainer-icon">🌨️</div>
+            <div class="source-explainer-name">Nashville Severe Weather</div>
+          </div>
+          <p class="source-explainer-text">Founded by weather nerds who became Nashville's trusted voice during storms. No ads, no profit motive—just neighbors helping neighbors stay safe. Their 15-year track record includes partnership with the National Weather Service.</p>
+        </div>
+        <div class="source-explainer">
+          <div class="source-explainer-header">
+            <div class="source-explainer-icon">✓</div>
+            <div class="source-explainer-name">Where to Turn in Nashville</div>
+          </div>
+          <p class="source-explainer-text">A resource guide created by and for people experiencing housing instability. Every listing has been verified by outreach workers and people who actually use these services. Published by Open Table Nashville since 2013.</p>
+        </div>
+        <div class="source-explainer">
+          <div class="source-explainer-header">
+            <div class="source-explainer-icon">🎙️</div>
+            <div class="source-explainer-name">City Cast Nashville</div>
+          </div>
+          <p class="source-explainer-text">Daily local journalism produced by people embedded in Nashville's civic life. Executive producer Whitney Pastorek serves on the Metro Human Relations Commission.</p>
+        </div>
+        <div class="source-explainer">
+          <div class="source-explainer-header">
+            <div class="source-explainer-icon">🏛️</div>
+            <div class="source-explainer-name">NWS Nashville</div>
+          </div>
+          <p class="source-explainer-text">The official source for weather warnings and forecasts. 38 counties, 13 forecasters, the weight of the federal government behind every warning.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Store data for re-rendering on language change
     let cachedWeatherData = null;
@@ -7222,6 +7988,69 @@
 
     // Track page load
     trackActivity('page_load', { url: window.location.href });
+
+    // ===========================================
+    // SOURCES-FIRST UI FUNCTIONS
+    // ===========================================
+    function openSourcesModal() {
+      const modal = document.getElementById('sourcesModal');
+      if (modal) modal.classList.add('active');
+    }
+
+    function closeSourcesModal() {
+      const modal = document.getElementById('sourcesModal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    document.addEventListener('click', function(e) {
+      if (e.target.id === 'sourcesModal') closeSourcesModal();
+    });
+
+    function navigateToSection(section) {
+      document.querySelectorAll('.footer-nav .nav-item').forEach(item => item.classList.remove('active'));
+      if (section === 'home') {
+        document.querySelector('.footer-nav .nav-item:first-child').classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function scrollToPodcast() {
+      const podcast = document.getElementById('podcastSection');
+      if (podcast) podcast.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function scrollToResourceSection(intent) {
+      const intentCard = document.querySelector(`[data-intent="${intent}"]`);
+      if (intentCard) {
+        if (!intentCard.classList.contains('expanded')) intentCard.click();
+        intentCard.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function promptZipCode() {
+      const currentZip = document.getElementById('zipInput')?.value || '37206';
+      const newZip = prompt('Enter your Nashville area ZIP code:', currentZip);
+      if (newZip && /^\d{5}$/.test(newZip)) {
+        const zipInput = document.getElementById('zipInput');
+        if (zipInput) {
+          zipInput.value = newZip;
+          document.getElementById('fetchBtn')?.click();
+        }
+        const zipBtn = document.getElementById('zipDisplayBtn');
+        if (zipBtn) zipBtn.textContent = `📍 ${newZip}`;
+      }
+    }
+
+    function updateStatsBar(outageCount, currentTemp) {
+      const outageEl = document.getElementById('statsOutageCount');
+      const tempEl = document.getElementById('statsCurrentTemp');
+      if (outageEl && outageCount !== undefined) {
+        outageEl.textContent = outageCount >= 1000 ? Math.round(outageCount / 1000) + 'K' : outageCount.toLocaleString();
+      }
+      if (tempEl && currentTemp !== undefined) {
+        tempEl.textContent = Math.round(currentTemp) + '°';
+      }
+    }
 
     // ===========================================
     // TRANSLATION CACHE (localStorage persistence)
