@@ -258,8 +258,35 @@
             continue;
           }
 
-          const text = await res.text();
+          let text = await res.text();
           log(`Received ${text.length} bytes`, 'success');
+
+          // Handle JSON-wrapped responses from some CORS proxies or webhooks
+          // Some return: [{"data": "<?xml..."}] or {"data": "<?xml..."}
+          const trimmed = text.trim();
+          if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+            log('Response looks like JSON, attempting to unwrap...', 'info');
+            try {
+              const json = JSON.parse(trimmed);
+              // Handle array format: [{"data": "..."}]
+              if (Array.isArray(json) && json[0]?.data) {
+                text = json[0].data;
+                log('Extracted XML from JSON array [{"data": ...}]', 'success');
+              }
+              // Handle object format: {"data": "..."}
+              else if (json.data) {
+                text = json.data;
+                log('Extracted XML from JSON object {"data": ...}', 'success');
+              }
+              // Handle object format: {"contents": "..."} (allorigins non-raw)
+              else if (json.contents) {
+                text = json.contents;
+                log('Extracted XML from JSON object {"contents": ...}', 'success');
+              }
+            } catch (jsonErr) {
+              log('Not valid JSON, treating as raw content', 'warn');
+            }
+          }
 
           // Check if it looks like XML
           if (!text.trim().startsWith('<?xml') && !text.trim().startsWith('<rss')) {
