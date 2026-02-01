@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Podcast Player Test</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #1a1a2e;
+      color: #eee;
+    }
+    h1 { color: #00d4aa; margin-bottom: 10px; }
+    .debug {
+      background: #0d0d1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .debug .error { color: #ff6b6b; }
+    .debug .success { color: #51cf66; }
+    .debug .info { color: #74c0fc; }
+    .debug .warn { color: #ffd43b; }
+
+    .player {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .episode-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .episode-meta {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 15px;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .play-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: none;
+      background: #00d4aa;
+      color: #000;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .play-btn:hover { background: #00b894; }
+    .progress-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .progress-bar {
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #00d4aa;
+      width: 0%;
+      transition: width 0.1s;
+    }
+    .time-display {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #888;
+    }
+    .status {
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+    .status.loading { background: #1e3a5f; }
+    .status.error { background: #5c1e1e; }
+    .status.ready { background: #1e5c3a; }
+
+    .test-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 15px 0;
+    }
+    .test-btn {
+      padding: 8px 16px;
+      border: 1px solid #00d4aa;
+      background: transparent;
+      color: #00d4aa;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .test-btn:hover { background: #00d4aa22; }
+  </style>
+</head>
+<body>
+  <h1>🎙️ Podcast Player Test</h1>
+  <p>Minimal test page to debug the podcast player</p>
+
+  <div class="status loading" id="status">Loading...</div>
+
+  <div class="test-buttons">
+    <button class="test-btn" onclick="testFeed()">Test RSS Feed</button>
+    <button class="test-btn" onclick="testDirectAudio()">Test Direct Audio</button>
+    <button class="test-btn" onclick="clearDebug()">Clear Log</button>
+  </div>
+
+  <div class="player" id="player" style="display: none;">
+    <div class="episode-title" id="title">--</div>
+    <div class="episode-meta">
+      <span id="date">--</span> &bull; <span id="duration">--</span>
+    </div>
+    <div class="controls">
+      <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+      <div class="progress-wrap">
+        <div class="progress-bar" id="progressBar" onclick="seek(event)">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="time-display">
+          <span id="currentTime">0:00</span>
+          <span id="totalTime">--:--</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="audio" preload="metadata"></audio>
+
+  <h3>Debug Log</h3>
+  <div class="debug" id="debug"></div>
+
+  <script>
+    const FEED_URL = 'https://feeds.megaphone.fm/CC2002452330';
+    const PROXIES = [
+      'https://corsproxy.io/?',
+      'https://api.allorigins.win/raw?url=',
+      'https://api.codetabs.com/v1/proxy?quest='
+    ];
+
+    let audio = document.getElementById('audio');
+    let episodes = [];
+    let currentIdx = 0;
+
+    // Debug logger
+    function log(msg, type = 'info') {
+      const debug = document.getElementById('debug');
+      const time = new Date().toLocaleTimeString();
+      debug.innerHTML += `<div class="${type}">[${time}] ${msg}</div>`;
+      debug.scrollTop = debug.scrollHeight;
+      console.log(`[${type}]`, msg);
+    }
+
+    function clearDebug() {
+      document.getElementById('debug').innerHTML = '';
+    }
+
+    function setStatus(msg, type) {
+      const status = document.getElementById('status');
+      status.textContent = msg;
+      status.className = 'status ' + type;
+    }
+
+    function formatTime(secs) {
+      if (!secs || isNaN(secs)) return '--:--';
+      const m = Math.floor(secs / 60);
+      const s = Math.floor(secs % 60);
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+
+    // Parse RSS
+    function parseRSS(xml) {
+      log('Parsing RSS XML...', 'info');
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(xml, 'application/xml');
+
+      const parseError = doc.querySelector('parsererror');
+      if (parseError) {
+        log('XML Parse Error: ' + parseError.textContent, 'error');
+        return null;
+      }
+
+      const channel = doc.querySelector('channel');
+      if (!channel) {
+        log('No channel element found in RSS', 'error');
+        return null;
+      }
+
+      const items = channel.querySelectorAll('item');
+      log(`Found ${items.length} items in feed`, 'success');
+
+      const eps = [];
+      items.forEach((item, i) => {
+        if (i >= 3) return; // Just get 3 for testing
+
+        const title = item.querySelector('title')?.textContent || 'Untitled';
+        const pubDate = item.querySelector('pubDate')?.textContent || '';
+        const enclosure = item.querySelector('enclosure');
+        const audioUrl = enclosure?.getAttribute('url') || '';
+        const duration = item.getElementsByTagName('itunes:duration')[0]?.textContent || '';
+
+        log(`Episode ${i + 1}: "${title.substring(0, 40)}..."`, 'info');
+        log(`  Audio URL: ${audioUrl ? audioUrl.substring(0, 60) + '...' : 'MISSING!'}`, audioUrl ? 'info' : 'error');
+
+        eps.push({ title, pubDate, audioUrl, duration });
+      });
+
+      return eps;
+    }
+
+    // Fetch feed with proxy fallback
+    async function fetchFeed() {
+      log('Starting RSS feed fetch...', 'info');
+
+      for (let i = 0; i < PROXIES.length; i++) {
+        const proxy = PROXIES[i];
+        log(`Trying proxy ${i + 1}/${PROXIES.length}: ${proxy.substring(0, 30)}...`, 'info');
+
+        try {
+          const url = proxy + encodeURIComponent(FEED_URL);
+          log(`Full URL: ${url.substring(0, 80)}...`, 'info');
+
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 10000);
+
+          const res = await fetch(url, { signal: controller.signal });
+          clearTimeout(timeout);
+
+          log(`Response status: ${res.status} ${res.statusText}`, res.ok ? 'success' : 'error');
+
+          if (!res.ok) {
+            log(`Proxy returned error, trying next...`, 'warn');
+            continue;
+          }
+
+          const text = await res.text();
+          log(`Received ${text.length} bytes`, 'success');
+
+          // Check if it looks like XML
+          if (!text.trim().startsWith('<?xml') && !text.trim().startsWith('<rss')) {
+            log(`Response doesn't look like XML: "${text.substring(0, 100)}..."`, 'error');
+            continue;
+          }
+
+          const parsed = parseRSS(text);
+          if (parsed && parsed.length > 0) {
+            log(`Successfully parsed ${parsed.length} episodes!`, 'success');
+            return parsed;
+          }
+        } catch (err) {
+          log(`Proxy failed: ${err.message}`, 'error');
+        }
+      }
+
+      log('All proxies failed!', 'error');
+      return null;
+    }
+
+    // Test feed button
+    async function testFeed() {
+      log('=== Manual Feed Test ===', 'info');
+      setStatus('Testing feed...', 'loading');
+      episodes = await fetchFeed();
+      if (episodes && episodes.length > 0) {
+        setStatus('Feed loaded! ' + episodes.length + ' episodes', 'ready');
+        loadEpisode(0);
+      } else {
+        setStatus('Failed to load feed', 'error');
+      }
+    }
+
+    // Test with a known working audio URL
+    function testDirectAudio() {
+      log('=== Direct Audio Test ===', 'info');
+      // Using a sample audio file to test if audio works at all
+      const testUrl = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+      log(`Testing with sample audio: ${testUrl}`, 'info');
+
+      audio.src = testUrl;
+      audio.load();
+
+      audio.onloadedmetadata = () => {
+        log(`Audio metadata loaded! Duration: ${formatTime(audio.duration)}`, 'success');
+        setStatus('Direct audio works!', 'ready');
+        document.getElementById('player').style.display = 'block';
+        document.getElementById('title').textContent = 'Test Audio (SoundHelix)';
+        document.getElementById('date').textContent = 'Test file';
+        document.getElementById('totalTime').textContent = formatTime(audio.duration);
+      };
+
+      audio.onerror = (e) => {
+        log(`Audio error: ${audio.error?.message || 'Unknown error'}`, 'error');
+        log(`Error code: ${audio.error?.code}`, 'error');
+        setStatus('Audio failed to load', 'error');
+      };
+    }
+
+    // Load episode into player
+    function loadEpisode(idx) {
+      if (!episodes || !episodes[idx]) return;
+
+      const ep = episodes[idx];
+      currentIdx = idx;
+
+      log(`Loading episode: "${ep.title.substring(0, 40)}..."`, 'info');
+      log(`Audio URL: ${ep.audioUrl}`, 'info');
+
+      document.getElementById('player').style.display = 'block';
+      document.getElementById('title').textContent = ep.title;
+      document.getElementById('date').textContent = ep.pubDate;
+      document.getElementById('duration').textContent = ep.duration;
+
+      if (ep.audioUrl) {
+        audio.src = ep.audioUrl;
+        audio.load();
+
+        audio.onloadedmetadata = () => {
+          log(`Episode audio loaded! Duration: ${formatTime(audio.duration)}`, 'success');
+          document.getElementById('totalTime').textContent = formatTime(audio.duration);
+        };
+
+        audio.onerror = (e) => {
+          log(`Episode audio error: ${audio.error?.message || 'Unknown'}`, 'error');
+          log(`Error code: ${audio.error?.code}`, 'error');
+        };
+      } else {
+        log('No audio URL for this episode!', 'error');
+      }
+    }
+
+    // Playback controls
+    function togglePlay() {
+      if (audio.paused) {
+        log('Playing...', 'info');
+        audio.play().then(() => {
+          log('Playback started', 'success');
+          document.getElementById('playBtn').textContent = '⏸';
+        }).catch(err => {
+          log(`Play failed: ${err.message}`, 'error');
+        });
+      } else {
+        audio.pause();
+        log('Paused', 'info');
+        document.getElementById('playBtn').textContent = '▶';
+      }
+    }
+
+    function seek(e) {
+      const bar = document.getElementById('progressBar');
+      const pct = e.offsetX / bar.offsetWidth;
+      audio.currentTime = pct * audio.duration;
+    }
+
+    // Progress updates
+    audio.addEventListener('timeupdate', () => {
+      const pct = (audio.currentTime / audio.duration) * 100;
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('currentTime').textContent = formatTime(audio.currentTime);
+    });
+
+    audio.addEventListener('ended', () => {
+      log('Playback ended', 'info');
+      document.getElementById('playBtn').textContent = '▶';
+    });
+
+    // Auto-load on page load
+    window.addEventListener('DOMContentLoaded', async () => {
+      log('Page loaded, starting auto-fetch...', 'info');
+      setStatus('Loading podcast feed...', 'loading');
+
+      episodes = await fetchFeed();
+
+      if (episodes && episodes.length > 0) {
+        setStatus('Ready! ' + episodes.length + ' episodes loaded', 'ready');
+        loadEpisode(0);
+      } else {
+        setStatus('Failed to load - check debug log', 'error');
+      }
+    });
+  </script>
+</body>
+</html>
