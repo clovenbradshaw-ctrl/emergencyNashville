@@ -7044,6 +7044,7 @@
     let cachedWeatherData = null;
     let cachedAlertsData = null;
     let cachedOutagesData = null;
+    let cachedNswxBlogPosts = null;
     let cachedUserCoords = null;
 
     // ===========================================
@@ -8568,6 +8569,10 @@
       }
       if (typeof updateRadarTimestamp === 'function') {
         updateRadarTimestamp();
+      }
+      // Re-render NSWX blog posts with new language
+      if (cachedNswxBlogPosts && typeof renderNswxPosts === 'function') {
+        renderNswxPosts(cachedNswxBlogPosts);
       }
     }
 
@@ -11610,7 +11615,7 @@
       }
 
       // Render blog posts
-      function renderNswxPosts(posts) {
+      async function renderNswxPosts(posts) {
         const container = document.getElementById('nswxPosts');
         if (!container) return;
 
@@ -11619,12 +11624,27 @@
           return;
         }
 
-        container.innerHTML = posts.map(post => `
+        const lang = getCurrentLang();
+
+        // Translate titles and excerpts in parallel
+        const translatedPosts = await Promise.all(posts.map(async post => {
+          const [translatedTitle, translatedExcerpt] = await Promise.all([
+            translateText(post.title, lang),
+            translateText(post.excerpt, lang)
+          ]);
+          return {
+            ...post,
+            translatedTitle,
+            translatedExcerpt
+          };
+        }));
+
+        container.innerHTML = translatedPosts.map(post => `
           <a class="nswx-post" href="${post.link}" target="_blank" rel="noopener noreferrer">
             <div class="nswx-post-content">
-              <div class="nswx-post-title">${post.title}</div>
+              <div class="nswx-post-title">${post.translatedTitle}</div>
               <div class="nswx-post-meta">${post.date} • ${post.author}</div>
-              <div class="nswx-post-excerpt">${post.excerpt}</div>
+              <div class="nswx-post-excerpt">${post.translatedExcerpt}</div>
             </div>
           </a>
         `).join('');
@@ -11690,8 +11710,11 @@
             fetchNswxBlogPosts()
           ]);
 
+          // Cache blog posts for re-rendering on language change
+          cachedNswxBlogPosts = blogPosts;
+
           renderNswxTicker(blueskyPosts);
-          renderNswxPosts(blogPosts);
+          await renderNswxPosts(blogPosts);
         } catch (e) {
           console.error('NSWX section init error:', e);
           const postsContainer = document.getElementById('nswxPosts');
@@ -11716,6 +11739,11 @@
 
       // Update radar timestamp every 10 seconds
       setInterval(updateRadarTimestamp, 10 * 1000);
+
+      // Expose functions globally for language change re-rendering
+      window.updateArchiveLink = updateArchiveLink;
+      window.updateRadarTimestamp = updateRadarTimestamp;
+      window.renderNswxPosts = renderNswxPosts;
     })();
   </script>
 
