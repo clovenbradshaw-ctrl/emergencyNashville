@@ -4922,10 +4922,19 @@
 
     .podcast-header {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       gap: 1rem;
       padding: 1rem 1.25rem;
       border-bottom: 1px solid #2a2a40;
+    }
+
+    .podcast-header-main {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex: 1;
+      min-width: 280px;
     }
 
     .podcast-artwork {
@@ -4947,12 +4956,14 @@
       align-items: center;
       gap: 0.5rem;
       margin-bottom: 0.25rem;
+      flex-wrap: wrap;
     }
 
     .podcast-title {
       font-size: 1.125rem;
       font-weight: 600;
       color: #fff;
+      white-space: nowrap;
     }
 
     .podcast-badge {
@@ -4964,6 +4975,7 @@
       border-radius: 4px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      flex-shrink: 0;
     }
 
     .podcast-subtitle {
@@ -4974,6 +4986,7 @@
     .podcast-nav {
       display: flex;
       gap: 0.5rem;
+      flex-shrink: 0;
     }
 
     .podcast-nav a {
@@ -5185,8 +5198,11 @@
     /* Podcast Mobile Responsive */
     @media (max-width: 600px) {
       .podcast-header {
-        flex-wrap: wrap;
         gap: 0.75rem;
+      }
+
+      .podcast-header-main {
+        min-width: 100%;
       }
 
       .podcast-nav {
@@ -5395,13 +5411,15 @@
     <div class="podcast-section" id="podcastSection">
       <!-- Header -->
       <div class="podcast-header">
-        <img class="podcast-artwork" id="podcastArtwork" src="https://megaphone.imgix.net/podcasts/021aca2a-eab9-11ee-9ff2-ebf466277b88/image/ab8c2c0a84bda721b66244cd3f736b0a.png?ixlib=rails-4.3.1&max-w=128&max-h=128&fit=crop&auto=format,compress" alt="City Cast Nashville">
-        <div class="podcast-info">
-          <div class="podcast-brand">
-            <div class="podcast-title">City Cast Nashville</div>
-            <span class="podcast-badge">Podcast</span>
+        <div class="podcast-header-main">
+          <img class="podcast-artwork" id="podcastArtwork" src="https://megaphone.imgix.net/podcasts/021aca2a-eab9-11ee-9ff2-ebf466277b88/image/ab8c2c0a84bda721b66244cd3f736b0a.png?ixlib=rails-4.3.1&max-w=128&max-h=128&fit=crop&auto=format,compress" alt="City Cast Nashville">
+          <div class="podcast-info">
+            <div class="podcast-brand">
+              <div class="podcast-title">City Cast Nashville</div>
+              <span class="podcast-badge">Podcast</span>
+            </div>
+            <div class="podcast-subtitle">Daily local news for Music City</div>
           </div>
-          <div class="podcast-subtitle">Daily local news for Music City</div>
         </div>
         <div class="podcast-nav">
           <a href="https://nashville.citycast.fm/" target="_blank" rel="noopener noreferrer">
@@ -11436,7 +11454,11 @@
   <script>
     (function() {
       const PODCAST_FEED_URL = 'https://feeds.megaphone.fm/CC2002452330';
-      const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+      const CORS_PROXIES = [
+        'https://api.allorigins.win/raw?url=',
+        'https://corsproxy.io/?',
+        'https://api.codetabs.com/v1/proxy?quest='
+      ];
 
       let podcastAudio = null;
       let currentEpisode = null;
@@ -11509,17 +11531,25 @@
         return episodes;
       }
 
-      // Fetch podcast RSS feed
+      // Fetch podcast RSS feed with fallback proxies
       async function fetchPodcastFeed() {
-        try {
-          const res = await fetch(CORS_PROXY + encodeURIComponent(PODCAST_FEED_URL));
-          if (!res.ok) throw new Error('Failed to fetch feed');
-          const xmlText = await res.text();
-          return parseRSS(xmlText);
-        } catch (err) {
-          console.error('Failed to fetch podcast feed:', err);
-          return null;
+        for (const proxy of CORS_PROXIES) {
+          try {
+            const res = await fetch(proxy + encodeURIComponent(PODCAST_FEED_URL), {
+              signal: AbortSignal.timeout(8000)
+            });
+            if (!res.ok) continue;
+            const xmlText = await res.text();
+            const episodes = parseRSS(xmlText);
+            if (episodes && episodes.length > 0) {
+              return episodes;
+            }
+          } catch (err) {
+            console.warn('Proxy failed:', proxy, err.message);
+          }
         }
+        console.error('All CORS proxies failed for podcast feed');
+        return null;
       }
 
       // Render the podcast player with episode data
