@@ -5100,6 +5100,50 @@
       gap: 0.25rem;
     }
 
+    .podcast-episode-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .podcast-episode-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.125rem;
+    }
+
+    .podcast-episode-indicator {
+      font-size: 0.625rem;
+      color: #6b7280;
+    }
+
+    .podcast-nav-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .podcast-nav-btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .podcast-nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
     .podcast-player-controls {
       display: flex;
       align-items: center;
@@ -5497,7 +5541,18 @@
           <span data-i18n="podcast_loading">Loading latest episode...</span>
         </div>
         <div id="podcastPlayer" style="display: none;">
-          <div class="podcast-episode-label" data-i18n="podcast_latest_episode">Latest Episode</div>
+          <div class="podcast-episode-nav">
+            <button class="podcast-nav-btn" id="podcastPrevBtn" onclick="prevPodcastEpisode()" title="Previous episode">
+              <i class="ph ph-caret-left"></i>
+            </button>
+            <div class="podcast-episode-info">
+              <div class="podcast-episode-label" id="podcastEpisodeLabel" data-i18n="podcast_latest_episode">Latest Episode</div>
+              <div class="podcast-episode-indicator" id="podcastEpisodeIndicator">1 / 6</div>
+            </div>
+            <button class="podcast-nav-btn" id="podcastNextBtn" onclick="nextPodcastEpisode()" title="Next episode">
+              <i class="ph ph-caret-right"></i>
+            </button>
+          </div>
           <div class="podcast-episode-title" id="podcastEpisodeTitle" data-i18n="podcast_loading_title">Loading...</div>
           <div class="podcast-episode-meta">
             <span id="podcastEpisodeDate">--</span>
@@ -11636,13 +11691,17 @@
     (function() {
       const PODCAST_FEED_URL = 'https://feeds.megaphone.fm/CC2002452330';
       const CORS_PROXIES = [
-        'https://api.allorigins.win/raw?url=',
         'https://corsproxy.io/?',
-        'https://api.codetabs.com/v1/proxy?quest='
+        'https://api.allorigins.win/raw?url=',
+        'https://api.codetabs.com/v1/proxy?quest=',
+        'https://cors-anywhere.herokuapp.com/',
+        'https://thingproxy.freeboard.io/fetch/'
       ];
 
       let podcastAudio = null;
       let currentEpisode = null;
+      let allEpisodes = [];
+      let currentEpisodeIndex = 0;
       let playbackSpeeds = [1, 1.25, 1.5, 1.75, 2];
       let currentSpeedIndex = 0;
 
@@ -11676,7 +11735,7 @@
         const episodes = [];
 
         items.forEach((item, index) => {
-          if (index >= 3) return; // Only get latest 3 episodes
+          if (index >= 6) return; // Get latest 6 episodes for navigation
 
           const title = item.querySelector('title')?.textContent || '';
           const pubDate = item.querySelector('pubDate')?.textContent || '';
@@ -11737,10 +11796,6 @@
       function renderPodcastPlayer(episodes) {
         const loadingEl = document.getElementById('podcastLoading');
         const playerEl = document.getElementById('podcastPlayer');
-        const titleEl = document.getElementById('podcastEpisodeTitle');
-        const dateEl = document.getElementById('podcastEpisodeDate');
-        const durationEl = document.getElementById('podcastEpisodeDuration');
-        const totalTimeEl = document.getElementById('podcastTotalTime');
 
         if (!episodes || episodes.length === 0) {
           if (loadingEl) {
@@ -11749,21 +11804,15 @@
           return;
         }
 
-        currentEpisode = episodes[0];
+        allEpisodes = episodes;
+        currentEpisodeIndex = 0;
 
-        if (titleEl) titleEl.textContent = currentEpisode.title;
-        if (dateEl) dateEl.textContent = formatPodcastDate(currentEpisode.pubDate);
-        if (durationEl) durationEl.textContent = formatDuration(currentEpisode.duration);
-        if (totalTimeEl) totalTimeEl.textContent = formatDuration(currentEpisode.duration);
-
-        // Set up audio element
+        // Set up audio element once
         podcastAudio = document.getElementById('podcastAudio');
-        if (podcastAudio && currentEpisode.audioUrl) {
-          podcastAudio.src = currentEpisode.audioUrl;
-
-          // Update progress as audio plays
+        if (podcastAudio) {
           podcastAudio.addEventListener('timeupdate', updateProgress);
           podcastAudio.addEventListener('loadedmetadata', () => {
+            const totalTimeEl = document.getElementById('podcastTotalTime');
             if (totalTimeEl && podcastAudio.duration) {
               totalTimeEl.textContent = formatDuration(podcastAudio.duration);
             }
@@ -11779,10 +11828,78 @@
           });
         }
 
+        // Load first episode
+        loadEpisode(0);
+
         // Show player, hide loading
         if (loadingEl) loadingEl.style.display = 'none';
         if (playerEl) playerEl.style.display = 'block';
       }
+
+      // Load a specific episode by index
+      function loadEpisode(index) {
+        if (index < 0 || index >= allEpisodes.length) return;
+
+        currentEpisodeIndex = index;
+        currentEpisode = allEpisodes[index];
+
+        const titleEl = document.getElementById('podcastEpisodeTitle');
+        const dateEl = document.getElementById('podcastEpisodeDate');
+        const durationEl = document.getElementById('podcastEpisodeDuration');
+        const totalTimeEl = document.getElementById('podcastTotalTime');
+        const labelEl = document.getElementById('podcastEpisodeLabel');
+        const indicatorEl = document.getElementById('podcastEpisodeIndicator');
+        const prevBtn = document.getElementById('podcastPrevBtn');
+        const nextBtn = document.getElementById('podcastNextBtn');
+        const progressFill = document.getElementById('podcastProgressFill');
+        const currentTimeEl = document.getElementById('podcastCurrentTime');
+
+        if (titleEl) titleEl.textContent = currentEpisode.title;
+        if (dateEl) dateEl.textContent = formatPodcastDate(currentEpisode.pubDate);
+        if (durationEl) durationEl.textContent = formatDuration(currentEpisode.duration);
+        if (totalTimeEl) totalTimeEl.textContent = formatDuration(currentEpisode.duration);
+        if (labelEl) labelEl.textContent = index === 0 ? 'Latest Episode' : 'Episode';
+        if (indicatorEl) indicatorEl.textContent = `${index + 1} / ${allEpisodes.length}`;
+
+        // Update navigation button states
+        if (prevBtn) prevBtn.disabled = index === 0;
+        if (nextBtn) nextBtn.disabled = index === allEpisodes.length - 1;
+
+        // Reset progress
+        if (progressFill) progressFill.style.width = '0%';
+        if (currentTimeEl) currentTimeEl.textContent = '0:00';
+
+        // Reset play button state
+        const playBtn = document.getElementById('podcastPlayBtn');
+        const playIcon = document.getElementById('podcastPlayIcon');
+        if (playBtn) playBtn.classList.remove('playing');
+        if (playIcon) {
+          playIcon.classList.remove('ph-pause');
+          playIcon.classList.add('ph-play');
+        }
+
+        // Load audio
+        if (podcastAudio && currentEpisode.audioUrl) {
+          podcastAudio.src = currentEpisode.audioUrl;
+          podcastAudio.load();
+        }
+      }
+
+      // Navigate to previous episode (older)
+      window.prevPodcastEpisode = function() {
+        if (currentEpisodeIndex > 0) {
+          if (podcastAudio) podcastAudio.pause();
+          loadEpisode(currentEpisodeIndex - 1);
+        }
+      };
+
+      // Navigate to next episode (newer)
+      window.nextPodcastEpisode = function() {
+        if (currentEpisodeIndex < allEpisodes.length - 1) {
+          if (podcastAudio) podcastAudio.pause();
+          loadEpisode(currentEpisodeIndex + 1);
+        }
+      };
 
       // Update progress bar
       function updateProgress() {
