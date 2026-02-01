@@ -7479,6 +7479,8 @@
         nswx_support_patreon: "Support on Patreon",
         nswx_merch: "Merch",
         nswx_view_all_posts: "View all {0} posts",
+        nswx_follow_for_updates: "Follow @nashseverewx.com for updates",
+        nswx_no_posts: "No posts found",
         // Podcast Section
         podcast_badge: "Podcast",
         podcast_subtitle: "Daily local news for Music City",
@@ -7700,6 +7702,8 @@
         nswx_support_patreon: "Apoyar en Patreon",
         nswx_merch: "Tienda",
         nswx_view_all_posts: "Ver todos los posts de {0}",
+        nswx_follow_for_updates: "Sigue a @nashseverewx.com para actualizaciones",
+        nswx_no_posts: "No se encontraron publicaciones",
         // Podcast Section
         podcast_badge: "Podcast",
         podcast_subtitle: "Noticias locales diarias para Music City",
@@ -7921,6 +7925,8 @@
         nswx_support_patreon: "ادعم على Patreon",
         nswx_merch: "المتجر",
         nswx_view_all_posts: "عرض جميع منشورات {0}",
+        nswx_follow_for_updates: "تابع @nashseverewx.com للتحديثات",
+        nswx_no_posts: "لم يتم العثور على منشورات",
         // Podcast Section
         podcast_badge: "بودكاست",
         podcast_subtitle: "أخبار محلية يومية لمدينة الموسيقى",
@@ -8142,6 +8148,8 @@
         nswx_support_patreon: "پشتیوانی لە Patreon",
         nswx_merch: "فرۆشگا",
         nswx_view_all_posts: "بینینی هەموو بابەتەکانی {0}",
+        nswx_follow_for_updates: "بۆ نوێکاریەکان @nashseverewx.com بشوێنە",
+        nswx_no_posts: "هیچ بابەتێک نەدۆزرایەوە",
         // Podcast Section
         podcast_badge: "پۆدکاست",
         podcast_subtitle: "هەواڵی ڕۆژانەی ناوخۆیی بۆ شاری میوزیک",
@@ -8363,6 +8371,8 @@
         nswx_support_patreon: "Hỗ Trợ trên Patreon",
         nswx_merch: "Cửa Hàng",
         nswx_view_all_posts: "Xem tất cả bài viết {0}",
+        nswx_follow_for_updates: "Theo dõi @nashseverewx.com để cập nhật",
+        nswx_no_posts: "Không tìm thấy bài viết",
         // Podcast Section
         podcast_badge: "Podcast",
         podcast_subtitle: "Tin tức địa phương hàng ngày cho Music City",
@@ -11407,16 +11417,18 @@
       // Format date for ticker
       function formatNswxTickerDate(dateStr) {
         const date = new Date(dateStr);
-        const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-        const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-        return `${days[date.getDay()]} ${months[date.getMonth()]} ${date.getDate()}`;
+        const dayKeys = ['day_sun', 'day_mon', 'day_tue', 'day_wed', 'day_thu', 'day_fri', 'day_sat'];
+        const monthKeys = ['month_jan', 'month_feb', 'month_mar', 'month_apr', 'month_may', 'month_jun', 'month_jul', 'month_aug', 'month_sep', 'month_oct', 'month_nov', 'month_dec'];
+        const day = t(dayKeys[date.getDay()]).toUpperCase();
+        const month = t(monthKeys[date.getMonth()]).toUpperCase();
+        return `${day} ${month} ${date.getDate()}`;
       }
 
       // Format date for blog posts
       function formatNswxPostDate(dateStr) {
         const date = new Date(dateStr);
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+        const monthKeys = ['month_jan', 'month_feb', 'month_mar', 'month_apr', 'month_may', 'month_jun', 'month_jul', 'month_aug', 'month_sep', 'month_oct', 'month_nov', 'month_dec'];
+        return `${t(monthKeys[date.getMonth()])} ${date.getDate()}, ${date.getFullYear()}`;
       }
 
       // Fetch Bluesky posts for ticker
@@ -11514,7 +11526,7 @@
         if (!ticker) return;
 
         if (posts.length === 0) {
-          ticker.innerHTML = '<span class="nswx-ticker-loading">Follow @nashseverewx.com for updates</span>';
+          ticker.innerHTML = `<span class="nswx-ticker-loading">${t('nswx_follow_for_updates')}</span>`;
           return;
         }
 
@@ -11537,7 +11549,7 @@
         if (!container) return;
 
         if (posts.length === 0) {
-          container.innerHTML = '<div class="nswx-posts-loading">No posts found</div>';
+          container.innerHTML = `<div class="nswx-posts-loading">${t('nswx_no_posts')}</div>`;
           return;
         }
 
