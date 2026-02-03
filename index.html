@@ -9808,10 +9808,22 @@
 
     async function fetchMapOutages() {
       try {
-        const response = await fetch('https://utilisocial.io/datacapable/v2/p/NES/map/events');
-        const data = await response.json();
+        const response = await fetch('https://utilisocial.io/datacapable/v2/p/NES/map/events', {
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        if (!response.ok) {
+          console.error('NES API returned status:', response.status);
+          return;
+        }
+        const events = await response.json();
 
-        const events = data.events || data || [];
+        // API returns array directly, not wrapped in an object
+        if (!Array.isArray(events)) {
+          console.error('NES API returned unexpected format:', typeof events);
+          return;
+        }
         cachedMapOutages = events;
 
         let totalCustomers = 0;
