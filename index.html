@@ -5568,28 +5568,8 @@
       <p class="subtitle" data-i18n="subtitle" style="text-align: center; margin-bottom: 0.75rem;">Nashville Winter Resources<br>Shelter, food & support during extreme weather</p>
     </header>
 
-    <!-- Alerts Row - Metro Overflow & Weather Alerts Side-by-Side -->
+    <!-- Alerts Row - Weather Alerts -->
     <div class="alerts-row">
-      <!-- Critical Alert Card - Emergency Shelter -->
-      <div id="shelterAlertBanner" class="critical-card" role="alert" aria-live="polite">
-        <div class="critical-header">
-          <span class="critical-label" data-i18n="critical_overflow_open">Emergency Overflow Open</span>
-          <span class="status-badge">● <span data-i18n="shelter_alert_status">24 Hours</span></span>
-        </div>
-        <h3 class="critical-title" data-i18n="shelter_alert_title">Metro Emergency Shelter</h3>
-        <p class="critical-address" data-i18n="shelter_alert_location">3230 Brick Church Pike, Nashville</p>
-        <div class="critical-details">
-          <span class="detail-chip" data-i18n="critical_who_short">🧑‍🤝‍🧑 18+, couples, dogs OK</span>
-          <span class="detail-chip" data-i18n="critical_meals">🍽️ Hot meals</span>
-          <span class="detail-chip" data-i18n="critical_transport">🚌 WeGo #23B after 7pm</span>
-        </div>
-        <div class="critical-actions">
-          <a href="tel:615-862-6391" class="action-btn primary">📞 615-862-6391</a>
-          <a href="https://www.nashville.gov/departments/government/winter-storm-fern-resources" class="action-btn secondary" target="_blank" rel="noopener noreferrer">ℹ️ <span data-i18n="details">Details</span></a>
-        </div>
-        <div class="critical-disclaimer" data-i18n="shelter_disclaimer">⚠️ Info may change – always double-check on Metro Nashville's official site</div>
-      </div>
-
       <!-- Weather Alerts Section -->
       <section class="weather-alerts-panel" id="weatherAlertsSection">
         <div class="section-title" data-i18n="weather_alerts">Weather Alerts</div>
@@ -5811,46 +5791,6 @@
           <span data-i18n="wttin_visit">Browse all categories</span>
           <i class="ph ph-arrow-square-out"></i>
         </a>
-      </div>
-
-      <!-- Warming Locations - Time-bound emergency section -->
-      <div id="warmingLocationsSection" class="warming-locations-section" style="display: none;">
-        <div class="warming-locations-header" onclick="toggleWarmingSection(event)">
-          <div class="warming-locations-title">
-            <span class="warming-icon">🔥</span>
-            <div>
-              <h3 data-i18n="warming_title">Warming Locations</h3>
-              <div class="warming-subtitle" id="warmingExpiryText">Winter Storm Fern • Updated Jan 31</div>
-            </div>
-          </div>
-          <div class="warming-header-right">
-            <div class="warming-transport-note">
-              <span data-i18n="warming_transport">Need a ride?</span>
-              <a href="tel:615-401-1712" class="warming-transport-phone">📞 615-401-1712</a>
-            </div>
-            <i class="ph ph-caret-down warming-toggle-icon"></i>
-          </div>
-        </div>
-
-        <div class="warming-locations-grid" id="warmingLocationsGrid">
-          <!-- Populated by JavaScript -->
-        </div>
-
-        <div class="warming-locations-disclaimer">
-          <i class="ph ph-warning"></i>
-          <span data-i18n="warming_disclaimer">Info may change. Always check Metro Nashville's site for up-to-date shelter info.</span>
-          <a href="https://www.nashville.gov/departments/government/winter-storm-fern-resources" class="warming-verify-link" target="_blank" rel="noopener noreferrer">
-            <span data-i18n="warming_verify_metro">Check Metro site</span>
-            <i class="ph ph-arrow-square-out"></i>
-          </a>
-        </div>
-        <div class="warming-locations-footer">
-          <span class="warming-pets-note" data-i18n="warming_pets">Pets allowed at Metro shelters</span>
-          <a href="https://www.nashville.gov/departments/government/winter-storm-fern-resources" class="warming-verify-link" target="_blank" rel="noopener noreferrer">
-            <span data-i18n="warming_verify">Verify on Nashville.gov</span>
-            <i class="ph ph-arrow-square-out"></i>
-          </a>
-        </div>
       </div>
 
       <div class="intent-grid">
@@ -6816,11 +6756,6 @@
               <span data-i18n="map_legend_outage">Power Outages</span>
             </label>
             <label class="map-panel-toggle">
-              <input type="checkbox" id="toggleWarmingCentersSBS" checked onchange="toggleSideBySideMapLayer('warmingCenters')">
-              <span class="map-legend-dot-small blue"></span>
-              <span data-i18n="map_legend_warming">Warming centers</span>
-            </label>
-            <label class="map-panel-toggle">
               <input type="checkbox" id="toggleRoadClosuresSBS" checked onchange="toggleSideBySideMapLayer('roadClosures')">
               <span class="map-legend-dot-small orange"></span>
               <span data-i18n="map_legend_road_closed">Road closures</span>
@@ -7215,28 +7150,6 @@
     let cachedNswxBlogPosts = null;
     let cachedNswxBlueskyPosts = null;
     let cachedUserCoords = null;
-
-    // ===========================================
-    // SHELTER ALERT TIME LOCK
-    // ===========================================
-    // Expiration date for the shelter alert banner (Central Time)
-    // Set to February 3, 2026 at midnight CT
-    const SHELTER_ALERT_EXPIRATION = '2026-02-03T00:00:00-06:00';
-
-    function checkShelterAlertExpiration() {
-      const banner = document.getElementById('shelterAlertBanner');
-      if (!banner) return;
-
-      const now = new Date();
-      const expirationDate = new Date(SHELTER_ALERT_EXPIRATION);
-
-      if (now >= expirationDate) {
-        banner.style.display = 'none';
-      }
-    }
-
-    // Check shelter alert expiration on page load
-    checkShelterAlertExpiration();
 
     // ===========================================
     // WEBHOOK ACTIVITY TRACKING
@@ -9571,7 +9484,6 @@
     let previewHeatLayer = null;
     let fullHeatLayer = null;
     let sideBySideOutageLayer = null;
-    let sideBySideWarmingLayer = null;
     let sideBySideRoadClosureLayer = null;
     let cachedMapOutages = [];
     let mapStatsData = { customers: 0, crews: 0, waiting: 0 };
@@ -9579,7 +9491,6 @@
     // Map layer toggle state
     let mapToggles = {
       outages: true,
-      warmingCenters: true,
       roadClosures: true,
       heatmap: false
     };
@@ -9587,100 +9498,8 @@
     // Side-by-side map layer toggle state
     let sideBySideMapToggles = {
       outages: true,
-      warmingCenters: true,
       roadClosures: true
     };
-
-    // Warming centers data - Official locations from Nashville.gov + community resources
-    // Last verified: January 31, 2026
-    // Sources: Nashville.gov, Nashville Predators, Nashville Scene, The Allsorts Lobby
-    // EXPIRATION: This section auto-hides after expires_at date
-    const WARMING_LOCATIONS_CONFIG = {
-      verified_date: '2026-01-31',
-      expires_at: '2026-02-01T23:59:59-06:00', // Section stops showing after this date
-      event_name: 'Winter Storm Fern'
-    };
-
-    const warmingLocations = [
-      // 24/7 Metro Shelters
-      {
-        lat: 36.0679, lng: -86.6675,
-        name: "Southeast Regional Community Center",
-        address: "5260 Hickory Hollow Pkwy, Suite 202, Antioch, TN 37013",
-        hours: "24/7 until further notice",
-        type: "24hr",
-        hasFood: true,
-        services: "Overnight stays, food, warming"
-      },
-      {
-        lat: 36.2573, lng: -86.7093,
-        name: "Madison Community Center",
-        address: "550 N Dupont Ave, Madison, TN 37115",
-        hours: "24/7 until further notice",
-        type: "24hr",
-        hasFood: true,
-        services: "Overnight stays, food, warming"
-      },
-      {
-        lat: 36.1409, lng: -86.7634,
-        name: "Nashville Fairgrounds",
-        address: "401 Wingrove St, Nashville, TN 37203",
-        hours: "24/7 until further notice",
-        type: "24hr",
-        hasFood: true,
-        services: "Overnight stays, food, warming"
-      },
-      {
-        lat: 36.0771, lng: -86.9208,
-        name: "Bellevue Community Center",
-        address: "7638A Highway 70 S, Nashville, TN 37221",
-        hours: "24/7 until further notice",
-        type: "24hr",
-        hasFood: true,
-        services: "Overnight stays, food, warming"
-      },
-      // Limited hours locations
-      {
-        lat: 36.1592, lng: -86.7785,
-        name: "Bridgestone Arena",
-        address: "501 Broadway, Nashville, TN 37203",
-        hours: "11:30am-4:30pm (Fri Jan 31)",
-        type: "limited",
-        hasFood: true,
-        services: "Device charging, water, hot meals"
-      },
-      {
-        lat: 36.1875, lng: -86.7450,
-        name: "Riverside Commons",
-        address: "1211 Riverside Drive, Nashville, TN 37206",
-        hours: "12pm-7pm (Sat Feb 1)",
-        type: "limited",
-        hasFood: true,
-        services: "Heat, power, food, WiFi, Jazz Jam 2-4pm"
-      },
-      // Community locations
-      {
-        lat: 36.2557, lng: -86.7062,
-        name: "The Allsorts Lobby (Madison Co-op)",
-        address: "752 Madison Square, Madison, TN 37115",
-        hours: "5:30pm-8:30pm (when below 40°)",
-        type: "community",
-        hasFood: true,
-        services: "Dinner ~6pm, shuttle to overnight shelter ~7pm"
-      }
-    ];
-
-    // Legacy format for map compatibility
-    const warmingCenters = warmingLocations.map(loc => ({
-      lat: loc.lat,
-      lng: loc.lng,
-      name: loc.type === 'limited' ? `${loc.name} (${loc.hours})` : loc.name,
-      address: loc.address,
-      hasFood: loc.hasFood
-    }));
-
-    const WARMING_CENTERS_VERIFIED_DATE = WARMING_LOCATIONS_CONFIG.verified_date;
-    const WARMING_CENTERS_EXPIRY_DAYS = 3;
 
     // Road closures data - fetched from Nashville NERVE API
     // Source: Nashville Metro GIS - NERVE Road Closures MapServer
@@ -9756,88 +9575,6 @@
       const now = new Date();
       const minutesSinceFetch = (now - roadClosuresLastFetched) / (1000 * 60);
       return minutesSinceFetch > 30;
-    }
-
-    function isWarmingDataStale() {
-      const verifiedDate = new Date(WARMING_CENTERS_VERIFIED_DATE);
-      const now = new Date();
-      const daysDiff = (now - verifiedDate) / (1000 * 60 * 60 * 24);
-      return daysDiff > WARMING_CENTERS_EXPIRY_DAYS;
-    }
-
-    // Check if warming locations section should be displayed (time-bound)
-    function isWarmingLocationsExpired() {
-      const expiryDate = new Date(WARMING_LOCATIONS_CONFIG.expires_at);
-      const now = new Date();
-      return now > expiryDate;
-    }
-
-    // Render the warming locations section
-    function renderWarmingLocationsSection() {
-      const section = document.getElementById('warmingLocationsSection');
-      const grid = document.getElementById('warmingLocationsGrid');
-      const expiryText = document.getElementById('warmingExpiryText');
-
-      if (!section || !grid) return;
-
-      // Hide section if expired
-      if (isWarmingLocationsExpired()) {
-        section.style.display = 'none';
-        return;
-      }
-
-      // Show section
-      section.style.display = 'block';
-
-      // Update subtitle with event name and date
-      if (expiryText) {
-        const verifiedDate = new Date(WARMING_LOCATIONS_CONFIG.verified_date);
-        const dateStr = verifiedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        expiryText.textContent = `${WARMING_LOCATIONS_CONFIG.event_name} • Updated ${dateStr}`;
-      }
-
-      // Sort locations: 24hr first, then limited, then community
-      const sortOrder = { '24hr': 0, 'limited': 1, 'community': 2 };
-      const sortedLocations = [...warmingLocations].sort((a, b) =>
-        (sortOrder[a.type] || 99) - (sortOrder[b.type] || 99)
-      );
-
-      // Render location cards
-      grid.innerHTML = sortedLocations.map(loc => {
-        const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(loc.address)}`;
-        return `
-          <div class="warming-location-card type-${loc.type}">
-            <div class="warming-location-info">
-              <h4>${loc.name}</h4>
-              <div class="warming-location-hours">${loc.hours}</div>
-              <div class="warming-location-address">${loc.address}</div>
-              ${loc.services ? `<div class="warming-location-services">${loc.services}</div>` : ''}
-            </div>
-            <div class="warming-location-actions">
-              <a href="${mapsUrl}" class="warming-location-link" target="_blank" rel="noopener noreferrer" title="Get directions">
-                <i class="ph ph-navigation-arrow"></i>
-              </a>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      // Start collapsed - users can click to expand
-      section.classList.add('collapsed');
-    }
-
-    // Toggle warming section expand/collapse
-    function toggleWarmingSection(event) {
-      // Don't toggle if clicking on the phone link
-      if (event.target.closest('a')) {
-        return;
-      }
-
-      const section = document.getElementById('warmingLocationsSection');
-      if (section) {
-        section.classList.toggle('collapsed');
-        trackActivity('warming_section_toggle', { expanded: !section.classList.contains('collapsed') });
-      }
     }
 
     function getMapStatusColor(status) {
@@ -9957,21 +9694,6 @@
           }).addTo(layer);
 
           marker.bindPopup(() => createOutagePopup(customers, status));
-        });
-      }
-
-      // Add warming center markers (if toggle enabled)
-      if (mapToggles.warmingCenters) {
-        const warmingIcon = L.divIcon({
-          className: '',
-          html: '<div class="warming-center-icon">🏠</div>',
-          iconSize: [28, 28],
-          iconAnchor: [14, 14]
-        });
-
-        warmingCenters.forEach(center => {
-          const marker = L.marker([center.lat, center.lng], { icon: warmingIcon }).addTo(layer);
-          marker.bindPopup(() => createWarmingCenterPopup(center.name, center.address, center.hasFood));
         });
       }
 
@@ -10240,7 +9962,6 @@
 
       // Create layer groups
       sideBySideOutageLayer = L.layerGroup().addTo(sideBySideMap);
-      sideBySideWarmingLayer = L.layerGroup().addTo(sideBySideMap);
       sideBySideRoadClosureLayer = L.layerGroup().addTo(sideBySideMap);
 
       // Add outage markers if data exists
@@ -10258,32 +9979,6 @@
       });
 
       console.log('Side-by-side map initialized');
-    }
-
-    function addWarmingMarkersToSideBySide() {
-      if (!sideBySideWarmingLayer || !sideBySideMap) return;
-
-      sideBySideWarmingLayer.clearLayers();
-
-      warmingLocations.forEach(loc => {
-        const marker = L.circleMarker([loc.lat, loc.lng], {
-          radius: 8,
-          fillColor: '#60a5fa',
-          color: '#1e3a5f',
-          weight: 2,
-          opacity: 1,
-          fillOpacity: 0.8
-        });
-
-        marker.bindPopup(`
-          <strong>${loc.name}</strong><br>
-          ${loc.address}<br>
-          <em>${loc.hours}</em>
-          ${loc.services ? '<br>' + loc.services : ''}
-        `);
-
-        marker.addTo(sideBySideWarmingLayer);
-      });
     }
 
     function addRoadClosureMarkersToSideBySide() {
@@ -10321,9 +10016,6 @@
       switch (layerName) {
         case 'outages':
           layer = sideBySideOutageLayer;
-          break;
-        case 'warmingCenters':
-          layer = sideBySideWarmingLayer;
           break;
         case 'roadClosures':
           layer = sideBySideRoadClosureLayer;
@@ -10463,9 +10155,6 @@
           previewMap.invalidateSize();
         }
       }, 300);
-
-      // Render warming locations section (time-bound)
-      renderWarmingLocationsSection();
     })();
 
     // IntersectionObserver to ensure map tiles load when visible
