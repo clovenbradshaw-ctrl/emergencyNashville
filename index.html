@@ -9675,7 +9675,7 @@
       if (mapToggles.outages && !mapToggles.heatmap) {
         cachedMapOutages.forEach(event => {
           const lat = event.lat || event.latitude;
-          const lng = event.lng || event.longitude;
+          const lng = event.lon || event.lng || event.longitude;
           const customers = event.customersAffected || event.customers_affected || event.numPeople || 1;
           const status = event.status || event.crewStatus || 'Unassigned';
 
@@ -9728,12 +9728,12 @@
         const heatData = cachedMapOutages
           .filter(event => {
             const lat = event.lat || event.latitude;
-            const lng = event.lng || event.longitude;
+            const lng = event.lon || event.lng || event.longitude;
             return lat && lng;
           })
           .map(event => {
             const lat = event.lat || event.latitude;
-            const lng = event.lng || event.longitude;
+            const lng = event.lon || event.lng || event.longitude;
             const customers = event.customersAffected || event.customers_affected || event.numPeople || 1;
             // Intensity based on customers affected (normalized)
             const intensity = Math.min(customers / 100, 1);
